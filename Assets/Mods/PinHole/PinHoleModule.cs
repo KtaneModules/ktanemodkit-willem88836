@@ -48,7 +48,7 @@ public class PinHoleModule : MonoBehaviour
 				newButton.Parent = gameObject.GetComponent<KMSelectable>();
 
 
-				Truple t = new Truple(i, j, k);
+				Truple<int, int, int> t = new Truple<int, int, int>(i, j, k);
 				newButton.OnInteract += delegate { return OnButtonSelected(t); };
 
 				selectableSelf.Children[k] = newButton;
@@ -58,7 +58,7 @@ public class PinHoleModule : MonoBehaviour
 	}
 
 
-	private bool OnButtonSelected(Truple t)
+	private bool OnButtonSelected(Truple<int, int, int> t)
 	{
 		Debug.Log(string.Format("Selected_{0}_{1}_{2}", t.A, t.B, t.C));
 
@@ -147,19 +147,5 @@ public class PinHoleModule : MonoBehaviour
 		}
 
 		return enumeratedSerial;
-	}
-}
-
-public class Truple
-{
-	public object A;
-	public object B;
-	public object C;
-
-	public Truple(object a, object b, object c)
-	{
-		this.A = a;
-		this.B = b;
-		this.C = c;
 	}
 }
