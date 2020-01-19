@@ -708,7 +708,7 @@ MonoBehaviour:
     End: {fileID: 1934616228}
   - Start: {fileID: 854873731}
     End: {fileID: 76649756}
-  BookInterval: 0.008
+  BookInterval: 0.006
   bookPrefab: {fileID: 114654466186940762, guid: 965ff0ebc9d1c3241819fcab74717b1d,
     type: 2}
   BookContainer: {fileID: 1894206713}
