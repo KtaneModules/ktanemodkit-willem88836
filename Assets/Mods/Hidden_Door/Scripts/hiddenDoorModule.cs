@@ -1,19 +1,34 @@
-﻿using System.Collections;
+﻿using KModkit;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
-public class hiddenDoorModule : MonoBehaviour 
+public class HiddenDoorModule : MonoBehaviour 
 {
+	private Random random; 
+
+	[Header("Module Settings")]
 	public BookRange[] BookRanges;
 	public float BookInterval;
-	public KMSelectable bookPrefab;
+	public SelectableBook bookPrefab;
 	public Transform BookContainer;
 
-	private List<Truple<KMSelectable, bool, bool>> bookRequirements = new List<Truple<KMSelectable, bool, bool>>();
+	[Header("Book Settings")]
+	public Material[] BookTypes;
+	public Vector3 BookSelectionRotation;
+
+
+
+	// TODO: figure out a way to do this neatly. 
+	private List<SelectableBook> selectableBooks = new List<SelectableBook>();
 
 	public void Start()
 	{
+		random = new System.Random();
 		KMSelectable selectable = GetComponent<KMSelectable>();
+		SelectableBook.Set(BookTypes, BookSelectionRotation);
 		SpawnBooks();
 	}
 
@@ -28,29 +43,20 @@ public class hiddenDoorModule : MonoBehaviour
 
 			for (int j = 0; j < n; j++)
 			{
-				KMSelectable newBook = Instantiate(bookPrefab, BookContainer);
+				SelectableBook newBook = Instantiate(bookPrefab, BookContainer);
 				newBook.transform.position = range.Start.position + Vector3.right * j * BookInterval;
 				newBook.name = "book_" + k++;
 
-				Truple<KMSelectable, bool, bool> t = new Truple<KMSelectable, bool, bool>(newBook, false, false);
-				newBook.OnInteract += delegate { return OnInteract(t); };
+				newBook.Initialize(random.Next(0, BookTypes.Length), OnLeverPulled);
 
-				bookRequirements.Add(t);
+				selectableBooks.Add(newBook);
 			}
 		}
 	}
 
-
-	public bool OnInteract(Truple<KMSelectable, bool, bool> t)
+	public void OnLeverPulled()
 	{
-		Debug.Log(t.A.name + " Selected!");
-		return false;
-	}
-}
+		Debug.Log("Lever pulled!");
 
-[System.Serializable]
-public class BookRange
-{
-	public Transform Start;
-	public Transform End;
+	}
 }
