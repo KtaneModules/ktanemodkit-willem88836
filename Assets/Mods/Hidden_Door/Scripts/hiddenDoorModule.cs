@@ -137,11 +137,14 @@ public class HiddenDoorModule : MonoBehaviour
 				{
 					tType = k;
 					t1Type = l;
+					Debug.Log(ruleSet[j].Text);
 				}
 			}
 
 			sets[i] = ruleSet;
 		}
+
+		
 
 		// TODO: write the rules' text to wherever they are needed for the pdf.
 	}

@@ -735,9 +735,12 @@ MonoBehaviour:
   - Black
   BookSelectionRotation: {x: 0, y: 20, z: 0}
   ConsequenceSentences:
-  - '{1}, T is {0}.'
-  - '{1}, the color of T is {0}.'
-  - '{1}, the color used for T is {1}.'
+  - '{2}, T is {0} and T1 is {1}.'
+  - '{2}, the color of T is {0} and T1 is {1}.'
+  - '{2}, the color used for T is {0} and T1 is {1}.'
+  - '{2}, T1 is {1} and T is {0}.'
+  - '{2}, the color of T1 is {1} and T is {0}.'
+  - '{2}, the color used for T1 is {1} and T is {0}.'
 --- !u!114 &418710027
 MonoBehaviour:
   m_ObjectHideFlags: 0
