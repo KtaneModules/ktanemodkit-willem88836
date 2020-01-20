@@ -701,6 +701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BombModule: {fileID: 418710029}
+  BombInfo: {fileID: 418710028}
   RuleSeedable: {fileID: 418710030}
   BookPrefab: {fileID: 114717334351567014, guid: 965ff0ebc9d1c3241819fcab74717b1d,
     type: 2}
@@ -2247,6 +2248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BombModule: {fileID: 0}
+  BombInfo: {fileID: 0}
   RuleSeedable: {fileID: 0}
   BookPrefab: {fileID: 0}
   BookContainer: {fileID: 0}
