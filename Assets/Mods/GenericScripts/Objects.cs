@@ -39,3 +39,13 @@ public struct Int2
 		this.Y = y;
 	}
 }
+
+
+
+public static class Extentions
+{
+	public static T GetPseudoRandom<T>(this T[] array, MonoRandom mRandom)
+	{
+		return array[mRandom.Next(0, array.Length)];
+	}
+}

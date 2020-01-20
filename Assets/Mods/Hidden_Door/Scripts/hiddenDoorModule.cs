@@ -21,14 +21,20 @@ public class HiddenDoorModule : MonoBehaviour
 
 	[Header("Book Settings")]
 	public Material[] BookTypes;
+	public string[] BookTypeNames;
 	public Vector3 BookSelectionRotation;
 
+	[Header("Sentences")]
+	public string[] ConsequenceSentences;
 
 	private Random tRandom; // random per session.
 	private MonoRandom mRandom; // random per manual version.
 	private RuleSets ruleSets;
 	private List<SelectableBook> selectableBooks = new List<SelectableBook>();
 
+	private int leverCount;
+	private int leverType;
+	private int tType = -1;
 
 	private void Start()
 	{
@@ -43,6 +49,8 @@ public class HiddenDoorModule : MonoBehaviour
 		SetRules();
 		SetKeys();
 		IterateActiveLever();
+
+		Debug.LogFormat("T = {0}, L = {1}", BookTypeNames[tType], BookTypeNames[leverType]);
 	}
 
 	private void SpawnBooks()
@@ -69,8 +77,8 @@ public class HiddenDoorModule : MonoBehaviour
 
 	private void SetBookTypes()
 	{
-		int leverType = tRandom.Next(0, BookTypes.Length);
-		int leverCount = tRandom.Next(MinMaxLevers.X, MinMaxLevers.Y);
+		leverType = tRandom.Next(0, BookTypes.Length);
+		leverCount = tRandom.Next(MinMaxLevers.X, MinMaxLevers.Y);
 
 		Debug.LogFormat("Levertype: ({0}), Spawing ({1}) levers!", leverType, leverCount);
 
@@ -106,12 +114,23 @@ public class HiddenDoorModule : MonoBehaviour
 		{
 			Rule[] ruleSet = ruleSets.GenerateRuleSet(DoubleRulesRatio, TRuleCount, true);
 
-			Consequence consequenceIfRight = new Consequence();
-			
 			for (int j = 0; j < ruleSet.Length; j++)
 			{
-				consequenceIfRight.Text = "then do Something!";
+				Consequence consequenceIfRight = new Consequence();
+
+				int k;
+				do
+				{
+					k = mRandom.Next(0, BookTypes.Length);
+				} while (k == leverType);
+
+				ruleSet[j].Text = string.Format(ConsequenceSentences.GetPseudoRandom(mRandom), BookTypeNames[k], ruleSet[j].Text);
 				ruleSet[j].ConcequenceIfRight = consequenceIfRight;
+				
+				if (i + MinMaxLevers.X == leverCount && tType == -1 && ruleSet[j].IsAdhered(BombInfo))
+				{
+					tType = k;
+				}
 			}
 
 			sets[i] = ruleSet;

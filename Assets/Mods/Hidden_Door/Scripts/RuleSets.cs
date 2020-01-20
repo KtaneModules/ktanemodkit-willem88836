@@ -6,20 +6,11 @@ using System.Text;
 
 public class RuleSets
 {
-	//public int BookTypeCount { get { return BookTypes.Length; } }
-	//public string[] BookTypes = new string[]
-	//{
-	//	"Red",
-	//	"Green",
-	//	"Blue",
-	//	"Brown",
-	//	"Black"
-	//};
-
 	private char[] serialUniqueSymbols = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 	private char[] serialVowels = new char[] { 'A', 'E', 'I', 'O', 'U' };
 	private char[] serialEvens = new char[] { '2', '4', '6', '8', '0' };
 	private char[] serialOdds = new char[] { '1', '3', '5', '7', '9' };
+	private int serialLength = 6;
 
 	private MonoRandom mRandom;
 
@@ -55,7 +46,7 @@ public class RuleSets
 		if (hasOverflow)
 		{
 			Rule overflowRule = new Rule();
-			overflowRule.Text = "Otherwise, ";
+			overflowRule.Text = "Otherwise";
 			overflowRule.RuleTest = delegate { return true; };
 			ruleSet[ruleSet.Length - 1] = overflowRule;
 		}
@@ -381,21 +372,21 @@ public class RuleSets
 		else if (r == 8)
 		{
 			// so-manieth icon is a letter
-			int i = mRandom.Next(0, 7);
+			int i = mRandom.Next(0, serialLength);
 			rule.Text = string.Format("if the {0}th symbol in the serial number is a letter", i);
 			rule.RuleTest = (KMBombInfo b) => { int a;  return !int.TryParse(KMBombInfoExtensions.GetSerialNumber(b).ElementAt(i).ToString(), out a); };
 		}
 		else if (r == 9)
 		{
 			// so-manieth icon is a number.
-			int i = mRandom.Next(0, 7);
+			int i = mRandom.Next(0, serialLength);
 			rule.Text = string.Format("if the {0}th symbol in the serial number is a number", i);
 			rule.RuleTest = (KMBombInfo b) => { int a; return int.TryParse(KMBombInfoExtensions.GetSerialNumber(b).ElementAt(i).ToString(), out a); };
 		}
 		else if (r == 10)
 		{
 			// so-maniet icon is a specific char.
-			int i = mRandom.Next(0, 7);
+			int i = mRandom.Next(0, serialLength);
 			char c = serialUniqueSymbols[mRandom.Next(0, serialUniqueSymbols.Length)];
 			rule.Text = string.Format("if the {0}th symbol of the serial number is a \"{1}\"", i, c);
 			rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.GetSerialNumber(b).ElementAt(i) == c; };

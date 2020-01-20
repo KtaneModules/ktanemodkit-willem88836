@@ -727,7 +727,17 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 61ccfc9c9957f76488a4bdb627bae493, type: 2}
   - {fileID: 2100000, guid: e84c64f76c3bbd74c948b668fc41aa71, type: 2}
   - {fileID: 2100000, guid: 2c9cbc4cd4dc5b84c87b2889d2cc7eb9, type: 2}
+  BookTypeNames:
+  - Red
+  - Green
+  - Blue
+  - Brown
+  - Black
   BookSelectionRotation: {x: 0, y: 20, z: 0}
+  ConsequenceSentences:
+  - '{1}, T is {0}.'
+  - '{1}, the color of T is {0}.'
+  - '{1}, the color used for T is {1}.'
 --- !u!114 &418710027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adf69c2de51bd3c43bbd9bc22578ee08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _seed: 1
+  _seed: 6546540
 --- !u!1001 &480444122
 Prefab:
   m_ObjectHideFlags: 0
@@ -2260,7 +2270,9 @@ MonoBehaviour:
     X: 0
     Y: 0
   BookTypes: []
+  BookTypeNames: []
   BookSelectionRotation: {x: 0, y: 0, z: 0}
+  ConsequenceSentences: []
 --- !u!114 &1909307081
 MonoBehaviour:
   m_ObjectHideFlags: 0
