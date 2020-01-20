@@ -40,9 +40,13 @@ public class RuleSets
 				? GenerateSingleRule() 
 				: GenerateDoubleRule();
 			
-			if (i >= 0)
+			if (i > 0)
 			{
 				rule.Text = "Otherwise, " + rule.Text;
+			}
+			else
+			{
+				rule.Text = rule.Text[0].ToString().ToUpper() + rule.Text.Substring(1);
 			}
 
 			ruleSet[i] = rule;
@@ -80,8 +84,7 @@ public class RuleSets
 		}
 		else
 		{
-			// Serial Number Rule
-			rule = null;
+			rule = GenerateSerialRule();
 		}
 
 		rule.Text += '.';
@@ -248,7 +251,7 @@ public class RuleSets
 	
 	public Rule GenerateSerialRule()
 	{
-		int r = mRandom.Next(0, 10);
+		int r = mRandom.Next(0, 11);
 		Rule rule = new Rule();
 
 		if (r == 0)
