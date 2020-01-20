@@ -333,9 +333,11 @@ public class RuleSets
 			rule.RuleTest = (KMBombInfo b) => 
 			{ 
 				int t = 0;
-				foreach (char c in KMBombInfoExtensions.GetSerialNumberNumbers(b))
+				foreach (char c in KMBombInfoExtensions.GetSerialNumber(b))
 				{
-					t += int.Parse(c.ToString());
+					int d = 0;
+					int.TryParse(c.ToString(), out d);
+					t += d;
 				}
 				return t % 2 == 0;
 			};
@@ -347,9 +349,11 @@ public class RuleSets
 			rule.RuleTest = (KMBombInfo b) =>
 			{
 				int t = 0;
-				foreach (char c in KMBombInfoExtensions.GetSerialNumberNumbers(b))
+				foreach (char c in KMBombInfoExtensions.GetSerialNumber(b))
 				{
-					t += int.Parse(c.ToString());
+					int d = 0;
+					int.TryParse(c.ToString(), out d);
+					t += d;
 				}
 				return t % 2 == 1;
 			};
