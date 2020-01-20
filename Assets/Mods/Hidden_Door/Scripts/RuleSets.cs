@@ -29,9 +29,9 @@ public class RuleSets
 	}
 
 
-	public Rule[] GenerateRuleSet(double a, int l)
+	public Rule[] GenerateRuleSet(double a, int l, bool hasOverflow)
 	{
-		Rule[] ruleSet = new Rule[l];
+		Rule[] ruleSet = new Rule[l + (hasOverflow ? 1 : 0)];
 
 		for (int i = 0; i < l; i++)
 		{
@@ -50,6 +50,14 @@ public class RuleSets
 			}
 
 			ruleSet[i] = rule;
+		}
+
+		if (hasOverflow)
+		{
+			Rule overflowRule = new Rule();
+			overflowRule.Text = "Otherwise, ";
+			overflowRule.RuleTest = delegate { return true; };
+			ruleSet[ruleSet.Length - 1] = overflowRule;
 		}
 
 		return ruleSet;

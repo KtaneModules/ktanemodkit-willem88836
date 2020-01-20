@@ -104,7 +104,7 @@ public class HiddenDoorModule : MonoBehaviour
 
 		for (int i = 0; i < sets.Length; i++)
 		{
-			Rule[] ruleSet = ruleSets.GenerateRuleSet(DoubleRulesRatio, TRuleCount);
+			Rule[] ruleSet = ruleSets.GenerateRuleSet(DoubleRulesRatio, TRuleCount, true);
 
 			Consequence consequenceIfRight = new Consequence();
 			
@@ -112,10 +112,7 @@ public class HiddenDoorModule : MonoBehaviour
 			{
 				consequenceIfRight.Text = "then do Something!";
 				ruleSet[j].ConcequenceIfRight = consequenceIfRight;
-
-				Debug.LogFormat("Rule ({0}, {1}) is {2}", i, j, ruleSet[j].IsAdhered(BombInfo));
-			}// continue here. 
-			Debug.Log(" ");
+			}
 
 			sets[i] = ruleSet;
 		}
