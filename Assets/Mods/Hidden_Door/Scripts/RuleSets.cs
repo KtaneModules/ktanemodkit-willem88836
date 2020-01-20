@@ -58,7 +58,6 @@ public class RuleSets
 	public Rule GenerateDoubleRule()
 	{
 		Rule rule = GenerateSingleRule();
-		rule.Text = rule.Text.Substring(0, rule.Text.Length - 1);
 		Rule subRule = GenerateSingleRule();
 		rule.Text = string.Format("{0}, and {1}", rule.Text, subRule.Text);
 		rule.SubRule = subRule;
@@ -74,10 +73,10 @@ public class RuleSets
 		{
 			rule = GenerateIndicatorRule();
 		}
-		else if (r == 1)
-		{
-			rule = GeneratePortRule();
-		}
+		//else if (r == 1)
+		//{
+		//	rule = GeneratePortRule();
+		//}
 		else if (r == 2)
 		{
 			rule = GenerateBatteryRule();
@@ -86,8 +85,6 @@ public class RuleSets
 		{
 			rule = GenerateSerialRule();
 		}
-
-		rule.Text += '.';
 
 		return rule;
 	}
@@ -154,7 +151,7 @@ public class RuleSets
 	/// <returns></returns>
 	public Rule GeneratePortRule()
 	{
-		int r = mRandom.Next(0, 6);
+		int r = mRandom.Next(0, 2);
 		Rule rule = new Rule();
 
 		if (r == 0)
@@ -171,30 +168,30 @@ public class RuleSets
 			rule.Text = string.Format("if the bomb does not contain a {0} port", port.ToString());
 			rule.RuleTest = (KMBombInfo b) => { return !KMBombInfoExtensions.IsPortPresent(b, port); };
 		}
-		else if (r == 2)
-		{
-			// Has specific duplicate port. 
-			Port port = GetRandomPort();
-			rule.Text = string.Format("if the bomb has two or more {0} ports", port.ToString());
-			rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.IsDuplicatePortPresent(b, port); };
-		}
-		else if (r == 3)
-		{
-			// Has Duplicate Port
-			rule.Text = "if the bomb has a duplicate port";
-			rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.IsDuplicatePortPresent(b); };
-		}
-		else if (r == 4)
-		{
-			// Has one portplate.
-			rule.Text = "if the bomb as exactly one port plate";
-			rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.GetPortPlateCount(b) == 1; };
-		}
-		else if (r == 5)
-		{
-			rule.Text = "if the bomb as two or more port plates";
-			rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.GetPortPlateCount(b) >= 2; };
-		}
+		//else if (r == 2)
+		//{
+		//	// Has specific duplicate port. 
+		//	Port port = GetRandomPort();
+		//	rule.Text = string.Format("if the bomb has two or more {0} ports", port.ToString());
+		//	rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.IsDuplicatePortPresent(b, port); };
+		//}
+		//else if (r == 3)
+		//{
+		//	// Has Duplicate Port
+		//	rule.Text = "if the bomb has a duplicate port";
+		//	rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.IsDuplicatePortPresent(b); };
+		//}
+		//else if (r == 4)
+		//{
+		//	// Has one portplate.
+		//	rule.Text = "if the bomb as exactly one port plate";
+		//	rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.GetPortPlateCount(b) == 1; };
+		//}
+		//else if (r == 5)
+		//{
+		//	rule.Text = "if the bomb as two or more port plates";
+		//	rule.RuleTest = (KMBombInfo b) => { return KMBombInfoExtensions.GetPortPlateCount(b) >= 2; };
+		//}
 
 		return rule;
 	}
@@ -403,9 +400,18 @@ public class Rule
 	public Func<KMBombInfo, bool> RuleTest;
 	public Rule SubRule;
 
+	public Consequence ConcequenceIfRight;
+
+
 	public bool IsAdhered(KMBombInfo bombInfo)
 	{
-		return SubRule.IsAdhered(bombInfo) 
+		return (SubRule == null || SubRule.IsAdhered(bombInfo)) 
 			&& RuleTest.Invoke(bombInfo);
 	}
+}
+
+public class Consequence
+{
+	public string Text;
+	public Action OnInvoke;
 }

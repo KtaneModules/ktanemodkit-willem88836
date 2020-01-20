@@ -715,6 +715,8 @@ MonoBehaviour:
   - Start: {fileID: 854873731}
     End: {fileID: 76649756}
   BookInterval: 0.006
+  TRuleCount: 5
+  DoubleRulesRatio: 0.4
   MinMaxLevers:
     X: 3
     Y: 6
@@ -2250,6 +2252,8 @@ MonoBehaviour:
   BookContainer: {fileID: 0}
   BookRanges: []
   BookInterval: 0
+  TRuleCount: 0
+  DoubleRulesRatio: 0
   MinMaxLevers:
     X: 0
     Y: 0

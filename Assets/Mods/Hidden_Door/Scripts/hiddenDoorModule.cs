@@ -1,4 +1,4 @@
-using KModkit;
+﻿using KModkit;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
@@ -7,6 +7,7 @@ public class HiddenDoorModule : MonoBehaviour
 {
 	[Header("References")]
 	public KMBombModule BombModule;
+	public KMBombInfo BombInfo;
 	public KMRuleSeedable RuleSeedable;
 	public SelectableBook BookPrefab;
 	public Transform BookContainer;
@@ -15,7 +16,7 @@ public class HiddenDoorModule : MonoBehaviour
 	public BookRange[] BookRanges;
 	public float BookInterval;
 	public int TRuleCount; // The number of alternatives per T rule section.
-
+	public double DoubleRulesRatio;
 	public Int2 MinMaxLevers;
 
 	[Header("Book Settings")]
@@ -25,6 +26,7 @@ public class HiddenDoorModule : MonoBehaviour
 
 	private Random tRandom; // random per session.
 	private MonoRandom mRandom; // random per manual version.
+	private RuleSets ruleSets;
 	private List<SelectableBook> selectableBooks = new List<SelectableBook>();
 
 
@@ -32,6 +34,8 @@ public class HiddenDoorModule : MonoBehaviour
 	{
 		tRandom = new Random();
 		mRandom = RuleSeedable.GetRNG();
+		ruleSets = new RuleSets();
+		ruleSets.Initialize(mRandom);
 		SelectableBook.Set(BookTypes, BookSelectionRotation);
 
 		SpawnBooks();
@@ -96,17 +100,27 @@ public class HiddenDoorModule : MonoBehaviour
 
 	private void SetRules()
 	{
-		for (int i = 0; i < MinMaxLevers.Y - MinMaxLevers.X; i++)
+		Rule[][] sets = new Rule[MinMaxLevers.Y - MinMaxLevers.X][];
+
+		for (int i = 0; i < sets.Length; i++)
 		{
-			for (int j = 0; j < TRuleCount; j++)
+			Rule[] ruleSet = ruleSets.GenerateRuleSet(DoubleRulesRatio, TRuleCount);
+
+			Consequence consequenceIfRight = new Consequence();
+			
+			for (int j = 0; j < ruleSet.Length; j++)
 			{
-				//string rule = j == 0 ? "" : RuleSets.NoninitialRulePrefix;
-				//string clr = RuleSets.BookTypes[mRandom.Next(0, RuleSets.BookTypeCount)];
+				consequenceIfRight.Text = "then do Something!";
+				ruleSet[j].ConcequenceIfRight = consequenceIfRight;
 
+				Debug.LogFormat("Rule ({0}, {1}) is {2}", i, j, ruleSet[j].IsAdhered(BombInfo));
+			}// continue here. 
+			Debug.Log(" ");
 
-				
-			}
+			sets[i] = ruleSet;
 		}
+
+		// TODO: write the rules' text to wherever they are needed for the pdf.
 	}
 
 	private void SetKeys()
