@@ -1,4 +1,4 @@
-﻿using KModkit;
+using KModkit;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
@@ -32,6 +32,7 @@ public class HiddenDoorModule : MonoBehaviour
 	{
 		tRandom = new Random();
 		mRandom = RuleSeedable.GetRNG();
+		SelectableBook.Set(BookTypes, BookSelectionRotation);
 
 		SpawnBooks();
 		SetBookTypes();
