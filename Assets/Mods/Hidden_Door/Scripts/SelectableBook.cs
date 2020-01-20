@@ -113,6 +113,6 @@ public class SelectableBook : MonoBehaviour
 	/// <returns></returns>
 	public bool IsCorrect()
 	{
-		return isKey == isSelected == true;
+		return isKey == isSelected;
 	}
 }
