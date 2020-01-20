@@ -35,6 +35,8 @@ public class HiddenDoorModule : MonoBehaviour
 	private int leverCount;
 	private int leverType;
 	private int tType = -1;
+	private int t1Type = -1;
+
 
 	private void Start()
 	{
@@ -50,7 +52,7 @@ public class HiddenDoorModule : MonoBehaviour
 		SetKeys();
 		IterateActiveLever();
 
-		Debug.LogFormat("T = {0}, L = {1}", BookTypeNames[tType], BookTypeNames[leverType]);
+		Debug.LogFormat("T = {0}, T1 = {3}, L = {1}, Lc = {2}", BookTypeNames[tType], BookTypeNames[leverType], leverCount, BookTypeNames[t1Type]);
 	}
 
 	private void SpawnBooks()
@@ -79,8 +81,6 @@ public class HiddenDoorModule : MonoBehaviour
 	{
 		leverType = tRandom.Next(0, BookTypes.Length);
 		leverCount = tRandom.Next(MinMaxLevers.X, MinMaxLevers.Y);
-
-		Debug.LogFormat("Levertype: ({0}), Spawing ({1}) levers!", leverType, leverCount);
 
 		for (int i = 0; i < leverCount; i++)
 		{
@@ -124,12 +124,19 @@ public class HiddenDoorModule : MonoBehaviour
 					k = mRandom.Next(0, BookTypes.Length);
 				} while (k == leverType);
 
-				ruleSet[j].Text = string.Format(ConsequenceSentences.GetPseudoRandom(mRandom), BookTypeNames[k], ruleSet[j].Text);
+				int l;
+				do
+				{
+					l = mRandom.Next(0, BookTypes.Length);
+				} while (l == k || l == leverType);
+
+				ruleSet[j].Text = string.Format(ConsequenceSentences.GetPseudoRandom(mRandom), BookTypeNames[k], BookTypeNames[l], ruleSet[j].Text);
 				ruleSet[j].ConcequenceIfRight = consequenceIfRight;
 				
 				if (i + MinMaxLevers.X == leverCount && tType == -1 && ruleSet[j].IsAdhered(BombInfo))
 				{
 					tType = k;
+					t1Type = l;
 				}
 			}
 

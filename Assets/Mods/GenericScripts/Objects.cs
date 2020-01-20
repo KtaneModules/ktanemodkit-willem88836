@@ -1,5 +1,4 @@
 ﻿
-
 public class Tuple<T, T1>
 {
 	public T A;
@@ -39,8 +38,6 @@ public struct Int2
 		this.Y = y;
 	}
 }
-
-
 
 public static class Extentions
 {
