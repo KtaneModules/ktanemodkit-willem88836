@@ -26,3 +26,16 @@ public class Truple<T, T1, T2>
 		this.C = c;
 	}
 }
+
+[System.Serializable]
+public struct Int2
+{
+	public int X;
+	public int Y;
+
+	public Int2(int x, int y)
+	{
+		this.X = x;
+		this.Y = y;
+	}
+}

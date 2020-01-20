@@ -712,6 +712,9 @@ MonoBehaviour:
   bookPrefab: {fileID: 114717334351567014, guid: 965ff0ebc9d1c3241819fcab74717b1d,
     type: 2}
   BookContainer: {fileID: 1894206713}
+  MinMaxLevers:
+    X: 3
+    Y: 6
   BookTypes:
   - {fileID: 2100000, guid: 95f19344a8681df4f8097f2f4937d492, type: 2}
   - {fileID: 2100000, guid: b12b81dce0165e544943a8fea9525dd5, type: 2}
@@ -2230,6 +2233,9 @@ MonoBehaviour:
   BookInterval: 0
   bookPrefab: {fileID: 0}
   BookContainer: {fileID: 0}
+  MinMaxLevers:
+    X: 0
+    Y: 0
   BookTypes: []
   BookSelectionRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &1909307081

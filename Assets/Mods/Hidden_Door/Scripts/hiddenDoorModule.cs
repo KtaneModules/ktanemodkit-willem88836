@@ -15,21 +15,24 @@ public class HiddenDoorModule : MonoBehaviour
 	public SelectableBook bookPrefab;
 	public Transform BookContainer;
 
+	public Int2 MinMaxLevers;
+
 	[Header("Book Settings")]
 	public Material[] BookTypes;
 	public Vector3 BookSelectionRotation;
 
 
-
-	// TODO: figure out a way to do this neatly. 
 	private List<SelectableBook> selectableBooks = new List<SelectableBook>();
 
 	public void Start()
 	{
-		random = new System.Random();
-		KMSelectable selectable = GetComponent<KMSelectable>();
+		random = new Random(); // Should I use some sort of seed here? Does the bomb have a seed? 
 		SelectableBook.Set(BookTypes, BookSelectionRotation);
+
 		SpawnBooks();
+		SetBookTypes();
+		SetKeys();
+		IterateActiveLever();
 	}
 
 	public void SpawnBooks()
@@ -47,11 +50,52 @@ public class HiddenDoorModule : MonoBehaviour
 				newBook.transform.position = range.Start.position + Vector3.right * j * BookInterval;
 				newBook.name = "book_" + k++;
 
-				newBook.Initialize(random.Next(0, BookTypes.Length), OnLeverPulled);
+				newBook.Initialize(OnLeverPulled);
 
 				selectableBooks.Add(newBook);
 			}
 		}
+	}
+
+	private void SetBookTypes()
+	{
+		int leverType = random.Next(0, BookTypes.Length);
+		int leverCount = random.Next(MinMaxLevers.X, MinMaxLevers.Y);
+
+		Debug.LogFormat("Levertype: ({0}), Spawing ({1}) levers!", leverType, leverCount);
+
+		for (int i = 0; i < leverCount; i++)
+		{
+			int j = random.Next(0, selectableBooks.Count);
+			selectableBooks[j].Set(false, true, leverType);
+		}
+
+		for (int i = 0; i < selectableBooks.Count; i++)
+		{
+			SelectableBook current = selectableBooks[i];
+
+			if (current.IsLever)
+				continue;
+
+			int j;
+			do
+			{
+				// Note: should I ensure a minimum number of books for each type? 
+				j = random.Next(0, BookTypes.Length);
+			} while (j == leverType);
+
+			current.Set(false, false, j);
+		}
+	}
+
+	private void SetKeys()
+	{
+
+	}
+
+	private void IterateActiveLever()
+	{
+
 	}
 
 	public void OnLeverPulled()
