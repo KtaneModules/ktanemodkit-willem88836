@@ -81,6 +81,7 @@ public class SelectableBook : MonoBehaviour
 
 		return false;
 	}
+	
 	public void Select()
 	{
 		if (!isSelected)

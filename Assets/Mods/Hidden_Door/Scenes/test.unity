@@ -699,6 +699,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25fb734a9e54962448f1e797b5a59117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BombModule: {fileID: 418710029}
+  BookPrefab: {fileID: 114717334351567014, guid: 965ff0ebc9d1c3241819fcab74717b1d,
+    type: 2}
+  BookContainer: {fileID: 1894206713}
   BookRanges:
   - Start: {fileID: 144169100}
     End: {fileID: 1512905670}
@@ -709,9 +713,6 @@ MonoBehaviour:
   - Start: {fileID: 854873731}
     End: {fileID: 76649756}
   BookInterval: 0.006
-  bookPrefab: {fileID: 114717334351567014, guid: 965ff0ebc9d1c3241819fcab74717b1d,
-    type: 2}
-  BookContainer: {fileID: 1894206713}
   MinMaxLevers:
     X: 3
     Y: 6
@@ -2229,10 +2230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25fb734a9e54962448f1e797b5a59117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BombModule: {fileID: 0}
+  BookPrefab: {fileID: 0}
+  BookContainer: {fileID: 0}
   BookRanges: []
   BookInterval: 0
-  bookPrefab: {fileID: 0}
-  BookContainer: {fileID: 0}
   MinMaxLevers:
     X: 0
     Y: 0

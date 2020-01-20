@@ -7,13 +7,16 @@ using Random = System.Random;
 
 public class HiddenDoorModule : MonoBehaviour 
 {
-	private Random random; 
+	private Random random;
 
+	[Header("References")]
+	public KMBombModule BombModule;
+	public SelectableBook BookPrefab;
+	public Transform BookContainer;
+	
 	[Header("Module Settings")]
 	public BookRange[] BookRanges;
 	public float BookInterval;
-	public SelectableBook bookPrefab;
-	public Transform BookContainer;
 
 	public Int2 MinMaxLevers;
 
@@ -46,7 +49,7 @@ public class HiddenDoorModule : MonoBehaviour
 
 			for (int j = 0; j < n; j++)
 			{
-				SelectableBook newBook = Instantiate(bookPrefab, BookContainer);
+				SelectableBook newBook = Instantiate(BookPrefab, BookContainer);
 				newBook.transform.position = range.Start.position + Vector3.right * j * BookInterval;
 				newBook.name = "book_" + k++;
 
@@ -100,7 +103,30 @@ public class HiddenDoorModule : MonoBehaviour
 
 	public void OnLeverPulled()
 	{
-		Debug.Log("Lever pulled!");
+		bool isCorrect = true;
 
+		foreach(SelectableBook book in selectableBooks)
+		{
+			if (!book.IsCorrect())
+			{
+				isCorrect = false;
+				break;
+			}
+		}
+
+		if (isCorrect)
+		{
+			BombModule.HandlePass();
+		}
+		else
+		{
+			BombModule.HandleStrike();
+
+			// Resets all book selections.
+			foreach (SelectableBook book in selectableBooks)
+			{
+				book.Deselect();
+			}
+		}
 	}
 }
