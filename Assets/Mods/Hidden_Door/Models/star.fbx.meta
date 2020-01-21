@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: 65e251d78451c614399cb6409add3907
+guid: fd8da9f8efc7b544086264ac9e7f6c70
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Box002
-    100004: Box003
-    400000: //RootNode
-    400002: Box002
-    400004: Box003
-    2100000: Box002Mat
-    2100002: Box003Mat
-    2300000: Box002
-    2300002: Box003
-    3300000: Box002
-    3300002: Box003
-    4300000: Box002
-    4300002: Box003
+    100000: Camera
+    100002: Lamp
+    100004: Star
+    100006: //RootNode
+    400000: Camera
+    400002: Lamp
+    400004: Star
+    400006: //RootNode
+    2000000: Camera
+    2100000: No Name
+    2300000: Star
+    3300000: Star
+    4300000: Star
+    10800000: Lamp
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -47,7 +47,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1

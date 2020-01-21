@@ -85,7 +85,8 @@ public class HiddenDoorModule : MonoBehaviour
 		for (int i = 0; i < leverCount; i++)
 		{
 			int j = tRandom.Next(0, selectableBooks.Count);
-			selectableBooks[j].Set(false, true, leverType);
+			selectableBooks[j].Set(false, true);
+			selectableBooks[j].Set(leverType, 0, 0);
 		}
 
 		for (int i = 0; i < selectableBooks.Count; i++)
@@ -102,7 +103,8 @@ public class HiddenDoorModule : MonoBehaviour
 				j = tRandom.Next(0, BookTypes.Length);
 			} while (j == leverType);
 
-			current.Set(false, false, j);
+			current.Set(false, false);
+			current.Set(j, 0, 0);
 		}
 	}
 
@@ -188,3 +190,26 @@ public class HiddenDoorModule : MonoBehaviour
 		}
 	}
 }
+
+
+/**
+ * 
+ * 
+ * 
+ * Pull every book with intervals that follow the folloiwng sequence, iterating between that sequence and the next number in the serial number. 
+ * If the current nserial number number is 0, use the previously used interval as the new interval.
+ *	- Number of [Square, star, circle] Icons on the [top, upper-middle, lower-middle, bottom] shelf. 
+ *	- ^ with different iteration.
+ *	- ^ with different iteration. 
+ *	
+ *	However,  if the selected book is of type T or is a lever, it is skipped. in case it is of type T, the next interval is dequal to the number of occurances of T modulus the initially calculated interval. 
+ *	If, however, that outcome is 0, the number of occurances of T is the new interval. 
+ *	
+ *	The direction in which should be iterated through the book case is not static either. 
+ *	If the list of the total books per type, ordered descendingly, excluding T and the levertype, are in alphabetical order, the horizontal navigation direction is left to right. 
+ *	Otherwise, it is in the reversed order. 
+ *	The vertical navigation direction is determined by the total number of books per marking type, ordered ascendingly, excluding T and the levertype colors.
+ *	If these are in non-alphabetical order, the direction is from top to bottom.
+ *	Otherwise, the other way around.
+ *	
+ */

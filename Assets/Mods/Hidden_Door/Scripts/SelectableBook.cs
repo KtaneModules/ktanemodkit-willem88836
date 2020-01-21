@@ -9,12 +9,15 @@ public class SelectableBook : MonoBehaviour
 	[SerializeField] private KMSelectable selectable;
 	[SerializeField] private Transform body;
 	[SerializeField] private MeshRenderer meshRenderer;
+	[SerializeField] private GameObject[] symbols; 
 
 	private static Material[] typeMaterials;
 	private static Vector3 selectedAngle;
 
 	private Action onLeverPulled;
-	private int myType;
+	private int bookType;
+	private int symbolType;
+	private int symbolShape;
 
 	public bool IsLever { get; private set; }
 	private bool isKey;
@@ -51,17 +54,25 @@ public class SelectableBook : MonoBehaviour
 	/// <param name="isKey">If the book should be selected.</param>
 	/// <param name="isLever">If the book finishes the puzzle.</param>
 	/// <param name="type">What type of book it is.</param>
-	public void Set(bool isKey, bool isLever, int type = -1)
+	public void Set(bool isKey, bool isLever)
 	{
 		Deselect();
 		this.isKey = isKey;
 		this.IsLever = isLever;
+	}
 
-		if (type != -1)
-		{
-			this.myType = type;
-			meshRenderer.material = typeMaterials[myType];
-		}
+	public void Set(int bookType, int symbolShape, int symbolType)
+	{
+		this.bookType = bookType;
+		meshRenderer.material = typeMaterials[this.bookType];
+		
+		if (this.symbolShape != -1)
+			symbols[this.symbolShape].SetActive(false);
+		this.symbolShape = symbolShape;
+		symbols[this.symbolShape].SetActive(true);
+
+		this.symbolType = symbolType;
+		symbols[this.symbolShape].GetComponent<MeshRenderer>().material = typeMaterials[this.symbolType];
 	}
 
 	/// <summary>
