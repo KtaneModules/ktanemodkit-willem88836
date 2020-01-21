@@ -104,7 +104,7 @@ public class HiddenDoorModule : MonoBehaviour
 			} while (j == leverType);
 
 			current.Set(false, false);
-			current.Set(j, 0, 0);
+			current.Set(j, 0, 0); // TODO: change this to something random. 
 		}
 	}
 

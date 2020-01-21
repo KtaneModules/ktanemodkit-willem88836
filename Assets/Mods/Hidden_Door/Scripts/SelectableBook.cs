@@ -15,9 +15,9 @@ public class SelectableBook : MonoBehaviour
 	private static Vector3 selectedAngle;
 
 	private Action onLeverPulled;
-	private int bookType;
-	private int symbolType;
-	private int symbolShape;
+	public int BookType { get; private set; }
+	public int SymbolType { get; private set; }
+	public int SymbolShape { get; private set; }
 
 	public bool IsLever { get; private set; }
 	private bool isKey;
@@ -63,16 +63,16 @@ public class SelectableBook : MonoBehaviour
 
 	public void Set(int bookType, int symbolShape, int symbolType)
 	{
-		this.bookType = bookType;
-		meshRenderer.material = typeMaterials[this.bookType];
+		this.BookType = bookType;
+		meshRenderer.material = typeMaterials[this.BookType];
 		
-		if (this.symbolShape != -1)
-			symbols[this.symbolShape].SetActive(false);
-		this.symbolShape = symbolShape;
-		symbols[this.symbolShape].SetActive(true);
+		if (this.SymbolShape != -1)
+			symbols[this.SymbolShape].SetActive(false);
+		this.SymbolShape = symbolShape;
+		symbols[this.SymbolShape].SetActive(true);
 
-		this.symbolType = symbolType;
-		symbols[this.symbolShape].GetComponent<MeshRenderer>().material = typeMaterials[this.symbolType];
+		this.SymbolType = symbolType;
+		symbols[this.SymbolShape].GetComponent<MeshRenderer>().material = typeMaterials[this.SymbolType];
 	}
 
 	/// <summary>
