@@ -22,6 +22,7 @@ public class HiddenDoorModule : MonoBehaviour
 	[Header("Book Settings")]
 	public Material[] BookTypes;
 	public string[] BookTypeNames;
+	public string[] BookShapes;
 	public Vector3 BookSelectionRotation;
 
 	[Header("Sentences")]
@@ -86,7 +87,16 @@ public class HiddenDoorModule : MonoBehaviour
 		{
 			int j = tRandom.Next(0, selectableBooks.Count);
 			selectableBooks[j].Set(false, true);
-			selectableBooks[j].Set(leverType, 0, 0);
+
+			int s = tRandom.Next(0, BookShapes.Length);
+			int t;
+
+			do
+			{
+				t = tRandom.Next(0, BookTypes.Length);
+			} while (t == j);
+
+			selectableBooks[j].Set(leverType, s, t);
 		}
 
 		for (int i = 0; i < selectableBooks.Count; i++)
@@ -96,15 +106,23 @@ public class HiddenDoorModule : MonoBehaviour
 			if (current.IsLever)
 				continue;
 
-			int j;
+			int j; // I've written this code twice now -> merge? 
 			do
 			{
 				// Note: should I ensure a minimum number of books for each type? 
 				j = tRandom.Next(0, BookTypes.Length);
 			} while (j == leverType);
 
+			int s = tRandom.Next(0, BookShapes.Length);
+			int t;
+
+			do
+			{
+				t = tRandom.Next(0, BookTypes.Length);
+			} while (t == j);
+
 			current.Set(false, false);
-			current.Set(j, 0, 0); // TODO: change this to something random. 
+			current.Set(j, s, t); // TODO: change this to something random. 
 		}
 	}
 
