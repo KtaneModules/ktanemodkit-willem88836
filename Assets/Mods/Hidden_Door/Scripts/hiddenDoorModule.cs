@@ -1,4 +1,6 @@
 ﻿using KModkit;
+using System.Linq;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
@@ -128,6 +130,12 @@ public class HiddenDoorModule : MonoBehaviour
 
 	private void SetRules()
 	{
+		SetTRules();
+		SetDirectionRules();
+	}
+
+	private void SetTRules()
+	{
 		Rule[][] sets = new Rule[MinMaxLevers.Y - MinMaxLevers.X][];
 
 		for (int i = 0; i < sets.Length; i++)
@@ -152,7 +160,7 @@ public class HiddenDoorModule : MonoBehaviour
 
 				ruleSet[j].Text = string.Format(ConsequenceSentences.GetPseudoRandom(mRandom), BookTypeNames[k], BookTypeNames[l], ruleSet[j].Text);
 				ruleSet[j].ConcequenceIfRight = consequenceIfRight;
-				
+
 				if (i + MinMaxLevers.X == leverCount && tType == -1 && ruleSet[j].IsAdhered(BombInfo))
 				{
 					tType = k;
@@ -164,10 +172,49 @@ public class HiddenDoorModule : MonoBehaviour
 			sets[i] = ruleSet;
 		}
 
-		
-
 		// TODO: write the rules' text to wherever they are needed for the pdf.
 	}
+
+	private void SetDirectionRules()
+	{
+		CountableString[] bookTypeCount = new CountableString[BookTypes.Length];
+		CountableString[] bookSymbolTypeCount = new CountableString[BookTypes.Length];
+
+		for(int i = 0; i < BookTypeNames.Length; i++)
+		{
+			bookTypeCount[i].S = BookTypeNames[i];
+			bookSymbolTypeCount[i].S = BookTypeNames[i];
+		}
+
+		foreach (SelectableBook book in selectableBooks)
+		{
+			bookTypeCount[book.BookType]++;
+			bookSymbolTypeCount[book.SymbolType]++;
+		}
+
+		Array.Sort(bookTypeCount);
+		Array.Sort(bookSymbolTypeCount);
+
+		bool bookTypeIsAlphabetical = true;
+		bool symbolTypeIsAlphabetical = true;
+		for (int i = 0; i < bookTypeCount.Length - 1; i++)
+		{
+			Debug.Log(bookTypeCount[i].ToString());
+			Debug.Log(bookSymbolTypeCount[i].ToString());
+			// HACK: it doesn't check all the letters, but hey, it works :p 
+			bookTypeIsAlphabetical = bookTypeIsAlphabetical 
+				&& bookTypeCount[i].S[0] <= bookTypeCount[i + 1].S[0] 
+				&& bookTypeCount[i].S[1] < bookTypeCount[i + 1].S[1];
+
+			symbolTypeIsAlphabetical = symbolTypeIsAlphabetical
+				&& bookSymbolTypeCount[i].S[0] <= bookSymbolTypeCount[i + 1].S[0]
+				&& bookSymbolTypeCount[i].S[1] < bookSymbolTypeCount[i + 1].S[1];
+		}
+
+		Debug.Log(bookTypeIsAlphabetical);
+		Debug.Log(symbolTypeIsAlphabetical);	
+	}
+
 
 	private void SetKeys()
 	{
@@ -214,13 +261,13 @@ public class HiddenDoorModule : MonoBehaviour
  * 
  * 
  * 
- * Pull every book with intervals that follow the folloiwng sequence, iterating between that sequence and the next number in the serial number. 
+ * Pull every book with intervals that follow the following sequence, iterating between that sequence and the next number in the serial number. 
  * If the current nserial number number is 0, use the previously used interval as the new interval.
  *	- Number of [Square, star, circle] Icons on the [top, upper-middle, lower-middle, bottom] shelf. 
  *	- ^ with different iteration.
  *	- ^ with different iteration. 
  *	
- *	However,  if the selected book is of type T or is a lever, it is skipped. in case it is of type T, the next interval is dequal to the number of occurances of T modulus the initially calculated interval. 
+ *	However, if the selected book is of type T or is a lever, it is skipped. in case it is of type T, the next interval is dequal to the number of occurances of T modulus the initially calculated interval. 
  *	If, however, that outcome is 0, the number of occurances of T is the new interval. 
  *	
  *	The direction in which should be iterated through the book case is not static either. 

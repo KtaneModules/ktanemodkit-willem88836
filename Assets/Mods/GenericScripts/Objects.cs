@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 public class Tuple<T, T1>
 {
 	public T A;
@@ -44,5 +46,42 @@ public static class Extentions
 	public static T GetPseudoRandom<T>(this T[] array, MonoRandom mRandom)
 	{
 		return array[mRandom.Next(0, array.Length)];
+	}
+}
+
+public struct CountableString : IComparable<CountableString>
+{
+	public string S;
+	public int C;
+
+	public int CompareTo(CountableString other)
+	{
+		return other.C > this.C ? -1 : 1;
+	}
+
+	public override string ToString()
+	{
+		return string.Format("{0} - {1}", S, C);
+	}
+
+	public static CountableString operator +(CountableString a, int d)
+	{
+		a.C += d;
+		return a;
+	}
+	public static CountableString operator -(CountableString a, int d)
+	{
+		a.C -= d;
+		return a;
+	}
+	public static CountableString operator ++(CountableString a)
+	{
+		a.C++;
+		return a;
+	}
+	public static CountableString operator --(CountableString a)
+	{
+		a.C--;
+		return a;
 	}
 }
