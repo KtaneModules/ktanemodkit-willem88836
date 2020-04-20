@@ -13,6 +13,6 @@ public class DebugModuleTracer : MonoBehaviour {
 	private IEnumerator<WaitForSeconds> DelayedStart()
 	{
 		yield return new WaitForSeconds(0.5f);
-		Camera.main.transform.position = GameObject.Find("Hidden_Door_Module_2").transform.position + Vector3.up * 0.15f;
+		//Camera.main.transform.position = GameObject.Find("Hidden_Door_Module_2").transform.position + Vector3.up * 0.15f;
 	}
 }
