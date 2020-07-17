@@ -13,10 +13,16 @@ namespace WillemMeijer.NMAirTrafficControl
 		public bool IsShowing { get; private set; }
 
 
-		private void Start()
+		public void Initialize(
+			AirTrafficControl airTrafficControl,
+			InteractableButton okButton,
+			InteractableButton upButton,
+			InteractableButton downButton)
 		{
+			this.airTrafficControl = airTrafficControl;
+
 			int c = transform.childCount;
-			for(int i = 0; i < c; i++)
+			for (int i = 0; i < c; i++)
 			{
 				Transform container = transform.GetChild(i);
 				int d = container.childCount;
@@ -29,16 +35,7 @@ namespace WillemMeijer.NMAirTrafficControl
 					options.Add(option);
 				}
 			}
-		}
 
-
-		public void Initialize(
-			AirTrafficControl airTrafficControl,
-			InteractableButton okButton,
-			InteractableButton upButton,
-			InteractableButton downButton)
-		{
-			this.airTrafficControl = airTrafficControl;
 			okButton.AddListener(OnOkClicked);
 			upButton.AddListener(OnUpClicked);
 			downButton.AddListener(OnDownClicked);
@@ -50,7 +47,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			for(int i = 0; i < this.options.Count; i++)
 			{
 				SelectionOption option = this.options[i];
-				if(i > options.Length)
+				if(i >= options.Length)
 				{
 					option.SetOption(null);
 				}
@@ -61,9 +58,9 @@ namespace WillemMeijer.NMAirTrafficControl
 				}
 			}
 
-			gameObject.SetActive(false);
 			IsShowing = true;
 			SetSelection(0);
+			gameObject.SetActive(true);
 		}
 
 		private void SetSelection(int next)
@@ -80,8 +77,8 @@ namespace WillemMeijer.NMAirTrafficControl
 			{
 				return;
 			}
-
-			if(current < options.Count - 1)
+			// TODO: Coninue here.
+			if (current < options.Count - 1)
 			{
 				SelectionOption option = options[current];
 				int index = option.Index;

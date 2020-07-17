@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
@@ -7,20 +8,26 @@ namespace WillemMeijer.NMAirTrafficControl
 		public int State { get; private set; }
 		public bool ContainsPlane { get; private set; }
 
+		[SerializeField] private Color32 selectedColor;
+		[SerializeField] private Color32 unselectedColor;
+		[SerializeField] private Image image;
+
 		private int hangar;
 		private int shuttleCar;
 		private int luggageCar;
 
 
 
+
 		public void Select()
 		{
-
+			ContainsPlane = true;
+			image.color = selectedColor;
 		}
 
 		public void Deselect()
 		{
-
+			image.color = unselectedColor;
 		}
 
 		public void SetNext(int selection)

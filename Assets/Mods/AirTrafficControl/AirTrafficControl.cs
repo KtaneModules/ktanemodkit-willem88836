@@ -56,13 +56,14 @@ namespace WillemMeijer.NMAirTrafficControl
             }
 
             messageField.Set(startedMessage);
-
-            messageField.Initialize(okButton);
-            selectionMenu.Initialize(this, okButton, upButton, downButton);
-
             okButton.AddListener(OnOkClicked);
             upButton.AddListener(OnUpClicked);
             downButton.AddListener(OnDownClicked);
+
+            landingLanes[currentLane].Select();
+
+            messageField.Initialize(okButton);
+            selectionMenu.Initialize(this, okButton, upButton, downButton);
         }
 
 
@@ -108,8 +109,13 @@ namespace WillemMeijer.NMAirTrafficControl
                 return;
             }
 
+            landingLanes[currentLane].Deselect();
             currentLane--;
-            currentLane %= landingLanes.Length;
+            if(currentLane < 0)
+            {
+                currentLane += landingLanes.Length;
+            }
+            landingLanes[currentLane].Select();
         }
 
         private void OnDownClicked()
@@ -119,8 +125,9 @@ namespace WillemMeijer.NMAirTrafficControl
                 return;
             }
 
-            currentLane++;
-            currentLane %= landingLanes.Length;
+            landingLanes[currentLane].Deselect();
+            currentLane = (currentLane + 1) % landingLanes.Length;
+            landingLanes[currentLane].Select();
         }
     }
 }

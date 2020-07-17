@@ -23,7 +23,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		private void Update()
 		{
-			if (IsDisplaying)
+			if (IsDisplaying && this.okButton != null)
 			{
 				flicker += Time.deltaTime;
 				if (flicker >= flickerSpeed)
@@ -46,7 +46,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		public void Set(string message)
 		{
 			IsDisplaying = true;
-			messageField.text = message;
+			messageField.text = message.Replace("\\n", "\n");
 		}
 
 		private void OnClick()
