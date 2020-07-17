@@ -1,14 +1,11 @@
-﻿using KModkit;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(KMSelectable))]
 public class HanoianButton : MonoBehaviour {
 
-	public Renderer lightRenderer;
+	[SerializeField] private Renderer lightRenderer;
 
-	private HanoianCompounds parent;
+	private HanoianButtonManager parent;
 	private int index;
 	private Material clicked;
 	private Material unclicked;
@@ -20,9 +17,8 @@ public class HanoianButton : MonoBehaviour {
 		selectable.OnInteract += OnInteract;
 	}
 
-
 	public void Set(
-		HanoianCompounds parent, 
+		HanoianButtonManager parent, 
 		int index,
 		Material clicked, 
 		Material unclicked, 
@@ -41,7 +37,6 @@ public class HanoianButton : MonoBehaviour {
 		parent.OnButtonClicked(index);
 		return true;
 	}
-
 
 	public void OnClick()
 	{

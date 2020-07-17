@@ -4,26 +4,21 @@ using UnityEngine;
 public class HanoianCompounds : MonoBehaviour
 {
 	[Header("References")]
-	public KMBombModule Bombmodule;
-	public KMRuleSeedable RuleSeedable;
-	public KMAudio Audio;
-	public LineRenderer[] LineRenderers;
-	public HanoianButton[] Buttons;
+	[SerializeField] private KMBombModule kmBombModule;
+	[SerializeField] private KMRuleSeedable kmRuleSeedable;
+	[SerializeField] private KMAudio kmAudio;
+	[SerializeField] private GraphLineManager lineManager;
+	[SerializeField] private HanoianButtonManager buttonManager;
 
 	[Header("Visuals")]
-	public Material ButtonClicked;
-	public Material ButtonUnclicked;
-	public Material ButtonWrong;
-	public Material[] LineColors;
-	public Texture[] LinePatterns;
+	[SerializeField] private Material[] lineColors;
+	[SerializeField] private Texture[] linePatterns;
 
 	[Header("Parameters")]
-	public int LineCount;
-	public int NodeCount;
-	public Vector2 HeightEdges;
-	public int ValueBuffer;
-	public int HanoiMin; 
-	public int HanoiMax;
+	[SerializeField] private int valueBuffer;
+	[SerializeField] private int hanoiMin;
+	[SerializeField] private int hanoiMax;
+	[SerializeField] private int shiftRange;
 
 
 	private int scalar; // Maximum value of a live node. Also used to scale the LineRenderers. 
@@ -38,7 +33,7 @@ public class HanoianCompounds : MonoBehaviour
 	/// </summary>
 	public void Start()
 	{
-		int seed = RuleSeedable.GetRNG().Seed;
+		int seed = kmRuleSeedable.GetRNG().Seed;
 		if (seed != 1)
 		{
 			HanoianRules.Generate(seed);
@@ -49,34 +44,29 @@ public class HanoianCompounds : MonoBehaviour
 				Debug.Log(HanoianRules.SerializeRuleSet());
 			}
 
-			HanoianRules.Shuffle(ref LineColors, seed);
-			HanoianRules.Shuffle(ref LinePatterns, seed);
+			HanoianRules.Shuffle(ref lineColors, seed);
+			HanoianRules.Shuffle(ref linePatterns, seed);
 		}
 
-		values = new int[LineCount, NodeCount];
-		tiles = new int[HanoiMax + 1];
+		values = new int[lineManager.LineCount, lineManager.NodeCount];
+		tiles = new int[hanoiMax + 1];
 		ruleSet = HanoianRules.GetRandomRuleSet();
 		currentNode = -1;
 
 		// Initializing, respectively, scalar, tiles, and buttons.
 		scalar = 0;
-		for (int i = HanoiMax; i >= HanoiMin; i--)
+		for (int i = hanoiMax; i >= hanoiMin; i--)
 		{
 			scalar += (int)Mathf.Pow(2, i);
 			tiles[i] = -1;
 		}
 
-		for (int i = HanoiMin; i >= 0; i--)
+		for (int i = hanoiMin; i >= 0; i--)
 		{
 			tiles[i] = -1;
 		}
 
-		for (int i = 0; i < Buttons.Length; i++)
-		{
-			HanoianButton button = Buttons[i];
-			button.Set(this, i, ButtonClicked, ButtonUnclicked, ButtonWrong);
-			button.OnUnclick();
-		}
+		buttonManager.Initialize(this);
 
 		SetColors();
 		SetStartingValues();
@@ -96,7 +86,7 @@ public class HanoianCompounds : MonoBehaviour
 		int colorRule = ruleSet[1];
 
 		List<int> availableColors = new List<int>();
-		for (int i = 0; i < LineColors.Length; i++)
+		for (int i = 0; i < lineColors.Length; i++)
 		{
 			if (i == colorRule)
 				continue;
@@ -112,7 +102,7 @@ public class HanoianCompounds : MonoBehaviour
 		int patternRule = ruleSet[0];
 
 		List<int> availablePatterns = new List<int>();
-		for (int i = 0; i < LinePatterns.Length; i++)
+		for (int i = 0; i < linePatterns.Length; i++)
 		{
 			if (i == patternRule)
 			{
@@ -122,9 +112,8 @@ public class HanoianCompounds : MonoBehaviour
 		}
 
 		// Setting all the colors and patterns. 
-		for (int k = 0; k < LineRenderers.Length; k++) 
+		for (int k = 0; k < lineManager.LineCount; k++) 
 		{
-			LineRenderer line = LineRenderers[k];
 			int i = Random.Range(0, availableColors.Count - 1);
 			int j = availableColors[i];
 			availableColors.RemoveAt(i);
@@ -133,14 +122,14 @@ public class HanoianCompounds : MonoBehaviour
 				// The ruleset now refers to the line instead of the pattern index. 
 				ruleSet[1] = k;
 			}
-			Material material = LineColors[j];
+			Material material = lineColors[j];
 
 			i = Random.Range(0, availablePatterns.Count - 1);
 			j = availablePatterns[i];
 			availablePatterns.RemoveAt(i);
-			material.mainTexture = LinePatterns[j];
+			material.mainTexture = linePatterns[j];
 
-			line.material = LineColors[j];
+			lineManager.SetMaterial(k, material);
 		}
 	}
 	/// <summary>
@@ -153,14 +142,14 @@ public class HanoianCompounds : MonoBehaviour
 		{
 			for (int j = 0; j < values.GetLength(1); j++)
 			{
-				values[i, j] = Random.Range(ValueBuffer, scalar - ValueBuffer);
+				values[i, j] = Random.Range(valueBuffer, scalar - valueBuffer);
 			}
 		}
 
 		ResetLiveNodes();
 
 		// Distributes tiles randomly, in legal order, across the live nodes.
-		for (int i = HanoiMax; i >= HanoiMin; i--)
+		for (int i = hanoiMax; i >= hanoiMin; i--)
 		{
 			int j = GetRandomLiveNode();
 			tiles[i] = j;
@@ -168,8 +157,8 @@ public class HanoianCompounds : MonoBehaviour
 		}
 
 		// Applying rule 1 and 2
-		SetRandomNonLiveNode(ruleSet[0], scalar + ValueBuffer); 
-		SetRandomNonLiveNode(ruleSet[1], -ValueBuffer);
+		SetRandomNonLiveNode(ruleSet[0], scalar + valueBuffer); 
+		SetRandomNonLiveNode(ruleSet[1], -valueBuffer);
 	}
 	/// <summary>
 	///		Applies the given value to a random node in the provided line
@@ -213,23 +202,17 @@ public class HanoianCompounds : MonoBehaviour
 	/// <param name="i">Node-index of the button</param>
 	public void OnButtonClicked(int i)
 	{
-		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-		HanoianButton button = Buttons[i];
+		kmAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
 
 		if (currentNode == -1)
 		{
 			currentNode = i;
-
-			foreach (HanoianButton b in Buttons)
-			{
-				b.OnUnclick();
-			}
-
-			button.OnClick();
+			buttonManager.UnclickAll();
+			buttonManager.Click(i);
 		}
 		else if (currentNode == i)
 		{
-			button.OnUnclick();
+			buttonManager.Unclick(i);
 			currentNode = -1;
 		}
 		else
@@ -289,14 +272,13 @@ public class HanoianCompounds : MonoBehaviour
 	/// <param name="t">Index of the tile.</param>
 	private void MoveTile(int from, int to, int t)
 	{
-		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.Switch, transform);
+		kmAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.Switch, transform);
 
 		tiles[t] = to;
 		int val = (int)Mathf.Pow(2, t);
 		values[ruleSet[3], from] -= val;
 		values[ruleSet[3], to] += val;
-		Buttons[from].OnUnclick();
-		Buttons[to].OnUnclick();
+		buttonManager.UnclickAll(from, to);
 		SetLines();
 
 		Debug.LogFormat("Moved ({0}) to ({1}).", from, to);
@@ -307,7 +289,8 @@ public class HanoianCompounds : MonoBehaviour
 
 		if (height == scalar)
 		{
-			Bombmodule.HandlePass();
+			kmBombModule.HandlePass();
+			buttonManager.ClickAll();
 		}
 
 		ShiftNonAliveNodes();
@@ -319,15 +302,8 @@ public class HanoianCompounds : MonoBehaviour
 	/// <param name="to">(optional) Node-index to which the tile was attempted to be moved.</param>
 	private void OnMoveFail(int from = -1, int to = -1)
 	{
-		if (from >= 0)
-		{
-			Buttons[from].OnWrongClick();
-		}
-		if (to >= 0)
-		{
-			Buttons[to].OnWrongClick();
-		}
-		Bombmodule.HandleStrike();
+		buttonManager.WrongClickAll(from, to);
+		kmBombModule.HandleStrike();
 		currentNode = -1;
 	}
 
@@ -337,29 +313,25 @@ public class HanoianCompounds : MonoBehaviour
 	/// </summary>
 	private void ShiftNonAliveNodes()
 	{
-		// TODO: this.
+		for (int i = 0; i < values.GetLength(0); i++)
+		{
+			if (i == ruleSet[3])
+			{
+				continue;
+			}
+			for (int j = 0; j < values.GetLength(1); j++)
+			{
+				values[i, j] += Random.Range(-shiftRange, shiftRange);
+			}
+		}
+		SetLines();
 	}
 	/// <summary>
 	///		Adjusts the LineRenderers' values to correspond with the current node-values.
 	/// </summary>
 	private void SetLines()
 	{
-		// TODO: do something with lerping.
-		for (int i = 0; i < LineRenderers.Length; i++)
-		{
-			LineRenderer line = LineRenderers[i];
-			Vector3[] positions = new Vector3[values.GetLength(1)];
-			int c = line.GetPositions(positions);
-
-			for (int j = 0; j < c; j++)
-			{
-				float a = (float)values[i, j] / (scalar + ValueBuffer);
-				float b = Mathf.Lerp(HeightEdges.x, HeightEdges.y, a);
-				positions[j].z = b;
-			}
-
-			line.SetPositions(positions);
-		}
+		lineManager.SetValues(values, scalar + valueBuffer);
 	}
 
 
