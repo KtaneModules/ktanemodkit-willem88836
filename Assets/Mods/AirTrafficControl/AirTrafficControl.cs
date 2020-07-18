@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Collections;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
@@ -14,10 +12,14 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField] private InteractableButton downButton;
         [SerializeField] private LandingLane[] lanes;
 
-        [Space, SerializeField] private int startingDelay;
-        [SerializeField] private string notYetStartedMessage;
-        [SerializeField] private string startedMessage;
+        [Space, SerializeField] private int eventIntervalMin;
+        [SerializeField] private int eventIntervalMax;
+        [SerializeField, Multiline] private string incomingPlaneMessage;
+        [SerializeField] private int startingDelay;
+        [SerializeField, Multiline] private string notYetStartedMessage;
+        [SerializeField, Multiline] private string startedMessage;
 
+        private int lastIncomingPlaneLane;
         private int current;
 
 
@@ -46,12 +48,12 @@ namespace WillemMeijer.NMAirTrafficControl
             while (t > 0)
             {
                 string message = string.Format(notYetStartedMessage, t);
-                messageField.Set(message);
+                messageField.ShowMessage(message);
                 t--;
                 yield return new WaitForSeconds(1);
             }
 
-            messageField.Set(startedMessage);
+            messageField.ShowMessage(startedMessage);
             okButton.AddListener(OnOkClicked);
             upButton.AddListener(OnUpClicked);
             downButton.AddListener(OnDownClicked);
@@ -60,6 +62,40 @@ namespace WillemMeijer.NMAirTrafficControl
 
             messageField.Initialize(okButton);
             selectionMenu.Initialize(this, okButton, upButton, downButton);
+
+            StartCoroutine(EventInvoker());
+        }
+
+
+        private IEnumerator EventInvoker()
+        {
+            while (true)
+            {
+                int d = UnityEngine.Random.Range(eventIntervalMin, eventIntervalMax);
+                yield return new WaitForSeconds(d);
+
+                PlaneData incoming = AirTrafficControlData.GeneratePlane();
+
+                int laneIndex = lastIncomingPlaneLane;
+                while (laneIndex == lastIncomingPlaneLane)
+                {
+                    laneIndex = UnityEngine.Random.Range(0, lanes.Length);
+                }
+                lastIncomingPlaneLane = laneIndex;
+
+                LandingLane lane = lanes[laneIndex];
+                lane.Incoming(incoming);
+
+                string message = string.Format(
+                    incomingPlaneMessage, 
+                    incoming.Serial, 
+                    incoming.Origin, 
+                    incoming.PassengerCount, 
+                    incoming.LuggageCount, 
+                    laneIndex);
+
+                messageField.ShowMessage(message);
+            }
         }
 
 

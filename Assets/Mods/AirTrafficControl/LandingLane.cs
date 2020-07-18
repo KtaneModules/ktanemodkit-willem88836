@@ -17,7 +17,10 @@ namespace WillemMeijer.NMAirTrafficControl
 		private int luggageCar;
 
 
+		public void Incoming(PlaneData plane)
+		{
 
+		}
 
 		public void Select()
 		{

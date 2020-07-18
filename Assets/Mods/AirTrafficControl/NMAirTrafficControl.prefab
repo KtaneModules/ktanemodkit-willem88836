@@ -54,7 +54,6 @@ GameObject:
   - component: {fileID: 224021558028114622}
   - component: {fileID: 222672962362259564}
   - component: {fileID: 114040328449741844}
-  - component: {fileID: 114770735648617488}
   - component: {fileID: 114608486977782980}
   m_Layer: 0
   m_Name: Panel
@@ -469,7 +468,6 @@ GameObject:
   - component: {fileID: 224992377582088256}
   - component: {fileID: 222426930296299008}
   - component: {fileID: 114930994689645678}
-  - component: {fileID: 114145156210714834}
   - component: {fileID: 114630156604930304}
   m_Layer: 0
   m_Name: Panel (3)
@@ -539,7 +537,6 @@ GameObject:
   - component: {fileID: 224357783307728154}
   - component: {fileID: 222295936120975318}
   - component: {fileID: 114075029532524274}
-  - component: {fileID: 114589684253391460}
   - component: {fileID: 114679700744158044}
   m_Layer: 0
   m_Name: Panel (3)
@@ -630,7 +627,6 @@ GameObject:
   - component: {fileID: 224419760510133656}
   - component: {fileID: 222255225594561852}
   - component: {fileID: 114718959135795350}
-  - component: {fileID: 114417904501733360}
   - component: {fileID: 114544639149260638}
   m_Layer: 0
   m_Name: Panel (1)
@@ -734,7 +730,6 @@ GameObject:
   - component: {fileID: 224735882634996528}
   - component: {fileID: 222085778332263292}
   - component: {fileID: 114149548394933650}
-  - component: {fileID: 114277922564386868}
   - component: {fileID: 114706514210276126}
   m_Layer: 0
   m_Name: Panel (4)
@@ -808,7 +803,6 @@ GameObject:
   - component: {fileID: 224901999520029464}
   - component: {fileID: 222861353968889364}
   - component: {fileID: 114396958327868720}
-  - component: {fileID: 114928935703576726}
   - component: {fileID: 114557219112864130}
   m_Layer: 0
   m_Name: Panel (4)
@@ -861,7 +855,6 @@ GameObject:
   - component: {fileID: 224314522966516330}
   - component: {fileID: 222498245038882930}
   - component: {fileID: 114059833215661846}
-  - component: {fileID: 114614087751671142}
   - component: {fileID: 114260070499465158}
   m_Layer: 0
   m_Name: Panel
@@ -880,7 +873,6 @@ GameObject:
   - component: {fileID: 224616186138347296}
   - component: {fileID: 222668286562278742}
   - component: {fileID: 114727490586433298}
-  - component: {fileID: 114761193221039240}
   - component: {fileID: 114643838911370030}
   m_Layer: 0
   m_Name: Panel (2)
@@ -916,7 +908,6 @@ GameObject:
   - component: {fileID: 224483882561838056}
   - component: {fileID: 222038006985459100}
   - component: {fileID: 114239799573243984}
-  - component: {fileID: 114082834468515080}
   - component: {fileID: 114413492265554890}
   m_Layer: 0
   m_Name: Panel (2)
@@ -969,7 +960,6 @@ GameObject:
   - component: {fileID: 224826512212337914}
   - component: {fileID: 222748597815370758}
   - component: {fileID: 114591192525595890}
-  - component: {fileID: 114392114726063950}
   - component: {fileID: 114284430187625078}
   m_Layer: 0
   m_Name: Panel (1)
@@ -1778,18 +1768,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: SD-1255
---- !u!114 &114082834468515080
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1904854988530446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114130945408819812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1883,18 +1861,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: SD-1255
---- !u!114 &114145156210714834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1512766468307552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114147339547375552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2057,7 +2023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114266585002429818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2091,18 +2057,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: SD-1255
---- !u!114 &114277922564386868
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704544952688788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114284430187625078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2114,7 +2068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114308136448945346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2204,18 +2158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8edfd7626f71545b3892fdf8da49be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114392114726063950
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1962739146435182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114396958327868720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2314,7 +2256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114417540129758084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2341,18 +2283,6 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
---- !u!114 &114417904501733360
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1624444514967296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114448959922572028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2393,7 +2323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114557219112864130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2405,7 +2335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114560821615918514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2454,9 +2384,19 @@ MonoBehaviour:
   - {fileID: 114855617900302766}
   - {fileID: 114057738544565766}
   - {fileID: 114313056129217750}
-  startingDelay: 5
+  eventIntervalMin: 5
+  eventIntervalMax: 6
+  incomingPlaneMessage: '- NOTIFICATION -
+
+
+    Plane {0} is coming from {1} is coming in on runway {4} with {2} passengers and
+    {3} luggage'
+  startingDelay: 1
   notYetStartedMessage: The airfield will open in {0} seconds.
-  startedMessage: '- NOTIFICATION -\n\nThe airfield is now opened!'
+  startedMessage: '- NOTIFICATION -
+
+
+    The airfield is now opened!'
 --- !u!114 &114585512559527876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2484,18 +2424,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114589684253391460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1579005142702588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114591192525595890
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2534,19 +2462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
---- !u!114 &114614087751671142
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1841538524778332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114616516374321048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2607,7 +2523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114643838911370030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2619,7 +2535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114654605822305870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2697,7 +2613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114684605500693078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2829,7 +2745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: -1
+  selectEncapsulation: '- {0} -'
 --- !u!114 &114718959135795350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2958,18 +2874,6 @@ MonoBehaviour:
 
 
     Plane SR-244 is coming in on runway 3 with 304 passengers and 248 luggage'
---- !u!114 &114761193221039240
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1871604759343368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114765641901315412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2988,18 +2892,6 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   image: {fileID: 114896323487656096}
---- !u!114 &114770735648617488
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1021078765872030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
 --- !u!114 &114803995871865638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3185,19 +3077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba90d80754341d244ad581221e79bb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  returnLabel: 
---- !u!114 &114928935703576726
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1775712683902824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Index: -1
+  returnLabel: Return
 --- !u!114 &114930994689645678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3310,7 +3190,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 30
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136292252852700946
@@ -3323,7 +3203,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 30
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136983271601640140
@@ -3336,7 +3216,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 30
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!222 &222028568150811586
@@ -4386,8 +4266,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 10, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 3, y: 0}
+  m_SizeDelta: {x: -63, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &224992377582088256
 RectTransform:

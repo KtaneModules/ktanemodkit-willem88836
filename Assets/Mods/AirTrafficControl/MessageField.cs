@@ -43,7 +43,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		}
 
 
-		public void Set(string message)
+		public void ShowMessage(string message)
 		{
 			IsDisplaying = true;
 			messageField.text = message.Replace("\\n", "\n");

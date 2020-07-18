@@ -1,4 +1,6 @@
-﻿namespace WillemMeijer.NMAirTrafficControl
+﻿using UnityEngine;
+
+namespace WillemMeijer.NMAirTrafficControl
 {
     public static class AirTrafficControlData
     {
@@ -326,5 +328,18 @@
             "Lusaka",
             "Harare"
         };
+    
+        
+        public static PlaneData GeneratePlane()
+        {
+            int s = Random.Range(0, PlaneSerials.Length);
+            int o = Random.Range(0, OriginLocations.Length);
+            int p = Random.Range(100, 300);
+            int l = Random.Range(100, 255);
+
+            PlaneData newPlane = new PlaneData(s, o, p, l);
+
+            return newPlane;
+        }
     }
 }
