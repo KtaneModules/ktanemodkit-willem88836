@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
@@ -44,5 +45,62 @@ namespace WillemMeijer.NMAirTrafficControl
 
             Debug.Log(to);
         }
+    
+        public static void GenerateOrigins(int n)
+        {
+            string[] cities = AirTrafficControlData.AllCities;
+
+            string o = "";
+            List<string> list = new List<string>();
+            for (int i = 0; i< n; i++)
+            {
+                int r = Random.Range(0, cities.Length);
+                string option = cities[r];
+
+                //if (cities.Contains(option))
+                //{
+                //    i--;
+                //}
+                //else
+                //{
+                list.Add(option);
+                o+="\"";
+                o += option;
+                o += "\",\n";
+                //}
+            }
+
+            Debug.Log(o);
+            Debug.Log(list.ToString());
+        }
+    
+        public static void GenerateCrossTable(int x, int y, int a)
+        {
+            string o = "{\n";
+            int[,] table = new int[x, y];
+            for (int i = 0; i < x; i++)
+            {
+                o += "{";
+                for (int j = 0; j < y; j++)
+                {
+                    int b = Random.Range(0, a);
+                    table[i, j] = b;
+                    o += b;
+                    if(j < y - 1)
+                    {
+                        o += ",";
+                    }
+                }
+
+                o += "}";
+                if(i < x - 1)
+                {
+                    o += ",\n";
+                }
+            }
+
+            Debug.Log(o);
+        }
+    
     }
 }
