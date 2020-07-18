@@ -1,6 +1,6 @@
 ﻿namespace WillemMeijer.NMAirTrafficControl
 {
-	public struct PlaneData
+	public class PlaneData
 	{
 		public int SerialIndex;
 		public int OriginIndex;
@@ -20,7 +20,7 @@
 		{
 			get
 			{
-				return AirTrafficControlData.OriginLocations[OriginIndex];
+				return AirTrafficControlData.OriginCities[OriginIndex];
 			}
 		}
 

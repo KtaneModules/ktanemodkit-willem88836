@@ -1011,20 +1011,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 114564076546678424, guid: d581edf32cdc74c409c00aef557f9417,
+    - target: {fileID: 114756077268997302, guid: d581edf32cdc74c409c00aef557f9417,
         type: 2}
-      propertyPath: eventIntervalMax
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 224909337360991360, guid: d581edf32cdc74c409c00aef557f9417,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 224909337360991360, guid: d581edf32cdc74c409c00aef557f9417,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: -63
+      propertyPath: m_Text
+      value: '- NOTIFICATION -
+
+
+        Plane SR-244, coming from Beirut, is coming in on runway 3 with 304 passengers
+        and 248 luggage.'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d581edf32cdc74c409c00aef557f9417, type: 2}

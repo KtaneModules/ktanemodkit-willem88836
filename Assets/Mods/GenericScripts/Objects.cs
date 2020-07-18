@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 public class Tuple<T, T1>
 {
@@ -83,5 +82,62 @@ public struct CountableString : IComparable<CountableString>
 	{
 		a.C--;
 		return a;
+	}
+}
+
+
+public static class StringManipulation
+{
+	/// <summary>
+	///		Converts a letter to an integer regardles of capitalization. 
+	///		A = 0, B = 1, etc.
+	/// </summary>
+	public static int AlphabetToInt(char c)
+	{
+		// offsets are derived from ascii table.
+		int i = (int)c;
+		
+		// char is capitalized. 
+		if(i > 90)
+		{
+			// lowercase offset is subtracted.
+			i -= 97;
+		}
+		else
+		{
+			// uppercase offset is subtracted.
+			i -= 65;
+		}
+
+		return i;
+	}
+
+	/// <summary>
+	///		Converts a letter to an integer regardles of capitalization. 
+	///		A = 1, B = 2, etc.
+	/// </summary>
+	public static int AlphabetToIntPlusOne(char c)
+	{
+		return AlphabetToInt(c) + 1;
+	}
+
+	/// <summary>
+	///		Converts a an integer to a capital letter. 
+	///		0 = A, 1 = B, etc.
+	/// </summary>
+	public static char IntToAlphabet(int i)
+	{
+		i += 65;
+		return (char)i;
+	}
+
+	/// <summary>
+	///		Converts a an integer to a capital letter. 
+	///		1 = A, 2 = B, etc.
+	/// </summary>
+	public static char IntToAlphabetPlusOne(int i)
+	{
+		i += 64;
+		return (char)i;
 	}
 }

@@ -70,7 +70,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "Hangar 6" 
         };
 
-        public static readonly string[] OriginLocations = new string[]
+        public static readonly string[] OriginCities = new string[]
         {
             "Nuku'alofa",
             "Bloemfontein",
@@ -160,7 +160,8 @@ namespace WillemMeijer.NMAirTrafficControl
             "Yaounde",
             "Ottawa",
             "Praia",
-            "Bangui","N\'Djamena",
+            "Bangui",
+            "N'Djamena",
             "Santiago",
             "Beijing",
             "Bogota",
@@ -307,7 +308,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "Dodoma",
             "Bangkok",
             "Lome",
-            "Nuku\'alofa",
+            "Nuku'alofa",
             "Port of Spain",
             "Tunis",
             "Ankara",
@@ -324,7 +325,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "Caracas",
             "Hanoi",
             "Cardiff",
-            "Sana\'a",
+            "Sana'a",
             "Lusaka",
             "Harare"
         };
@@ -333,7 +334,7 @@ namespace WillemMeijer.NMAirTrafficControl
         public static PlaneData GeneratePlane()
         {
             int s = Random.Range(0, PlaneSerials.Length);
-            int o = Random.Range(0, OriginLocations.Length);
+            int o = Random.Range(0, OriginCities.Length);
             int p = Random.Range(100, 300);
             int l = Random.Range(100, 255);
 

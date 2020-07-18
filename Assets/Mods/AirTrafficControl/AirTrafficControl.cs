@@ -63,6 +63,11 @@ namespace WillemMeijer.NMAirTrafficControl
             messageField.Initialize(okButton);
             selectionMenu.Initialize(this, okButton, upButton, downButton);
 
+            for(int i = 0; i < lanes.Length; i++)
+            {
+                lanes[i].Intialize(i, lanes);
+            }
+
             StartCoroutine(EventInvoker());
         }
 
@@ -71,7 +76,7 @@ namespace WillemMeijer.NMAirTrafficControl
         {
             while (true)
             {
-                int d = UnityEngine.Random.Range(eventIntervalMin, eventIntervalMax);
+                int d = Random.Range(eventIntervalMin, eventIntervalMax);
                 yield return new WaitForSeconds(d);
 
                 PlaneData incoming = AirTrafficControlData.GeneratePlane();
@@ -79,7 +84,7 @@ namespace WillemMeijer.NMAirTrafficControl
                 int laneIndex = lastIncomingPlaneLane;
                 while (laneIndex == lastIncomingPlaneLane)
                 {
-                    laneIndex = UnityEngine.Random.Range(0, lanes.Length);
+                    laneIndex = Random.Range(0, lanes.Length);
                 }
                 lastIncomingPlaneLane = laneIndex;
 

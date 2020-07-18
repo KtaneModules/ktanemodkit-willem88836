@@ -2389,8 +2389,8 @@ MonoBehaviour:
   incomingPlaneMessage: '- NOTIFICATION -
 
 
-    Plane {0} is coming from {1} is coming in on runway {4} with {2} passengers and
-    {3} luggage'
+    Plane {0}, coming from {1}, is coming in on runway {4} with {2} passengers and
+    {3} luggage.'
   startingDelay: 1
   notYetStartedMessage: The airfield will open in {0} seconds.
   startedMessage: '- NOTIFICATION -
@@ -2873,7 +2873,8 @@ MonoBehaviour:
   m_Text: '- NOTIFICATION -
 
 
-    Plane SR-244 is coming in on runway 3 with 304 passengers and 248 luggage'
+    Plane SR-244, coming from Beirut, is coming in on runway 3 with 304 passengers
+    and 248 luggage'
 --- !u!114 &114765641901315412
 MonoBehaviour:
   m_ObjectHideFlags: 1
