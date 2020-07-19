@@ -50,10 +50,13 @@ namespace WillemMeijer.NMAirTrafficControl
 			yield return new WaitForSeconds(incomingPlaneDelay);
 			GameObject nextPlane = planePrefabs.PickRandom();
 			GameObject planeObject = Instantiate(nextPlane, planeContainer);
+			planeObject.name = "Plane - " + incomingPlane.Serial;
+			planeObject.transform.position = Vector3.forward;
 
 			Action onComplete = delegate
 			{
-				// TODO: add oncomplete.
+				occupyingPlane = incomingPlane;
+				incomingPlane = null;
 			};
 
 			animator.Animate(planeObject.transform, 0, -1, onComplete); 

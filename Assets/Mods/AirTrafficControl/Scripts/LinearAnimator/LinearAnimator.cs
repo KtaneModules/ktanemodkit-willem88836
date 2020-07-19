@@ -31,32 +31,52 @@ namespace WillemMeijer.NMAirTrafficControl
 
 
 		[SerializeField] private float progressionSpeed;
-		[SerializeField] private AnimationCurve progressionCurve;
+		[SerializeField] private bool closeDebugLoop;
 
-		private List<Transform> nodes = new List<Transform>();
+		private List<LinearAnimationNode> nodes;
 		private List<Actor> liveActors = new List<Actor>();
 
 
+		private void OnValidate()
+		{
+			Initialize();
+		}
+
 		private void Awake()
 		{
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			nodes = new List<LinearAnimationNode>();
 			int c = transform.childCount;
-			for(int i = 0; i < c; i++)
+			for (int i = 0; i < c; i++)
 			{
-				nodes.Add(transform.GetChild(i));
+				Transform child = transform.GetChild(i);
+				LinearAnimationNode node = child.GetComponent<LinearAnimationNode>();
+				if (node != null)
+				{
+					nodes.Add(node);
+				}
 			}
 		}
 
 		private void Update()
 		{
 			#if UNITY_EDITOR
+			// Shows the nodes in the editor.
 			for(int i = 0; i < nodes.Count; i++)
 			{
+				if (i == nodes.Count - 1 && !closeDebugLoop)
+					continue;
+
 				int j = (i + 1) % nodes.Count;
 
-				Transform current = nodes[i];
+				LinearAnimationNode current = nodes[i];
 
-				Debug.DrawLine(current.position, nodes[j].position, Color.red);
-				Debug.DrawLine(current.position, current.position + current.forward, Color.blue);
+				Debug.DrawLine(current.Position, nodes[j].Position, Color.red);
+				//Debug.DrawLine(current.Position, current.Position + current.Rotation.eulerAngles, Color.blue);
 			}
 			#endif
 
@@ -65,26 +85,42 @@ namespace WillemMeijer.NMAirTrafficControl
 			{
 				Actor actor = liveActors[i];
 
-				float b = progressionCurve.Evaluate(actor.alpha);
+				// the start and end nodes are selected.
+				LinearAnimationNode start = nodes[actor.current];
+				LinearAnimationNode end = nodes[actor.current + 1];
 
-				Transform start = nodes[actor.current];
-				Transform end = nodes[actor.current + 1];
+				// the start's animationcurve is used for progressing.
+				AnimationCurve curve = start.ProgressionCurve;
+				float a = actor.alpha - start.Delay;
+				float b = curve.Evaluate(a);
 
-				Vector3 position = Vector3.Lerp(start.position, end.position, b);
-				Quaternion rotation = Quaternion.Lerp(start.rotation, end.rotation, b);
+				// interpolating values based on evaluated alpha.
+				Vector3 position = Vector3.Lerp(start.Position, end.Position, b);
+				Quaternion rotation = Quaternion.Lerp(start.Rotation, end.Rotation, b);
 
+				// sets values.
 				actor.actor.position = position;
 				actor.actor.rotation = rotation;
 
-				actor.alpha = actor.alpha + progressionSpeed * Time.deltaTime;
+				// the alpha is increased. the speed is altered by the 
+				// distance between the current and next node. 
+				actor.alpha = actor.alpha 
+					+ (progressionSpeed / (end.Position - start.Position).magnitude)		
+					* Time.deltaTime;
 
-				if (actor.alpha >= 1)
+
+				// if the progression exceeds 1 it's either at the 
+				// next node, or the end of the sequence. 
+				if (actor.alpha - start.Delay >= 1)
 				{
+					// when at the next node, the next node is selected.
 					if (actor.current < actor.end - 1)
 					{
-						actor.alpha -= 1;
+						actor.alpha = 0;
 						actor.current += 1;
 					}
+					// when the end is reached, the node is removed, and 
+					// its owner notified. 
 					else
 					{
 						liveActors.RemoveAt(i);
@@ -98,6 +134,8 @@ namespace WillemMeijer.NMAirTrafficControl
 					}
 				}
 
+				// the alpha doesn't update unless you set the value again. 
+				// is this a bug? 
 				liveActors[i] = actor;
 			}
 		}
