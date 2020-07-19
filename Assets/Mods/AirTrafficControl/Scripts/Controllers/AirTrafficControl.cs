@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
@@ -82,7 +83,8 @@ namespace WillemMeijer.NMAirTrafficControl
                 PlaneData incoming = AirTrafficControlData.GeneratePlane();
 
                 int laneIndex = lastIncomingPlaneLane;
-                while (laneIndex == lastIncomingPlaneLane)
+                while (laneIndex == lastIncomingPlaneLane
+                    || lanes[laneIndex].IsWrecked)
                 {
                     laneIndex = Random.Range(0, lanes.Length);
                 }

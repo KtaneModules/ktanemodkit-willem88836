@@ -1,5 +1,6 @@
 ﻿using System;
 
+[Serializable]
 public class Tuple<T, T1>
 {
 	public T A;
@@ -12,7 +13,7 @@ public class Tuple<T, T1>
 	}
 }
 
-
+[Serializable]
 public class Truple<T, T1, T2>
 {
 	public T A;

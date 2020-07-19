@@ -151,5 +151,14 @@ namespace WillemMeijer.NMAirTrafficControl
 			Actor newActor = new Actor(actor, start, end, 0, onComplete);
 			liveActors.Add(newActor);
 		}
+
+		public void Remove(Transform actor)
+		{
+			int i = liveActors.IndexOf((Actor a) => { return a.actor == actor; });
+			if(i >= 0)
+			{
+				liveActors.RemoveAt(i);
+			}
+		}
 	}
 }

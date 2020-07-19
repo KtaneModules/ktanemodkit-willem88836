@@ -9,8 +9,10 @@ namespace WillemMeijer.NMAirTrafficControl
 	{
 		public int State { get; private set; }
 		public bool ContainsPlane { get; private set; }
+		public bool IsWrecked { get; private set; }
 
 		[SerializeField] private int incomingPlaneDelay;
+		[SerializeField] private float crashDistance;
 
 		[SerializeField] private GameObject[] planePrefabs;
 		[SerializeField] private Transform planeContainer;
@@ -26,8 +28,31 @@ namespace WillemMeijer.NMAirTrafficControl
 		private int shuttleCar;
 		private int luggageCar;
 
-		private PlaneData incomingPlane;
-		private PlaneData occupyingPlane;
+		private Tuple<PlaneData, Transform> incomingPlane 
+			= new Tuple<PlaneData, Transform>(null, null);
+		private Tuple<PlaneData, Transform> occupyingPlane 
+			= new Tuple<PlaneData, Transform>(null, null);
+
+
+		private void Update()
+		{
+			if (incomingPlane.B == null || occupyingPlane.B == null)
+			{
+				return;
+			}
+
+			float delta = (incomingPlane.B.position
+				- occupyingPlane.B.position).magnitude;
+
+			if (delta < crashDistance)
+			{
+				IsWrecked = true;
+				animator.Remove(incomingPlane.B);
+				animator.Remove(occupyingPlane.B);
+				Debug.Log("Crash on lane" + laneIndex);
+				// handle strike
+			}
+		}
 
 
 		public void Intialize(int laneIndex, LandingLane[] lanes)
@@ -39,9 +64,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Incoming(PlaneData plane)
 		{
-			incomingPlane = plane;
-			//occupyingPlane = plane;
-
+			incomingPlane.A = plane;
 			StartCoroutine(LandPlane());
 		}
 
@@ -50,13 +73,17 @@ namespace WillemMeijer.NMAirTrafficControl
 			yield return new WaitForSeconds(incomingPlaneDelay);
 			GameObject nextPlane = planePrefabs.PickRandom();
 			GameObject planeObject = Instantiate(nextPlane, planeContainer);
-			planeObject.name = "Plane - " + incomingPlane.Serial;
-			planeObject.transform.position = Vector3.forward;
+			planeObject.name = "Plane - " + incomingPlane.A.Serial;
+			planeObject.transform.position = Vector3.left * 900;
+
+			incomingPlane.B = planeObject.transform;
 
 			Action onComplete = delegate
 			{
-				occupyingPlane = incomingPlane;
-				incomingPlane = null;
+				occupyingPlane.A = incomingPlane.A;
+				occupyingPlane.B = incomingPlane.B;
+				incomingPlane.A = null;
+				incomingPlane.B = null;
 			};
 
 			animator.Animate(planeObject.transform, 0, -1, onComplete); 
@@ -136,26 +163,28 @@ namespace WillemMeijer.NMAirTrafficControl
 	
 		private int CalculateCorrectHangar()
 		{
-			return AirTrafficControlData.OriginSerialCrossTable[occupyingPlane.SerialIndex, occupyingPlane.OriginIndex];
+			return AirTrafficControlData.OriginSerialCrossTable[occupyingPlane.A.SerialIndex, occupyingPlane.A.OriginIndex];
 		}
 	
 		private int CalculateCorrectShuttle()
 		{
+			PlaneData data = occupyingPlane.A;
+
 			// 7) However, if the plane's origin is {0}, {1}, {2}, then ignore all rules above. 
-			if (occupyingPlane.OriginIndex == 6 || occupyingPlane.OriginIndex == 8 || occupyingPlane.OriginIndex == 23)
+			if (data.OriginIndex == 6 || data.OriginIndex == 8 || data.OriginIndex == 23)
 			{
 				return 5;
 			}
 
 			// 1) If one of the plane's serial letters is contained in its origin's.
-			string serialNumber = occupyingPlane.Serial;
+			string serialNumber = data.Serial;
 			char l1 = serialNumber[0];
 			char l2 = serialNumber[1];
 			char l3 = serialNumber[2] == '-'
 				? serialNumber[3]
 				: serialNumber[2];
 
-			string origin = occupyingPlane.Origin;
+			string origin = data.Origin;
 			if (origin.Contains(l1.ToString())
 				|| origin.Contains(l2.ToString())
 				|| origin.Contains(l3.ToString()))
@@ -164,8 +193,8 @@ namespace WillemMeijer.NMAirTrafficControl
 			}
 
 			// 2) Alternatively, if the plane's passenger and luggage count are both even. 
-			if (occupyingPlane.PassengerCount % 2 == 0
-				&& occupyingPlane.LuggageCount % 2 == 0)
+			if (data.PassengerCount % 2 == 0
+				&& data.LuggageCount % 2 == 0)
 			{
 				return 2;
 			}
@@ -185,7 +214,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			}
 
 			// 5) Alternatively, if the plane came in on lane 3 and it has more than 200 luggage.
-			if(laneIndex == 3 && occupyingPlane.LuggageCount > 200)
+			if(laneIndex == 3 && data.LuggageCount > 200)
 			{
 				return 2;
 			}
@@ -195,13 +224,13 @@ namespace WillemMeijer.NMAirTrafficControl
 			bool allInUse = true;
 			foreach(LandingLane lane in allLanes)
 			{
-				if(lane.occupyingPlane == null)
+				if(lane.occupyingPlane.A == null)
 				{
 					allInUse = false;
 				}
 				else
 				{
-					totalPassengers += lane.occupyingPlane.PassengerCount;
+					totalPassengers += lane.occupyingPlane.A.PassengerCount;
 				}
 			}
 
@@ -215,7 +244,7 @@ namespace WillemMeijer.NMAirTrafficControl
 	
 		private int CalculateCorrectLuggage()
 		{
-			string serial = occupyingPlane.Serial;
+			string serial = occupyingPlane.A.Serial;
 			int predash = 0;
 			int postdash = 0;
 			bool isPostDash = false;
@@ -255,8 +284,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			int correctLuggage =
 				(
-					(predash * occupyingPlane.PassengerCount
-						+ postdash * occupyingPlane.LuggageCount)
+					(predash * occupyingPlane.A.PassengerCount
+						+ postdash * occupyingPlane.A.LuggageCount)
 					^ (predash + postdash)
 				)
 				% AirTrafficControlData.LuggageSerials.Length;
