@@ -179,7 +179,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "Roseau",
             "Santo Domingo",
             "Dili",
-            "Quito","" +
+            "Quito",
             "Cairo",
             "San Salvador",
             "London",
