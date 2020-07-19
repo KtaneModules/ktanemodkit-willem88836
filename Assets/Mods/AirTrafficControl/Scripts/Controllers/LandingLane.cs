@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,11 @@ namespace WillemMeijer.NMAirTrafficControl
 		public int State { get; private set; }
 		public bool ContainsPlane { get; private set; }
 
+		[SerializeField] private int incomingPlaneDelay;
+
+		[SerializeField] private GameObject[] planePrefabs;
+		[SerializeField] private Transform planeContainer;
+		[SerializeField] private LinearAnimator animator;
 		[SerializeField] private Color32 selectedColor;
 		[SerializeField] private Color32 unselectedColor;
 		[SerializeField] private Image image;
@@ -20,6 +26,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		private int shuttleCar;
 		private int luggageCar;
 
+		private PlaneData incomingPlane;
 		private PlaneData occupyingPlane;
 
 
@@ -32,9 +39,21 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Incoming(PlaneData plane)
 		{
-			// TODO: change this.
-			occupyingPlane = plane;
+			incomingPlane = plane;
+			//occupyingPlane = plane;
+
+			StartCoroutine(LandPlane());
 		}
+
+		private IEnumerator LandPlane()
+		{
+			yield return new WaitForSeconds(incomingPlaneDelay);
+			GameObject nextPlane = planePrefabs.PickRandom();
+			GameObject planeObject = Instantiate(nextPlane, planeContainer);
+			animator.Animate(planeObject.transform, 0, -1, null); // TODO: add oncomplete.
+		}
+
+
 
 		public void Select()
 		{
