@@ -101,7 +101,7 @@ namespace WillemMeijer.NMAirTrafficControl
                     incoming.Origin, 
                     incoming.PassengerCount, 
                     incoming.LuggageCount, 
-                    laneIndex);
+                    laneIndex + 1); // incremented to match the lane's visual numbers.
 
                 messageField.ShowMessage(message);
             }

@@ -100,7 +100,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				incomingPlane.A = null;
 				incomingPlane.B = null;
 
-				Debug.LogFormat("Hangar: {0}\nShuttle: {1}\nLuggage: {2}", CalculateCorrectHangar(), CalculateCorrectShuttle(), CalculateCorrectLuggage());
+				Debug.LogFormat("Answers for lane {3}: (Hangar: {0}, Shuttle: {1}, Luggage: {2})", CalculateCorrectHangar(), CalculateCorrectShuttle(), CalculateCorrectLuggage(), laneIndex);
 			};
 
 			planeAnimator.Animate(planeObject.transform, 0, animatorEndNode, onComplete);
@@ -137,7 +137,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			if(State == 3)
 			{
-				// Start animations.
+				Launch();
 			}
 		}
 
@@ -149,6 +149,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				State = 0;
 				Action onLaunchComplete = delegate
 				{
+					Debug.Log("Launch Completed!");
 					departingPlane.A = null;
 					departingPlane.B = null;
 				};
