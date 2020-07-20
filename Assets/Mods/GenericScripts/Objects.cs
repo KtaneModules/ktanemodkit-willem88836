@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
 public class Tuple<T, T1>
@@ -46,6 +47,14 @@ public static class Extentions
 	public static T GetPseudoRandom<T>(this T[] array, MonoRandom mRandom)
 	{
 		return array[mRandom.Next(0, array.Length)];
+	}
+}
+
+public static class Positions
+{
+	public static Vector3 FarAway
+	{
+		get { return Vector3.right * 1000; }
 	}
 }
 

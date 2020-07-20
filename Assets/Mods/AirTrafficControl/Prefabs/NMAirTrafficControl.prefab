@@ -236,7 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224429831228045812}
   m_Layer: 0
-  m_Name: PlaneContainer
+  m_Name: UnitContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2642,7 +2642,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  Delay: 0
+  Delay: 3
 --- !u!114 &114124671517905656
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2744,7 +2744,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  Delay: 0
+  Delay: 3
 --- !u!114 &114158925150241006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2756,15 +2756,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751a735c977c114fbaf40b3cbcac162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomingPlaneDelay: 12
-  crashDistance: 0.01
+  planeAnimator: {fileID: 114905117542215738}
+  luggageFactory: {fileID: 0}
   planePrefabs:
   - {fileID: 1124760793660038, guid: 3a26e477897f4454783d67277a2f4890, type: 2}
   - {fileID: 1512562154663222, guid: 335b177ce70a7394bb05734ce252fc3a, type: 2}
   - {fileID: 1958636192092606, guid: 7b687cfbd69059c48ba585c1deffc5a2, type: 2}
   - {fileID: 1119485969402414, guid: 0d1d1285214028c4383e69536aade26e, type: 2}
   planeContainer: {fileID: 224429831228045812}
-  animator: {fileID: 114905117542215738}
   selectedColor:
     serializedVersion: 2
     rgba: 4289045925
@@ -2772,6 +2771,8 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   image: {fileID: 114266111277135322}
+  animatorEndNode: 0
+  crashDistance: 0.01
 --- !u!114 &114168693692021294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2964,7 +2965,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  Delay: 0
+  Delay: 3
 --- !u!114 &114266111277135322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3004,6 +3005,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionSpeed: 0.01
+  debugColor:
+    serializedVersion: 2
+    rgba: 4278190335
   closeDebugLoop: 0
 --- !u!114 &114274567840974298
 MonoBehaviour:
@@ -3053,6 +3057,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionSpeed: 0.01
+  debugColor:
+    serializedVersion: 2
+    rgba: 4278190335
   closeDebugLoop: 0
 --- !u!114 &114282215208942302
 MonoBehaviour:
@@ -3304,15 +3311,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751a735c977c114fbaf40b3cbcac162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomingPlaneDelay: 12
-  crashDistance: 0.01
+  planeAnimator: {fileID: 114935279961373218}
+  luggageFactory: {fileID: 0}
   planePrefabs:
   - {fileID: 1124760793660038, guid: 3a26e477897f4454783d67277a2f4890, type: 2}
   - {fileID: 1512562154663222, guid: 335b177ce70a7394bb05734ce252fc3a, type: 2}
   - {fileID: 1958636192092606, guid: 7b687cfbd69059c48ba585c1deffc5a2, type: 2}
   - {fileID: 1119485969402414, guid: 0d1d1285214028c4383e69536aade26e, type: 2}
   planeContainer: {fileID: 224429831228045812}
-  animator: {fileID: 114935279961373218}
   selectedColor:
     serializedVersion: 2
     rgba: 4289045925
@@ -3320,6 +3326,8 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   image: {fileID: 114609271604771570}
+  animatorEndNode: 0
+  crashDistance: 0.01
 --- !u!114 &114353266995920790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3775,15 +3783,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751a735c977c114fbaf40b3cbcac162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomingPlaneDelay: 12
-  crashDistance: 0.01
+  planeAnimator: {fileID: 114267005252106128}
+  luggageFactory: {fileID: 0}
   planePrefabs:
   - {fileID: 1124760793660038, guid: 3a26e477897f4454783d67277a2f4890, type: 2}
   - {fileID: 1512562154663222, guid: 335b177ce70a7394bb05734ce252fc3a, type: 2}
   - {fileID: 1958636192092606, guid: 7b687cfbd69059c48ba585c1deffc5a2, type: 2}
   - {fileID: 1119485969402414, guid: 0d1d1285214028c4383e69536aade26e, type: 2}
   planeContainer: {fileID: 224429831228045812}
-  animator: {fileID: 114267005252106128}
   selectedColor:
     serializedVersion: 2
     rgba: 4289045925
@@ -3791,6 +3798,8 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   image: {fileID: 114519511355700164}
+  animatorEndNode: 0
+  crashDistance: 0.01
 --- !u!114 &114504656320936610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4253,15 +4262,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751a735c977c114fbaf40b3cbcac162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomingPlaneDelay: 12
-  crashDistance: 0.01
+  planeAnimator: {fileID: 114275863908071542}
+  luggageFactory: {fileID: 0}
   planePrefabs:
   - {fileID: 1124760793660038, guid: 3a26e477897f4454783d67277a2f4890, type: 2}
   - {fileID: 1512562154663222, guid: 335b177ce70a7394bb05734ce252fc3a, type: 2}
   - {fileID: 1958636192092606, guid: 7b687cfbd69059c48ba585c1deffc5a2, type: 2}
   - {fileID: 1119485969402414, guid: 0d1d1285214028c4383e69536aade26e, type: 2}
   planeContainer: {fileID: 224429831228045812}
-  animator: {fileID: 114275863908071542}
   selectedColor:
     serializedVersion: 2
     rgba: 4289045925
@@ -4269,6 +4277,8 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   image: {fileID: 114953898317054606}
+  animatorEndNode: 0
+  crashDistance: 0.01
 --- !u!114 &114631870974076528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4388,7 +4398,7 @@ MonoBehaviour:
   - {fileID: 114337656611398502}
   - {fileID: 114158925150241006}
   - {fileID: 114502382736291840}
-  eventIntervalMin: 18
+  eventIntervalMin: 35
   eventIntervalMax: 60
   incomingPlaneMessage: '- NOTIFICATION -
 
@@ -4487,7 +4497,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  Delay: 0
+  Delay: 3
 --- !u!114 &114686262955316526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5064,6 +5074,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionSpeed: 0.01
+  debugColor:
+    serializedVersion: 2
+    rgba: 4278190335
   closeDebugLoop: 0
 --- !u!114 &114909598344670772
 MonoBehaviour:
@@ -5217,6 +5230,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionSpeed: 0.01
+  debugColor:
+    serializedVersion: 2
+    rgba: 4278190335
   closeDebugLoop: 0
 --- !u!114 &114953898317054606
 MonoBehaviour:

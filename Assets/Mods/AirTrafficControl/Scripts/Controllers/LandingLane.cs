@@ -7,20 +7,27 @@ namespace WillemMeijer.NMAirTrafficControl
 {
 	public class LandingLane : MonoBehaviour
 	{
+		// The data state of this landing lane (hangar, shuttle, luggage). 
 		public int State { get; private set; }
 		public bool ContainsPlane { get; private set; }
 		public bool IsWrecked { get; private set; }
 
-		[SerializeField] private int incomingPlaneDelay;
-		[SerializeField] private float crashDistance;
 
-		[SerializeField] private GameObject[] planePrefabs;
+		[SerializeField] private LinearAnimator planeAnimator;
+		[SerializeField] private LuggageCartFactory luggageFactory;
+
+		[Space, SerializeField] private GameObject[] planePrefabs;
 		[SerializeField] private Transform planeContainer;
-		[SerializeField] private LinearAnimator animator;
-		[SerializeField] private Color32 selectedColor;
+
+		[Space, SerializeField] private Color32 selectedColor;
 		[SerializeField] private Color32 unselectedColor;
 		[SerializeField] private Image image;
 
+		[Space, SerializeField] private int animatorEndNode;
+		[SerializeField] private float crashDistance;
+
+
+		private AirTrafficControl airTrafficControl;
 		private LandingLane[] allLanes;
 		private int laneIndex;
 
@@ -32,49 +39,57 @@ namespace WillemMeijer.NMAirTrafficControl
 			= new Tuple<PlaneData, Transform>(null, null);
 		private Tuple<PlaneData, Transform> occupyingPlane 
 			= new Tuple<PlaneData, Transform>(null, null);
+		private Tuple<PlaneData,Transform> departingPlane
+			= new Tuple<PlaneData, Transform>(null, null);
 
 
 		private void Update()
 		{
-			if (incomingPlane.B == null || occupyingPlane.B == null)
+			if (TestCrash(incomingPlane.B, occupyingPlane.B)
+			|| TestCrash(occupyingPlane.B, departingPlane.B)
+			|| TestCrash(departingPlane.B, incomingPlane.B))
 			{
-				return;
-			}
-
-			float delta = (incomingPlane.B.position
-				- occupyingPlane.B.position).magnitude;
-
-			if (delta < crashDistance)
-			{
-				IsWrecked = true;
-				animator.Remove(incomingPlane.B);
-				animator.Remove(occupyingPlane.B);
 				Debug.Log("Crash on lane" + laneIndex);
-				// handle strike
+
+				IsWrecked = true;
+				planeAnimator.Remove(incomingPlane.B);
+				planeAnimator.Remove(occupyingPlane.B);
+				planeAnimator.Remove(departingPlane.B);
+
+				airTrafficControl.OnPlaneCrash();
 			}
 		}
 
+		private bool TestCrash(Transform planeA, Transform planeB)
+		{
+			if (planeA == null || planeB == null)
+			{
+				return false;
+			}
 
-		public void Intialize(int laneIndex, LandingLane[] lanes)
+			float delta = (planeA.position
+				- planeB.position).magnitude;
+
+			return delta < crashDistance;
+		}
+
+
+		public void Intialize(int laneIndex, LandingLane[] lanes, AirTrafficControl airTrafficControl)
 		{
 			this.allLanes = lanes;
 			this.laneIndex = laneIndex;
+			this.airTrafficControl = airTrafficControl;
 		}
 
 
 		public void Incoming(PlaneData plane)
 		{
 			incomingPlane.A = plane;
-			StartCoroutine(LandPlane());
-		}
 
-		private IEnumerator LandPlane()
-		{
-			yield return new WaitForSeconds(incomingPlaneDelay);
 			GameObject nextPlane = planePrefabs.PickRandom();
 			GameObject planeObject = Instantiate(nextPlane, planeContainer);
 			planeObject.name = "Plane - " + incomingPlane.A.Serial;
-			planeObject.transform.position = Vector3.left * 900;
+			planeObject.transform.position = Positions.FarAway;
 
 			incomingPlane.B = planeObject.transform;
 
@@ -84,11 +99,12 @@ namespace WillemMeijer.NMAirTrafficControl
 				occupyingPlane.B = incomingPlane.B;
 				incomingPlane.A = null;
 				incomingPlane.B = null;
+
+				Debug.LogFormat("Hangar: {0}\nShuttle: {1}\nLuggage: {2}", CalculateCorrectHangar(), CalculateCorrectShuttle(), CalculateCorrectLuggage());
 			};
 
-			animator.Animate(planeObject.transform, 0, -1, onComplete); 
+			planeAnimator.Animate(planeObject.transform, 0, animatorEndNode, onComplete);
 		}
-
 
 
 		public void Select()
@@ -127,8 +143,25 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Launch()
 		{
-			State = 0;
-			// Test selection.
+			Action onLuggageComplete = delegate
+			{
+				Debug.Log("Starting launch");
+				State = 0;
+				Action onLaunchComplete = delegate
+				{
+					departingPlane.A = null;
+					departingPlane.B = null;
+				};
+
+				departingPlane.A = occupyingPlane.A;
+				departingPlane.B = occupyingPlane.B;
+				occupyingPlane.A = null;
+				occupyingPlane.B = null;
+
+				planeAnimator.Animate(departingPlane.B, animatorEndNode, -1, onLaunchComplete);
+			};
+
+			luggageFactory.CreateLuggageCart(luggageCar, onLuggageComplete);
 		}
 	
 		
@@ -170,8 +203,11 @@ namespace WillemMeijer.NMAirTrafficControl
 		{
 			PlaneData data = occupyingPlane.A;
 
-			// 7) However, if the plane's origin is {0}, {1}, {2}, then ignore all rules above. 
-			if (data.OriginIndex == 6 || data.OriginIndex == 8 || data.OriginIndex == 23)
+			// 7) However, if the plane's origin is {0}, {1}, {2}, 
+			// then ignore all rules above. 
+			if (data.OriginIndex == 6 
+				|| data.OriginIndex == 8 
+				|| data.OriginIndex == 23)
 			{
 				return 5;
 			}
@@ -192,21 +228,27 @@ namespace WillemMeijer.NMAirTrafficControl
 				return 3;
 			}
 
-			// 2) Alternatively, if the plane's passenger and luggage count are both even. 
+			// 2) Alternatively, if the plane's passenger and 
+			// luggage count are both even. 
 			if (data.PassengerCount % 2 == 0
 				&& data.LuggageCount % 2 == 0)
 			{
 				return 2;
 			}
 
-			// 3) Alternatively, if the origin's name consists of multiple words, or the plane has more luggage than passengers. 
-			string[] split = origin.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+			// 3) Alternatively, if the origin's name consists of multiple 
+			// words, or the plane has more luggage than passengers. 
+			string[] split = origin.Split(
+				new char[] { ' ' }, 
+				StringSplitOptions.RemoveEmptyEntries);
+
 			if(split.Length > 1)
 			{
 				return 4;
 			}
 
-			// 4) Alternatively, if the plane's serial number's first letter is in the last fourth of the alphabet.
+			// 4) Alternatively, if the plane's serial number's first letter is 
+			// in the last fourth of the alphabet.
 			int ax = StringManipulation.AlphabetToIntPlusOne(serialNumber[0]);
 			if(ax > 18)
 			{
@@ -219,12 +261,14 @@ namespace WillemMeijer.NMAirTrafficControl
 				return 2;
 			}
 
-			// 6) Alternatively, if there is a plane present, departing from, or currently approaching all landing lanes, and their cumulative passenger count is over 800
+			// 6) Alternatively, if there is a plane present, departing from, 
+			// or currently approaching all landing lanes, and the cumulative 
+			// passenger count of their occupying planes is over 800, excluding wrecked lanes.
 			int totalPassengers = 0;
 			bool allInUse = true;
 			foreach(LandingLane lane in allLanes)
 			{
-				if(lane.occupyingPlane.A == null)
+				if(lane.occupyingPlane.A == null && !lane.IsWrecked)
 				{
 					allInUse = false;
 				}

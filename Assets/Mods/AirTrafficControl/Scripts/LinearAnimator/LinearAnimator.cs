@@ -31,6 +31,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
 
 		[SerializeField] private float progressionSpeed;
+
+		[SerializeField] private Color32 debugColor;
 		[SerializeField] private bool closeDebugLoop;
 
 		private List<LinearAnimationNode> nodes;
@@ -75,7 +77,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 				LinearAnimationNode current = nodes[i];
 
-				Debug.DrawLine(current.Position, nodes[j].Position, Color.red);
+				Debug.DrawLine(current.Position, nodes[j].Position, debugColor);
 				//Debug.DrawLine(current.Position, current.Position + current.Rotation.eulerAngles, Color.blue);
 			}
 			#endif

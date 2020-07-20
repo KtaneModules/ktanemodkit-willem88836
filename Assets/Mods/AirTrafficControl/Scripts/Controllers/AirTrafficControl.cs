@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
+    [RequireComponent(typeof(KMNeedyModule))]
     public class AirTrafficControl : MonoBehaviour
     {
         [SerializeField] private MessageField messageField;
@@ -20,12 +20,14 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField, Multiline] private string notYetStartedMessage;
         [SerializeField, Multiline] private string startedMessage;
 
+        private KMNeedyModule needyModule;
         private int lastIncomingPlaneLane;
         private int current;
 
 
         private void Start()
         {
+            needyModule = GetComponent<KMNeedyModule>();
             StartCoroutine(DelayedModuleActivation());
         }
 
@@ -66,7 +68,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
             for(int i = 0; i < lanes.Length; i++)
             {
-                lanes[i].Intialize(i, lanes);
+                lanes[i].Intialize(i, lanes, this);
             }
 
             StartCoroutine(EventInvoker());
@@ -103,6 +105,12 @@ namespace WillemMeijer.NMAirTrafficControl
 
                 messageField.ShowMessage(message);
             }
+        }
+
+
+        public void OnPlaneCrash()
+        {
+            needyModule.HandleStrike();
         }
 
 
