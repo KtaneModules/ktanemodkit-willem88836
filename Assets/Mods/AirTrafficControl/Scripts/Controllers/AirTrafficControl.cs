@@ -6,6 +6,10 @@ namespace WillemMeijer.NMAirTrafficControl
     [RequireComponent(typeof(KMNeedyModule))]
     public class AirTrafficControl : MonoBehaviour
     {
+        #if UNITY_EDITOR
+        [SerializeField] private bool isOneShot = false;
+        #endif
+
         [SerializeField] private MessageField messageField;
         [SerializeField] private SelectionMenu selectionMenu;
         [SerializeField] private InteractableButton okButton;
@@ -80,7 +84,18 @@ namespace WillemMeijer.NMAirTrafficControl
             while (true)
             {
                 int d = Random.Range(eventIntervalMin, eventIntervalMax);
-                yield return new WaitForSeconds(d);
+                #if UNITY_EDITOR
+                if (isOneShot)
+                {
+                    yield return new WaitForSeconds(1);
+                }
+                else
+                {
+                #endif
+                    yield return new WaitForSeconds(d);
+                #if UNITY_EDITOR
+                }
+                #endif
 
                 PlaneData incoming = AirTrafficControlData.GeneratePlane();
 
@@ -91,8 +106,16 @@ namespace WillemMeijer.NMAirTrafficControl
                     laneIndex = Random.Range(0, lanes.Length);
                 }
                 lastIncomingPlaneLane = laneIndex;
+                
+                #if UNITY_EDITOR
+                if (isOneShot)
+                {
+                    laneIndex = 0;
+                }
+                #endif
 
                 LandingLane lane = lanes[laneIndex];
+
                 lane.Incoming(incoming);
 
                 string message = string.Format(
@@ -104,6 +127,13 @@ namespace WillemMeijer.NMAirTrafficControl
                     laneIndex + 1); // incremented to match the lane's visual numbers.
 
                 messageField.ShowMessage(message);
+
+#if UNITY_EDITOR
+                if (isOneShot)
+                {
+                    break;
+                }
+#endif
             }
         }
 

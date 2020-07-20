@@ -100,7 +100,11 @@ namespace WillemMeijer.NMAirTrafficControl
 				incomingPlane.A = null;
 				incomingPlane.B = null;
 
-				Debug.LogFormat("Answers for lane {3}: (Hangar: {0}, Shuttle: {1}, Luggage: {2})", CalculateCorrectHangar(), CalculateCorrectShuttle(), CalculateCorrectLuggage(), laneIndex);
+				Debug.LogFormat("Answers for lane {3}: (Hangar: {0}, Shuttle: {1}, Luggage: {2})", 
+					CalculateCorrectHangar(), 
+					CalculateCorrectShuttle(), 
+					CalculateCorrectLuggage(), 
+					laneIndex);
 			};
 
 			planeAnimator.Animate(planeObject.transform, 0, animatorEndNode, onComplete);

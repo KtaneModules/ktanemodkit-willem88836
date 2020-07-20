@@ -16,5 +16,10 @@ namespace WillemMeijer.NMAirTrafficControl
 		{
 			get { return transform.rotation; }
 		}
+
+		public Vector3 Scale
+		{
+			get { return transform.localScale; }
+		}
 	}
 }

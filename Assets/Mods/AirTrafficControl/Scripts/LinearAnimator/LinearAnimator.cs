@@ -32,8 +32,10 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		[SerializeField] private float progressionSpeed;
 
+		#if UNITY_EDITOR
 		[SerializeField] private Color32 debugColor;
 		[SerializeField] private bool closeDebugLoop;
+		#endif
 
 		private List<LinearAnimationNode> nodes;
 		private List<Actor> liveActors = new List<Actor>();
@@ -99,10 +101,12 @@ namespace WillemMeijer.NMAirTrafficControl
 				// interpolating values based on evaluated alpha.
 				Vector3 position = Vector3.Lerp(start.Position, end.Position, b);
 				Quaternion rotation = Quaternion.Lerp(start.Rotation, end.Rotation, b);
+				Vector3 scale = Vector3.Lerp(start.Scale, end.Scale, b);
 
 				// sets values.
 				actor.actor.position = position;
 				actor.actor.rotation = rotation;
+				actor.actor.localScale = scale;
 
 				// the alpha is increased. the speed is altered by the 
 				// distance between the current and next node. 
