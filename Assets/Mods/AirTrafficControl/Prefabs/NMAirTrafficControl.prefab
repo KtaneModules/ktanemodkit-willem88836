@@ -2226,9 +2226,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4573399900033602}
+  - component: {fileID: 95455547774564996}
+  - component: {fileID: 114355807105259772}
   - component: {fileID: 114061451168629134}
   - component: {fileID: 114104135579393144}
-  - component: {fileID: 95455547774564996}
   - component: {fileID: 114668782083222110}
   m_Layer: 0
   m_Name: NMAirTrafficControl
@@ -5990,6 +5991,17 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: SD-1255
+--- !u!114 &114355807105259772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1748404551501522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114366434431912980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7572,7 +7584,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneShot: 0
-  instaStart: 0
+  instantStart: 0
+  earlyEnd: 0
+  skipSpawnDelay: 0
+  skipEndMessage: 0
+  forceLane0: 0
+  onlyAllowLane0: 0
+  ignoreCloseIntervalModifier: 0
   messageField: {fileID: 114841173164306722}
   selectionMenu: {fileID: 114481187665036058}
   okButton: {fileID: 114686262955316526}
@@ -7591,11 +7609,18 @@ MonoBehaviour:
     Plane {0}, coming from {1}, is coming in on runway {4} with {2} passengers and
     {3} luggage.'
   startingDelay: 120
+  deactivationAlpha: 0.2
   notYetStartedMessage: The airfield will open in {0} seconds.
   startedMessage: '- NOTIFICATION -
 
 
     The airfield is now opened!'
+  closeMessageDuration: 20
+  closedMessage: '- NOTIFICATION -
+
+
+    The airfield is now closed!'
+  afterCloseEventIntervalModifier: 0.51
 --- !u!114 &114673162150654866
 MonoBehaviour:
   m_ObjectHideFlags: 1

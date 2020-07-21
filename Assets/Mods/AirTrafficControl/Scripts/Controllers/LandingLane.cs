@@ -29,6 +29,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		private AirTrafficControl airTrafficControl;
 		private LandingLane[] allLanes;
 		private int laneIndex;
+		private bool moduleEnded;
 
 		private int hangar;
 		private int shuttleCar;
@@ -41,9 +42,23 @@ namespace WillemMeijer.NMAirTrafficControl
 		private Tuple<PlaneData,Transform> departingPlane
 			= new Tuple<PlaneData, Transform>(null, null);
 
+		private string status = "";
 
 		private void Update()
 		{
+			status = "";
+			status += incomingPlane.A == null
+				? "Incoming: null, "
+				: string.Format("Incoming: {0}, ", incomingPlane.A.Serial);
+			status += occupyingPlane.A == null
+				? "Occupying: null, "
+				: string.Format("Occupying: {0}, ", occupyingPlane.A.Serial);
+			status += departingPlane.A == null
+				? "Departing: null, "
+				: string.Format("Departing: {0}, ", departingPlane.A.Serial);
+
+
+
 			if (TestCrash(incomingPlane.B, occupyingPlane.B)
 			|| TestCrash(occupyingPlane.B, departingPlane.B)
 			|| TestCrash(departingPlane.B, incomingPlane.B))
@@ -101,16 +116,33 @@ namespace WillemMeijer.NMAirTrafficControl
 				incomingPlane.A = null;
 				incomingPlane.B = null;
 
-				Debug.LogFormat("Answers for lane {3}: (Hangar: {0}, Shuttle: {1}, Luggage: {2})", 
-					CalculateCorrectHangar(), 
-					CalculateCorrectShuttle(), 
-					CalculateCorrectLuggage(), 
+				int correctHangar = CalculateCorrectHangar();
+				int correctShuttle = CalculateCorrectShuttle();
+				int correctLuggage = CalculateCorrectLuggage();
+
+				Debug.LogFormat("Answers for lane {3}: (Hangar: {0}, Shuttle: {1}, Luggage: {2})",
+					correctHangar,
+					correctShuttle,
+					correctLuggage, 
 					laneIndex);
+
+				if (moduleEnded)
+				{
+					hangar = correctHangar;
+					shuttleCar = correctShuttle;
+					luggageCar = correctLuggage;
+
+					Launch();
+				}
 			};
 
 			planeAnimator.Animate(planeObject.transform, 0, animatorEndNode, onComplete);
 		}
 
+		public void ModuleEnded()
+		{
+			moduleEnded = true;
+		}
 
 		public void Select()
 		{
@@ -149,11 +181,11 @@ namespace WillemMeijer.NMAirTrafficControl
 		{
 			Action onLuggageComplete = delegate
 			{
-				Debug.Log("Starting launch");
 				State = 0;
 				Action onLaunchComplete = delegate
 				{
-					Debug.Log("Launch Completed!");
+					Debug.Log("Launch Completed!" + departingPlane.A.Serial);
+					Destroy(departingPlane.B.gameObject);
 					departingPlane.A = null;
 					departingPlane.B = null;
 				};
@@ -162,6 +194,8 @@ namespace WillemMeijer.NMAirTrafficControl
 				departingPlane.B = occupyingPlane.B;
 				occupyingPlane.A = null;
 				occupyingPlane.B = null;
+
+				Debug.Log("Starting launch: " + departingPlane.A.Serial);
 
 				planeAnimator.Animate(departingPlane.B, animatorEndNode, -1, onLaunchComplete);
 			};

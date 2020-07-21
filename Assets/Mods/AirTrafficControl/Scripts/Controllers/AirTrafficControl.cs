@@ -4,14 +4,23 @@ using UnityEngine;
 namespace WillemMeijer.NMAirTrafficControl
 {
     [RequireComponent(typeof(KMNeedyModule))]
+    [RequireComponent(typeof(KMBombInfo))]
     public class AirTrafficControl : MonoBehaviour
     {
 #if UNITY_EDITOR
+        [Header("Debugging")]
         [SerializeField] private bool oneShot = false;
-        [SerializeField] private bool instaStart = false;
+        [SerializeField] private bool instantStart = false;
+        [SerializeField] private bool earlyEnd = false;
+        [SerializeField] private bool skipSpawnDelay = false;
+        [SerializeField] private bool skipEndMessage = false;
+        [SerializeField] private bool forceLane0 = false;
+        [SerializeField] private bool onlyAllowLane0 = false;
+        [SerializeField] private bool ignoreCloseIntervalModifier = false;
 #endif
 
-        [Space, SerializeField] private MessageField messageField;
+        [Header("Module Settings")]
+        [SerializeField] private MessageField messageField;
         [SerializeField] private SelectionMenu selectionMenu;
         [SerializeField] private InteractableButton okButton;
         [SerializeField] private InteractableButton upButton;
@@ -22,12 +31,19 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField] private int eventIntervalMax;
         [SerializeField, Multiline] private string incomingPlaneMessage;
         [SerializeField] private int startingDelay;
+        [SerializeField] private float deactivationAlpha;
         [SerializeField, Multiline] private string notYetStartedMessage;
         [SerializeField, Multiline] private string startedMessage;
+        [SerializeField] private int closeMessageDuration;
+        [SerializeField, Multiline] private string closedMessage;
+        [SerializeField] private float afterCloseEventIntervalModifier;
 
         private Lock screenLock;
         private Lock interactionLock; 
         private KMNeedyModule needyModule;
+        private KMBombInfo bombInfo;
+        private float bombTime;
+        private bool isDeactivated;
         private int lastIncomingPlaneLane;
         private int current;
 
@@ -35,8 +51,10 @@ namespace WillemMeijer.NMAirTrafficControl
         private void Start()
         {
             needyModule = GetComponent<KMNeedyModule>();
+            bombInfo = GetComponent<KMBombInfo>();
             screenLock = new Lock();
             interactionLock = new Lock();
+            bombTime = bombInfo.GetTime();
             StartCoroutine(DelayedModuleActivation());
         }
 
@@ -76,7 +94,7 @@ namespace WillemMeijer.NMAirTrafficControl
             int t = startingDelay;
 
 #if UNITY_EDITOR
-            if (instaStart)
+            if (instantStart)
             {
                 t = 2;
             }
@@ -104,7 +122,7 @@ namespace WillemMeijer.NMAirTrafficControl
             {
                 int d = Random.Range(eventIntervalMin, eventIntervalMax);
 #if UNITY_EDITOR
-                if (oneShot)
+                if (skipSpawnDelay)
                 {
                     yield return new WaitForSeconds(1);
                 }
@@ -116,8 +134,7 @@ namespace WillemMeijer.NMAirTrafficControl
                 }
 #endif
 
-                PlaneData incoming = AirTrafficControlData.GeneratePlane();
-
+                // Selects the landing lane. this cannot be the previous one.
                 int laneIndex = lastIncomingPlaneLane;
                 while (laneIndex == lastIncomingPlaneLane
                     || lanes[laneIndex].IsWrecked)
@@ -127,14 +144,21 @@ namespace WillemMeijer.NMAirTrafficControl
                 lastIncomingPlaneLane = laneIndex;
                 
 #if UNITY_EDITOR
-                if (oneShot)
+                if (forceLane0)
                 {
                     laneIndex = 0;
                 }
+                if (onlyAllowLane0 && laneIndex != 0)
+                {
+                    continue;
+                }
 #endif
 
-                LandingLane lane = lanes[laneIndex];
+                // generates incoming plane.
+                PlaneData incoming = AirTrafficControlData.GeneratePlane();
 
+                // Notifies all the elements involved. 
+                LandingLane lane = lanes[laneIndex];
                 lane.Incoming(incoming);
 
                 string message = string.Format(
@@ -146,7 +170,50 @@ namespace WillemMeijer.NMAirTrafficControl
                     laneIndex + 1); // incremented to match the lane's visual numbers.
 
                 selectionMenu.Disable();
-                messageField.ShowMessage(message);
+                if (!isDeactivated)
+                {
+                    messageField.ShowMessage(message);
+                }
+
+                // if the timer reaches the lowerbound, 
+                // this module is deactivated. 
+                if (!isDeactivated && (bombInfo.GetTime()
+                    < bombTime * deactivationAlpha
+#if UNITY_EDITOR
+                    || earlyEnd
+#endif
+                    ))
+                {
+                    isDeactivated = true;
+
+                    foreach(LandingLane l in lanes)
+                    {
+                        l.ModuleEnded();
+                    }
+
+                    lanes[current].Deselect();
+                    interactionLock.Claim(this);
+                    messageField.ShowMessage(closedMessage);
+#if UNITY_EDITOR
+                    if (!skipEndMessage)
+                    {
+#endif
+                        yield return new WaitForSeconds(closeMessageDuration);
+#if UNITY_EDITOR
+                    }
+#endif
+                    messageField.Close();
+
+#if UNITY_EDITOR
+                    if (!ignoreCloseIntervalModifier)
+                    {
+#endif
+                        eventIntervalMin = (int)(eventIntervalMin * afterCloseEventIntervalModifier);
+                        eventIntervalMax = (int)(eventIntervalMax * afterCloseEventIntervalModifier);
+#if UNITY_EDITOR
+                    }
+#endif
+                }    
 
 #if UNITY_EDITOR
                 if (oneShot)
@@ -160,7 +227,10 @@ namespace WillemMeijer.NMAirTrafficControl
 
         public void OnPlaneCrash()
         {
-            needyModule.HandleStrike();
+            if (interactionLock.Available)
+            {
+                needyModule.HandleStrike();
+            }
         }
 
 

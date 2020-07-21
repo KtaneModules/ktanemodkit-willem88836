@@ -1,5 +1,8 @@
-﻿namespace WillemMeijer.NMAirTrafficControl
+﻿using System;
+
+namespace WillemMeijer.NMAirTrafficControl
 {
+	[Serializable]
 	public class PlaneData
 	{
 		public int SerialIndex;

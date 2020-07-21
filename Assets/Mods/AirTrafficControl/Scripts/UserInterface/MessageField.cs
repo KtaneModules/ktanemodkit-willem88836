@@ -60,6 +60,23 @@ namespace WillemMeijer.NMAirTrafficControl
 			screenLock.Claim(this);
 		}
 
+		public void Close()
+		{
+
+			IsDisplaying = false;
+			flicker = 0;
+			firstChild.SetActive(false);
+
+			if (previousScreenOwner == (object)this)
+			{
+				screenLock.Unclaim(this);
+			}
+			else
+			{
+				screenLock.Claim(previousScreenOwner);
+			}
+		}
+
 		private void OnClick()
 		{
 			if (!screenLock.IsOwnedBy(this) 
@@ -68,18 +85,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				return;
 			}
 
-			IsDisplaying = false;
-			flicker = 0;
-			firstChild.SetActive(false);
-
-			if(previousScreenOwner == (object)this)
-			{
-				screenLock.Unclaim(this);
-			}
-			else
-			{
-				screenLock.Claim(previousScreenOwner);
-			}
+			Close();
 		}
 	}
 }
