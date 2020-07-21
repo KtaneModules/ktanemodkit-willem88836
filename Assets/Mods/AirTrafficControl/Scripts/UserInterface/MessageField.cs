@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Constraints;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace WillemMeijer.NMAirTrafficControl
@@ -9,8 +7,14 @@ namespace WillemMeijer.NMAirTrafficControl
 	{
 		[SerializeField] private Text messageField;
 		[SerializeField] private float flickerSpeed;
+
+		private Lock interactionLock;
+		private Lock screenLock;
+		private object previousScreenOwner = null;
 		private InteractableButton okButton;
 		private GameObject firstChild;
+
+
 
 		public bool IsDisplaying { get; private set; }
 		private float flicker;
@@ -36,8 +40,13 @@ namespace WillemMeijer.NMAirTrafficControl
 		}
 
 
-		public void Initialize(InteractableButton okButton)
+		public void Initialize(
+			Lock interactionLock, 
+			Lock screenLock, 
+			InteractableButton okButton)
 		{
+			this.interactionLock = interactionLock;
+			this.screenLock = screenLock;
 			this.okButton = okButton;
 			okButton.AddListener(OnClick);
 		}
@@ -47,11 +56,14 @@ namespace WillemMeijer.NMAirTrafficControl
 		{
 			IsDisplaying = true;
 			messageField.text = message.Replace("\\n", "\n");
+			previousScreenOwner = screenLock.Owner;
+			screenLock.Claim(this);
 		}
 
 		private void OnClick()
 		{
-			if (!IsDisplaying)
+			if (!screenLock.IsOwnedBy(this) 
+				|| !interactionLock.Available)
 			{
 				return;
 			}
@@ -59,6 +71,15 @@ namespace WillemMeijer.NMAirTrafficControl
 			IsDisplaying = false;
 			flicker = 0;
 			firstChild.SetActive(false);
+
+			if(previousScreenOwner == (object)this)
+			{
+				screenLock.Unclaim(this);
+			}
+			else
+			{
+				screenLock.Claim(previousScreenOwner);
+			}
 		}
 	}
 }

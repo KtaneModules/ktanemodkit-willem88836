@@ -6,10 +6,20 @@ namespace WillemMeijer.NMAirTrafficControl
 	public class SelectionMenu : MonoBehaviour
 	{
 		[SerializeField] private string returnLabel;
+
 		private AirTrafficControl airTrafficControl;
 		private List<SelectionOption> options = new List<SelectionOption>();
+
+		private Lock interactionLock;
+		private Lock screenLock;
+
+		// Currently selected option.
 		private int current;
+		// startedThisFrame resolves the issue where an option is selected
+		// immediately when the menu is opened (caused by the event order of
+		// the interaction buttons). 
 		private bool startedThisframe = false;
+		// Number of options for the active selection.
 		private int activeOptionCount;
 
 
@@ -24,12 +34,22 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Initialize(
 			AirTrafficControl airTrafficControl,
+			Lock interactionLock,
+			Lock screenLock,
 			InteractableButton okButton,
 			InteractableButton upButton,
 			InteractableButton downButton)
 		{
 			this.airTrafficControl = airTrafficControl;
+			this.interactionLock = interactionLock;
+			this.screenLock = screenLock;
 
+			okButton.AddListener(OnOkClicked);
+			upButton.AddListener(OnUpClicked);
+			downButton.AddListener(OnDownClicked);
+
+
+			// Finds all SelectionOptions in children. 
 			int c = transform.childCount;
 			for (int i = 0; i < c; i++)
 			{
@@ -44,10 +64,6 @@ namespace WillemMeijer.NMAirTrafficControl
 					options.Add(option);
 				}
 			}
-
-			okButton.AddListener(OnOkClicked);
-			upButton.AddListener(OnUpClicked);
-			downButton.AddListener(OnDownClicked);
 		}
 
 
@@ -74,10 +90,19 @@ namespace WillemMeijer.NMAirTrafficControl
 			IsShowing = true;
 			SetSelection(0);
 			gameObject.SetActive(true);
+			screenLock.Claim(this);
 
 			activeOptionCount = options.Length;
 			startedThisframe = true;
 		}
+
+		public void Disable()
+		{
+			screenLock.Unclaim(this);
+			IsShowing = false;
+			gameObject.SetActive(false);
+		}
+
 
 		private void SetSelection(int next)
 		{
@@ -86,10 +111,11 @@ namespace WillemMeijer.NMAirTrafficControl
 			current = next;
 		}
 
-
 		private void OnOkClicked()
 		{
-			if (!IsShowing || startedThisframe)
+			if (startedThisframe 
+				|| !interactionLock.Available 
+				|| !screenLock.IsOwnedBy(this))
 			{
 				return;
 			}
@@ -101,13 +127,13 @@ namespace WillemMeijer.NMAirTrafficControl
 				airTrafficControl.OnSelect(index);
 			}
 
-			IsShowing = false;
-			gameObject.SetActive(false);
+			Disable();
 		}
 
 		private void OnUpClicked()
 		{
-			if (!IsShowing)
+			if (!interactionLock.Available 
+				|| !screenLock.IsOwnedBy(this))
 			{
 				return;
 			}
@@ -122,7 +148,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		private void OnDownClicked()
 		{
-			if (!IsShowing)
+			if (!interactionLock.Available
+				|| !screenLock.IsOwnedBy(this))
 			{
 				return;
 			}

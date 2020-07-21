@@ -6,11 +6,12 @@ namespace WillemMeijer.NMAirTrafficControl
     [RequireComponent(typeof(KMNeedyModule))]
     public class AirTrafficControl : MonoBehaviour
     {
-        #if UNITY_EDITOR
-        [SerializeField] private bool isOneShot = false;
-        #endif
+#if UNITY_EDITOR
+        [SerializeField] private bool oneShot = false;
+        [SerializeField] private bool instaStart = false;
+#endif
 
-        [SerializeField] private MessageField messageField;
+        [Space, SerializeField] private MessageField messageField;
         [SerializeField] private SelectionMenu selectionMenu;
         [SerializeField] private InteractableButton okButton;
         [SerializeField] private InteractableButton upButton;
@@ -24,6 +25,8 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField, Multiline] private string notYetStartedMessage;
         [SerializeField, Multiline] private string startedMessage;
 
+        private Lock screenLock;
+        private Lock interactionLock; 
         private KMNeedyModule needyModule;
         private int lastIncomingPlaneLane;
         private int current;
@@ -32,14 +35,33 @@ namespace WillemMeijer.NMAirTrafficControl
         private void Start()
         {
             needyModule = GetComponent<KMNeedyModule>();
+            screenLock = new Lock();
+            interactionLock = new Lock();
             StartCoroutine(DelayedModuleActivation());
         }
 
         private IEnumerator DelayedModuleActivation()
         {
-            yield return new WaitForEndOfFrame();
+            // Everything is initialized.
+            okButton.AddListener(OnOkClicked);
+            upButton.AddListener(OnUpClicked);
+            downButton.AddListener(OnDownClicked);
+
+            // interactionLock is initially claimed to prevent everything from interacting.
+            interactionLock.Claim(this);
+            messageField.Initialize(interactionLock, screenLock, okButton);
+            selectionMenu.Initialize(this, interactionLock, screenLock, okButton, upButton, downButton);
+
+            for (int i = 0; i < lanes.Length; i++)
+            {
+                lanes[i].Intialize(i, lanes, this);
+            }
+
+
 
             // Disables needymodule timer that automatically spawns. 
+            // The Object only appears after the first frame.
+            yield return new WaitForEndOfFrame();
             int c = transform.childCount;
             for (int i = 0; i < c; i++)
             {
@@ -50,8 +72,16 @@ namespace WillemMeijer.NMAirTrafficControl
                 }
             }
 
-
+            // Shows not yet started message every 1 seconds. 
             int t = startingDelay;
+
+#if UNITY_EDITOR
+            if (instaStart)
+            {
+                t = 2;
+            }
+#endif
+
             while (t > 0)
             {
                 string message = string.Format(notYetStartedMessage, t);
@@ -60,22 +90,11 @@ namespace WillemMeijer.NMAirTrafficControl
                 yield return new WaitForSeconds(1);
             }
 
+            // The delayed initialization.
             messageField.ShowMessage(startedMessage);
-            okButton.AddListener(OnOkClicked);
-            upButton.AddListener(OnUpClicked);
-            downButton.AddListener(OnDownClicked);
-
             lanes[current].Select();
-
-            messageField.Initialize(okButton);
-            selectionMenu.Initialize(this, okButton, upButton, downButton);
-
-            for(int i = 0; i < lanes.Length; i++)
-            {
-                lanes[i].Intialize(i, lanes, this);
-            }
-
             StartCoroutine(EventInvoker());
+            interactionLock.Unclaim(this);
         }
 
 
@@ -84,18 +103,18 @@ namespace WillemMeijer.NMAirTrafficControl
             while (true)
             {
                 int d = Random.Range(eventIntervalMin, eventIntervalMax);
-                #if UNITY_EDITOR
-                if (isOneShot)
+#if UNITY_EDITOR
+                if (oneShot)
                 {
                     yield return new WaitForSeconds(1);
                 }
                 else
                 {
-                #endif
+#endif
                     yield return new WaitForSeconds(d);
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 }
-                #endif
+#endif
 
                 PlaneData incoming = AirTrafficControlData.GeneratePlane();
 
@@ -107,12 +126,12 @@ namespace WillemMeijer.NMAirTrafficControl
                 }
                 lastIncomingPlaneLane = laneIndex;
                 
-                #if UNITY_EDITOR
-                if (isOneShot)
+#if UNITY_EDITOR
+                if (oneShot)
                 {
                     laneIndex = 0;
                 }
-                #endif
+#endif
 
                 LandingLane lane = lanes[laneIndex];
 
@@ -126,10 +145,11 @@ namespace WillemMeijer.NMAirTrafficControl
                     incoming.LuggageCount, 
                     laneIndex + 1); // incremented to match the lane's visual numbers.
 
+                selectionMenu.Disable();
                 messageField.ShowMessage(message);
 
 #if UNITY_EDITOR
-                if (isOneShot)
+                if (oneShot)
                 {
                     break;
                 }
@@ -146,14 +166,18 @@ namespace WillemMeijer.NMAirTrafficControl
 
         public void OnSelect(int index)
         {
-            LandingLane lane = lanes[current];
-            lane.SetNext(index);
+            if (interactionLock.Available)
+            {
+                LandingLane lane = lanes[current];
+                lane.SetNext(index);
+            }
         }
 
 
         private void OnOkClicked()
         {
-            if(messageField.IsDisplaying || selectionMenu.IsShowing)
+            if(!interactionLock.Available
+                || !screenLock.Available)
             {
                 return;
             }
@@ -181,7 +205,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
         private void OnUpClicked()
         {
-            if (messageField.IsDisplaying || selectionMenu.IsShowing)
+            if (!interactionLock.Available
+                || !screenLock.Available)
             {
                 return;
             }
@@ -199,7 +224,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
         private void OnDownClicked()
         {
-            if (messageField.IsDisplaying || selectionMenu.IsShowing)
+            if (!interactionLock.Available
+                || !screenLock.Available)
             {
                 return;
             }

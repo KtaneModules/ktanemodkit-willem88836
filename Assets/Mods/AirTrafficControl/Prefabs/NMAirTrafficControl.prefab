@@ -7589,7 +7589,7 @@ MonoBehaviour:
 
     Plane {0}, coming from {1}, is coming in on runway {4} with {2} passengers and
     {3} luggage.'
-  startingDelay: 2
+  startingDelay: 120
   notYetStartedMessage: The airfield will open in {0} seconds.
   startedMessage: '- NOTIFICATION -
 
