@@ -7571,7 +7571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f227030dd4919d4eb7107de4c00806d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOneShot: 0
+  oneShot: 0
+  instaStart: 0
   messageField: {fileID: 114841173164306722}
   selectionMenu: {fileID: 114481187665036058}
   okButton: {fileID: 114686262955316526}

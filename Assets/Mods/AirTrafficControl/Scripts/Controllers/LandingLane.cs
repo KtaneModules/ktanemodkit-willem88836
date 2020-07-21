@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,7 @@ namespace WillemMeijer.NMAirTrafficControl
 	{
 		// The data state of this landing lane (hangar, shuttle, luggage). 
 		public int State { get; private set; }
-		public bool ContainsPlane { get; private set; }
+		public bool ContainsPlane { get { return occupyingPlane.A != null; } }
 		public bool IsWrecked { get; private set; }
 
 
@@ -84,13 +83,15 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Incoming(PlaneData plane)
 		{
+			GameObject planeObject = Instantiate(
+				planePrefabs.PickRandom(), 
+				Positions.FarAway,
+				Quaternion.identity,
+				planeContainer);
+
+			planeObject.name = "Plane - " + plane.Serial;
+
 			incomingPlane.A = plane;
-
-			GameObject nextPlane = planePrefabs.PickRandom();
-			GameObject planeObject = Instantiate(nextPlane, planeContainer);
-			planeObject.name = "Plane - " + incomingPlane.A.Serial;
-			planeObject.transform.position = Positions.FarAway;
-
 			incomingPlane.B = planeObject.transform;
 
 			Action onComplete = delegate
@@ -113,7 +114,6 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void Select()
 		{
-			ContainsPlane = true;
 			image.color = selectedColor;
 		}
 
@@ -186,7 +186,6 @@ namespace WillemMeijer.NMAirTrafficControl
 			{
 				return false;
 			}
-
 
 			// Luggage Test.
 			int correctLuggage = CalculateCorrectLuggage();
