@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
-	public class LuggageCartFactory : MonoBehaviour
+	public class TrainCartFactory : MonoBehaviour
 	{
 		[SerializeField] private LinearAnimator animator;
 		
@@ -54,7 +54,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		}
 
 
-		public void CreateLuggageCart(int type, Action onComplete)
+		public void CreateTrain(int type, Action onComplete)
 		{
 			onComplete += StopFolow;
 
@@ -62,8 +62,17 @@ namespace WillemMeijer.NMAirTrafficControl
 			System.Random random = new System.Random(type);
 
 			int c = random.Next(0, maxCarts);
-
-			GameObject cart = Instantiate(cartCarPrefab, cartContainer);
+			
+			GameObject cart;
+			if (cartCarPrefab == null)
+			{
+				int j = random.Next(0, cartPrefabs.Length);
+				cart = Instantiate(cartPrefabs[j], cartContainer);
+			}
+			else
+			{
+				cart = Instantiate(cartCarPrefab, cartContainer);
+			}
 			car = cart.transform;
 			car.transform.position = spawnLocation.position;
 			animator.Animate(car, 0, -1, onComplete);

@@ -77,18 +77,18 @@ namespace WillemMeijer.NMAirTrafficControl
 
 
 
-            // Disables needymodule timer that automatically spawns. 
-            // The Object only appears after the first frame.
-            yield return new WaitForEndOfFrame();
-            int c = transform.childCount;
-            for (int i = 0; i < c; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (child.gameObject.name == "NeedyTimer(Clone)")
-                {
-                    child.gameObject.SetActive(false);
-                }
-            }
+            //// Disables needymodule timer that automatically spawns. 
+            //// The Object only appears after the first frame.
+            //yield return new WaitForEndOfFrame();
+            //int c = transform.childCount;
+            //for (int i = 0; i < c; i++)
+            //{
+            //    Transform child = transform.GetChild(i);
+            //    if (child.gameObject.name == "NeedyTimer(Clone)")
+            //    {
+            //        child.gameObject.SetActive(false);
+            //    }
+            //}
 
             // Shows not yet started message every 1 seconds. 
             int t = startingDelay;
@@ -104,6 +104,7 @@ namespace WillemMeijer.NMAirTrafficControl
             {
                 string message = string.Format(notYetStartedMessage, t);
                 messageField.ShowMessage(message);
+                
                 t--;
                 yield return new WaitForSeconds(1);
             }

@@ -40,7 +40,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 
 			UnityEngine.Debug.LogFormat(
-				"Created New Plane - Serial: {0}, Origin: {1}, Passangers: {2}, Luggage: {3}",
+				"Created New Plane - Serial: {0}, Origin: {1}, Passengers: {2}, Luggage: {3}",
 				Serial,
 				Origin,
 				passengerCount,

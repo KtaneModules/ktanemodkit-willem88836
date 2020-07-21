@@ -13,7 +13,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
 
 		[SerializeField] private LinearAnimator planeAnimator;
-		[SerializeField] private LuggageCartFactory luggageFactory;
+		[SerializeField] private TrainCartFactory luggageFactory;
+		[SerializeField] private TrainCartFactory shuttleFactory;
 
 		[Space, SerializeField] private GameObject[] planePrefabs;
 		[SerializeField] private Transform planeContainer;
@@ -195,12 +196,14 @@ namespace WillemMeijer.NMAirTrafficControl
 				occupyingPlane.A = null;
 				occupyingPlane.B = null;
 
-				Debug.Log("Starting launch: " + departingPlane.A.Serial);
-
+				departingPlane.B.SetAsLastSibling();
 				planeAnimator.Animate(departingPlane.B, animatorEndNode, -1, onLaunchComplete);
+
+				Debug.Log("Starting launch: " + departingPlane.A.Serial);
 			};
 
-			luggageFactory.CreateLuggageCart(luggageCar, onLuggageComplete);
+			luggageFactory.CreateTrain(luggageCar, onLuggageComplete);
+			shuttleFactory.CreateTrain(shuttleCar, null);
 		}
 	
 		
