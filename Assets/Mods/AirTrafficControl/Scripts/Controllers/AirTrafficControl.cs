@@ -13,6 +13,7 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField] private bool instantStart = false;
         [SerializeField] private bool earlyEnd = false;
         [SerializeField] private bool skipSpawnDelay = false;
+        [SerializeField] private bool skipSpawnDelayOnce = false;
         [SerializeField] private bool skipEndMessage = false;
         [SerializeField] private bool forceLane0 = false;
         [SerializeField] private bool onlyAllowLane0 = false;
@@ -42,6 +43,7 @@ namespace WillemMeijer.NMAirTrafficControl
         private Lock interactionLock; 
         private KMNeedyModule needyModule;
         private KMBombInfo bombInfo;
+        private SevenSegDisplay sevenSegDisplay;
         private float bombTime;
         private bool isDeactivated;
         private int lastIncomingPlaneLane;
@@ -79,16 +81,16 @@ namespace WillemMeijer.NMAirTrafficControl
 
             //// Disables needymodule timer that automatically spawns. 
             //// The Object only appears after the first frame.
-            //yield return new WaitForEndOfFrame();
-            //int c = transform.childCount;
-            //for (int i = 0; i < c; i++)
-            //{
-            //    Transform child = transform.GetChild(i);
-            //    if (child.gameObject.name == "NeedyTimer(Clone)")
-            //    {
-            //        child.gameObject.SetActive(false);
-            //    }
-            //}
+            yield return new WaitForEndOfFrame();
+            int c = transform.childCount;
+            for (int i = 0; i < c; i++)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.gameObject.name == "NeedyTimer(Clone)")
+                {
+                    sevenSegDisplay = child.GetComponent<SevenSegDisplay>();
+                }
+            }
 
             // Shows not yet started message every 1 seconds. 
             int t = startingDelay;
@@ -119,6 +121,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
         private IEnumerator EventInvoker()
         {
+            sevenSegDisplay.On = true;
             while (true)
             {
                 int d = Random.Range(eventIntervalMin, eventIntervalMax);
@@ -130,7 +133,12 @@ namespace WillemMeijer.NMAirTrafficControl
                 else
                 {
 #endif
-                    yield return new WaitForSeconds(d);
+                    while (d >= 0)
+                    {
+                        sevenSegDisplay.DisplayValue = d;
+                        d--;
+                        yield return new WaitForSeconds(1);
+                    }
 #if UNITY_EDITOR
                 }
 #endif
@@ -186,6 +194,7 @@ namespace WillemMeijer.NMAirTrafficControl
                     ))
                 {
                     isDeactivated = true;
+                    sevenSegDisplay.On = false;
 
                     foreach(LandingLane l in lanes)
                     {
@@ -217,6 +226,10 @@ namespace WillemMeijer.NMAirTrafficControl
                 }    
 
 #if UNITY_EDITOR
+                if (skipSpawnDelayOnce)
+                {
+                    skipSpawnDelay = false;
+                }
                 if (oneShot)
                 {
                     break;

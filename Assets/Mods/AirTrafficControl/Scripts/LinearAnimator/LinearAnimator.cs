@@ -94,14 +94,15 @@ namespace WillemMeijer.NMAirTrafficControl
 				LinearAnimationNode end = nodes[actor.current + 1];
 
 				// the start's animationcurve is used for progressing.
-				AnimationCurve curve = start.ProgressionCurve;
 				float a = actor.alpha - start.Delay;
-				float b = curve.Evaluate(a);
+				float positionAlpha = start.PositionCurve.Evaluate(a);
+				float rotationAlpha = start.RotationCurve.Evaluate(a);
+				float scaleAlpha = start.ScaleCurve.Evaluate(a);
 
 				// interpolating values based on evaluated alpha.
-				Vector3 position = Vector3.Lerp(start.Position, end.Position, b);
-				Quaternion rotation = Quaternion.Lerp(start.Rotation, end.Rotation, b);
-				Vector3 scale = Vector3.Lerp(start.Scale, end.Scale, b);
+				Vector3 position = Vector3.Lerp(start.Position, end.Position, positionAlpha);
+				Quaternion rotation = Quaternion.Lerp(start.Rotation, end.Rotation, rotationAlpha);
+				Vector3 scale = Vector3.Lerp(start.Scale, end.Scale, scaleAlpha);
 
 				// sets values.
 				actor.actor.position = position;

@@ -14,9 +14,11 @@ namespace WillemMeijer.NMAirTrafficControl
 		[SerializeField] private Transform spawnLocation;
 		
 		[Space, SerializeField] private int maxCarts;
+		[SerializeField] private int minCarts;
 
 		[Space, SerializeField] private float followSpeed;
 		[SerializeField] private float minCartDistance;
+		[SerializeField] private float maxCartDistance;
 
 
 		private Transform car;
@@ -45,6 +47,12 @@ namespace WillemMeijer.NMAirTrafficControl
 			{
 				return;
 			}
+			if (delta > maxCartDistance)
+			{
+				f.position = p.position;
+				f.rotation = p.rotation;
+				return;
+			}
 
 			Vector3 newPosition = Vector3.Lerp(f.position, p.position, followSpeed);
 			Quaternion newRotation = Quaternion.Lerp(f.rotation, p.rotation, followSpeed);
@@ -61,7 +69,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			carts.Clear();
 			System.Random random = new System.Random(type);
 
-			int c = random.Next(0, maxCarts);
+			int c = random.Next(minCarts, maxCarts);
 			
 			GameObject cart;
 			if (cartCarPrefab == null)
@@ -81,8 +89,11 @@ namespace WillemMeijer.NMAirTrafficControl
 			{
 				int j = random.Next(0, cartPrefabs.Length);
 				GameObject nextPrefab = cartPrefabs[j];
-				GameObject spawn = Instantiate(nextPrefab, cartContainer);
-				spawn.transform.position = spawnLocation.position;
+				GameObject spawn = Instantiate(
+					nextPrefab, 
+					car.transform.position, 
+					car.transform.rotation, 
+					cartContainer);
 				carts.Add(spawn.transform);
 			}
 		}

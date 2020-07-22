@@ -4,7 +4,9 @@ namespace WillemMeijer.NMAirTrafficControl
 {
 	public class LinearAnimationNode : MonoBehaviour
 	{
-		public AnimationCurve ProgressionCurve;
+		public AnimationCurve PositionCurve = AnimationCurve.Linear(0,0,1,1);
+		public AnimationCurve ScaleCurve = AnimationCurve.Linear(0, 0, 1, 1);
+		public AnimationCurve RotationCurve = AnimationCurve.Linear(0, 0, 1, 1);
 		public float Delay;
 
 		public Vector3 Position
