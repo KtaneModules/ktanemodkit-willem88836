@@ -52,6 +52,17 @@ namespace WillemMeijer.NMAirTrafficControl
 
         private void Start()
         {
+            MonoRandom mRandom = new MonoRandom(0);
+
+            AirTrafficUtilities.GenerateOrigins(14, mRandom);
+            AirTrafficUtilities.GeneratePlaneSerials(14, mRandom);
+            AirTrafficUtilities.GenerateCrossTable(mRandom);
+            AirTrafficUtilities.PrintOrigins();
+            AirTrafficUtilities.PrintPlaneSerials();
+            AirTrafficUtilities.PrintCrosstableAsCS();
+            AirTrafficUtilities.PrintCrossTableAsHTML();
+            return;
+
             needyModule = GetComponent<KMNeedyModule>();
             bombInfo = GetComponent<KMBombInfo>();
             screenLock = new Lock();

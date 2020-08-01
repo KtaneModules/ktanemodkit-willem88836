@@ -1,106 +1,217 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
     public class AirTrafficUtilities
 	{
-		public static void GenerateSerials(int n)
-		{
-            string to = "\"";
+        private static string GenerateSerial(MonoRandom mRandom)
+        {
+            string serial = "";
+
+            int r0 = mRandom.Next(65, 90);
+            serial += (char)r0;
+
+            int r1 = mRandom.Next(65, 90);
+            serial += (char)r1;
+
+            double a = mRandom.NextDouble();
+            if (a < 0.5f)
+            {
+                serial += "-";
+            }
+
+            int r2 = mRandom.Next(0, 9);
+            serial += r2.ToString();
+
+            if (a >= 0.5f)
+            {
+                serial += "-";
+            }
+
+            int r3 = mRandom.Next(0, 9);
+            serial += r3.ToString();
+
+            int r4 = mRandom.Next(0, 9);
+            serial += r4.ToString();
+
+            return serial;
+        }
+
+        public static void GeneratePlaneSerials(int n, MonoRandom mRandom)
+        {
+            string[] serials = new string[n];
 
             for (int i = 0; i < n; i++)
             {
-                string sc = "";
-
-                int r = Random.Range(65, 90);
-                sc += (char)r;
-
-                int r1 = Random.Range(65, 90);
-                sc += (char)r1;
-
-                float a = Random.Range(0f, 1f);
-                if (a < 0.5f)
-                {
-                    sc += "-";
-                }
-
-                int r2 = Random.Range(0, 9);
-                sc += r2.ToString();
-
-                if (a >= 0.5f)
-                {
-                    sc += "-";
-                }
-
-                int r3 = Random.Range(0, 9);
-                sc += r3.ToString();
-
-                int r4 = Random.Range(0, 9);
-                sc += r4.ToString();
-
-                to += sc;
-                to += "\", \"";
+                string serial = GenerateSerial(mRandom);
+                serials[i] = serial;
             }
 
-            Debug.Log(to);
+            AirTrafficControlData.PlaneSerials = serials;
         }
-    
-        public static void GenerateOrigins(int n)
+
+        public static void GenerateOrigins(int n, MonoRandom mRandom)
         {
-            string[] cities = AirTrafficControlData.AllCities;
-
-            string o = "";
-            List<string> list = new List<string>();
-            for (int i = 0; i< n; i++)
+            string[] allCities = AirTrafficControlData.AllCities;
+            string[] originCities = new string[n];
+            
+            for (int i = 0; i < n; i++)
             {
-                int r = Random.Range(0, cities.Length);
-                string option = cities[r];
-
-                //if (cities.Contains(option))
-                //{
-                //    i--;
-                //}
-                //else
-                //{
-                list.Add(option);
-                o+="\"";
-                o += option;
-                o += "\",\n";
-                //}
+                string option = allCities[mRandom.Next(0, allCities.Length)];
+                originCities[i] = option;
             }
 
-            Debug.Log(o);
-            Debug.Log(list.ToString());
+            AirTrafficControlData.OriginCities = originCities;
         }
-    
-        public static void GenerateCrossTable(int x, int y, int a)
+        
+        public static void GenerateShuttleSerials(int n, MonoRandom mRandom)
         {
-            string o = "{\n";
-            int[,] table = new int[x, y];
-            for (int i = 0; i < x; i++)
+            string[] serials = new string[n];
+
+            for (int i = 0; i < n; i++)
             {
-                o += "{";
-                for (int j = 0; j < y; j++)
+                string serial = GenerateSerial(mRandom);
+                serials[i] = serial;
+            }
+
+            AirTrafficControlData.ShuttleSerials = serials;
+        }
+
+        public static void GenerateLuggageSerials(int n, MonoRandom mRandom)
+        {
+            string[] serials = new string[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                string serial = GenerateSerial(mRandom);
+                serials[i] = serial;
+            }
+
+            AirTrafficControlData.LuggageSerials = serials;
+        }
+
+        public static void GenerateHangars(int n, MonoRandom mRandom)
+        {
+            string[] hangars = new string[n];
+
+            for (int i = 1; i <= n; i++)
+            {
+                hangars[i] = "Hangar " + i;
+            }
+
+            AirTrafficControlData.Hangars = hangars;
+        }
+
+        public static void GenerateCrossTable(MonoRandom mRandom)
+        {
+            int rowsCount = AirTrafficControlData.PlaneSerials.Length;
+            int columnCount = AirTrafficControlData.OriginCities.Length;
+            int hangarCount = AirTrafficControlData.Hangars.Length;
+
+            int[,] crossTable = new int[rowsCount, columnCount];
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                for (int j = 0; j < columnCount; j++)
                 {
-                    int b = Random.Range(0, a);
-                    table[i, j] = b;
-                    o += b;
-                    if(j < y - 1)
+                    int k = mRandom.Next(0, hangarCount);
+                    crossTable[i, j] = k;
+                }
+            }
+
+            AirTrafficControlData.OriginSerialCrossTable = crossTable;
+        }
+
+
+
+        public static void PrintPlaneSerials()
+        {
+            string cs = "{\n";
+            for (int i = 0; i < AirTrafficControlData.PlaneSerials.Length; i++)
+            {
+                cs += "\"" + AirTrafficControlData.PlaneSerials[i] + "\"";
+                if (i < AirTrafficControlData.PlaneSerials.Length - 1)
+                {
+                    cs += ",\n";
+                }
+            }
+            cs += "};";
+            Debug.Log(cs);
+        }
+
+        public static void PrintOrigins()
+        {
+            string cs = "{\n";
+            for (int i = 0; i < AirTrafficControlData.OriginCities.Length; i++)
+            {
+                cs += "\"" + AirTrafficControlData.OriginCities[i] + "\"";
+                if (i < AirTrafficControlData.OriginCities.Length - 1)
+                {
+                    cs += ",\n";
+                }
+            }
+            cs += "};";
+            Debug.Log(cs);
+        }
+
+        public static void PrintCrosstableAsCS()
+        {
+            int[,] data = AirTrafficControlData.OriginSerialCrossTable;
+
+            string cs = "{\n";
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                cs += "{";
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    cs += data[i, j] ;
+                    if (j < data.GetLength(1) - 1)
                     {
-                        o += ",";
+                        cs += ",";
                     }
                 }
-
-                o += "}";
-                if(i < x - 1)
+                cs += "}";
+                if (i < data.GetLength(0) - 1)
                 {
-                    o += ",\n";
+                    cs += ",\n";
                 }
             }
+            cs += "};";
 
-            Debug.Log(o);
+            Debug.Log(cs);
         }
-    
+
+        public static void PrintCrossTableAsHTML()
+        {
+            int[,] data = AirTrafficControlData.OriginSerialCrossTable;
+
+            string html = "                        <tr><th></th>";
+            
+            // labels.
+            for (int k = 0; k < data.GetLength(1); k++)
+            {
+                html += "<th style=\"writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;\">"
+                    + AirTrafficControlData.OriginCities[k] 
+                    + "</th>";
+            }
+
+            for(int i = 0; i < data.GetLength(0); i++)
+            {
+                html += "                        <tr>";
+                html += "<th>" + AirTrafficControlData.PlaneSerials[i] + "</th>";
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    html += "<th>" + data[i, j] + "</th>";
+                }
+                html += "</tr>\n";
+            }
+
+            Debug.Log(html);
+        }
     }
 }

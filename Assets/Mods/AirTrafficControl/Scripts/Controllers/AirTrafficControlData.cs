@@ -4,37 +4,25 @@ namespace WillemMeijer.NMAirTrafficControl
 {
     public static class AirTrafficControlData
     {
-        public static readonly string[] PlaneSerials = new string[] 
-        { 
-            "GN3-63", 
-            "WR-857", 
-            "BS-788", 
-            "DE4-86", 
-            "SG-325", 
-            "LR2-67", 
-            "OK-248", 
-            "ET7-31", 
-            "KP-820", 
-            "AL0-34", 
-            "WK4-11", 
-            "UQ-633", 
-            "SA-567", 
-            "CR-653", 
-            "ES-607", 
-            "WK2-60", 
-            "WA-664", 
-            "LR1-44", 
-            "NG2-82", 
-            "JY-286", 
-            "RH-611", 
-            "AX1-30", 
-            "QC-270", 
-            "CG-765", 
-            "BJ-832" 
-        
+        public static string[] PlaneSerials = new string[]
+        {
+            "HV3-84",
+            "GQ1-02",
+            "VQ6-10",
+            "HF-062",
+            "GQ6-10",
+            "XP-600",
+            "KB0-87",
+            "YT0-84",
+            "LD-128",
+            "RR1-28",
+            "BF-521",
+            "GC5-75",
+            "PD-376",
+            "OO-332"
         };
 
-        public static readonly string[] ShuttleSerials = new string[] 
+        public static string[] ShuttleSerials = new string[] 
         { 
             "DG-780", 
             "DO5-62", 
@@ -47,7 +35,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "HK4-82" 
         };
 
-        public static readonly string[] LuggageSerials = new string[] 
+        public static string[] LuggageSerials = new string[] 
         { 
             "SQ2-16", 
             "CQ3-01", 
@@ -60,7 +48,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "HO0-46" 
         };
 
-        public static readonly string[] Hangars = new string[] 
+        public static string[] Hangars = new string[] 
         { 
             "Hangar 1", 
             "Hangar 2", 
@@ -70,63 +58,43 @@ namespace WillemMeijer.NMAirTrafficControl
             "Hangar 6" 
         };
 
-        public static readonly string[] OriginCities = new string[]
+        public static string[] OriginCities = new string[]
         {
-            "Nuku'alofa",
-            "Bloemfontein",
-            "Gitega",
-            "Monaco",
-            "Bogota",
-            "Guatemala City",
-            "Andorra la Vella",
-            "Beirut",
-            "Kinshasa",
-            "Vaduz",
-            "Islamabad",
-            "Port au Prince",
-            "Brazzaville",
-            "London",
-            "Luxembourg",
-            "Saint John's",
-            "Tehran",
-            "Yaounde",
-            "Minsk",
-            "Male",
-            "Managua",
-            "Yerevan",
-            "Bishkek"
+            "Ashgabat",
+            "Quito",
+            "Harare",
+            "Ottawa",
+            "Bandar Seri Begawan",
+            "Wellington",
+            "Victoria",
+            "Lima",
+            "Mogadishu",
+            "Riyadh",
+            "Dushanbe",
+            "Bishkek",
+            "Belmopan",
+            "Abuja"
         };
 
-        public static readonly int[,] OriginSerialCrossTable = new int[,]
+        public static int[,] OriginSerialCrossTable = new int[,]
         {
-            {1,4,3,1,4,1,3,3,2,2,1,2,4,0,0,2,2,3,3,1,3,4,1,0,4},
-            {0,1,0,1,0,0,0,0,4,2,2,1,4,4,2,2,3,2,1,1,4,4,3,2,2},
-            {3,3,0,0,2,1,1,3,4,4,4,2,1,3,0,1,4,1,2,4,0,0,3,1,2},
-            {3,1,2,1,4,2,1,4,3,2,3,3,0,0,1,3,2,3,1,2,0,0,1,4,1},
-            {4,1,1,1,1,4,4,0,3,4,0,2,1,2,1,4,4,0,2,0,3,3,2,2,1},
-            {3,3,2,4,0,2,3,4,0,3,2,1,1,2,1,0,4,0,1,4,0,0,0,4,2},
-            {1,2,0,1,2,2,2,1,1,1,3,2,2,0,2,0,2,0,2,0,2,4,2,1,2},
-            {2,1,3,2,0,4,1,2,4,4,1,1,0,3,2,2,4,1,0,3,0,4,4,2,4},
-            {2,0,1,3,1,0,4,3,0,0,0,4,2,3,1,1,3,1,0,3,1,4,3,1,2},
-            {1,3,3,4,2,2,4,0,4,4,2,4,1,3,1,4,1,0,0,2,2,4,2,3,1},
-            {3,0,2,4,1,0,3,0,4,4,1,3,0,4,2,4,0,4,3,1,3,2,0,1,3},
-            {3,4,4,2,1,2,1,4,0,2,0,0,0,1,3,2,4,3,2,3,2,4,3,2,3},
-            {3,2,3,2,0,3,4,1,3,0,4,0,1,4,1,3,0,4,4,0,3,1,2,2,3},
-            {1,4,0,4,0,2,2,0,1,1,2,3,0,3,1,3,2,3,0,0,1,2,3,0,0},
-            {1,3,3,3,0,1,4,3,1,3,0,4,3,4,4,2,4,1,4,4,2,2,2,1,2},
-            {0,2,0,3,4,4,3,3,1,0,0,1,3,2,4,3,4,4,4,1,1,2,2,3,4},
-            {0,1,1,4,1,0,1,1,1,1,4,4,4,2,2,4,1,0,3,4,1,2,2,2,1},
-            {2,1,0,2,1,0,3,3,2,4,0,0,4,2,0,4,0,1,2,4,0,4,3,2,2},
-            {1,3,0,1,0,4,2,1,3,2,1,3,4,1,4,2,4,4,2,1,4,1,0,2,3},
-            {2,2,0,4,2,2,2,1,4,0,2,2,0,3,2,4,4,0,4,4,4,0,2,0,0},
-            {3,1,3,2,1,3,3,1,2,0,0,4,3,0,4,1,2,3,3,0,4,0,2,2,3},
-            {3,3,2,3,3,2,3,1,4,4,2,4,4,2,3,4,0,3,1,3,0,2,3,2,1},
-            {0,1,1,1,4,3,3,3,3,0,4,4,3,3,0,3,3,4,3,0,4,2,0,1,3},
-            {4,4,2,0,3,1,4,1,2,2,0,0,4,2,1,3,3,4,0,2,2,0,3,2,1},
-            {4,2,2,0,4,3,1,2,0,3,3,3,4,3,0,4,1,2,1,1,2,3,3,1,2}
+            {0,4,3,3,2,5,4,1,0,5,1,1,1,5},
+            {4,1,1,1,5,5,0,5,4,0,5,5,0,0},
+            {4,2,1,4,0,0,2,0,5,2,2,4,2,3},
+            {4,4,0,0,3,4,4,3,2,5,3,5,0,1},
+            {3,3,0,1,5,1,5,2,3,3,3,3,5,3},
+            {4,3,2,1,2,0,1,4,0,3,2,3,5,2},
+            {2,5,4,4,3,4,3,2,3,4,5,5,1,2},
+            {1,5,5,5,3,0,1,5,0,0,3,1,3,4},
+            {5,2,4,3,4,1,2,3,2,0,1,5,4,4},
+            {5,1,0,3,0,1,1,5,0,3,3,3,4,5},
+            {0,3,2,5,2,3,1,3,0,0,0,5,2,4},
+            {4,4,4,4,0,3,1,2,2,3,0,0,2,5},
+            {5,1,1,0,1,1,3,2,3,2,1,0,0,0},
+            {0,2,1,3,4,3,4,0,1,3,3,2,3,5}
         };
 
-        public static readonly string[] AllCities = new string[]
+        public static string[] AllCities = new string[]
         {
             "Kabul",
             "Tirana",

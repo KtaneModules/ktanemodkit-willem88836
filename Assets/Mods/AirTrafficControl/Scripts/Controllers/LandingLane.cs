@@ -248,7 +248,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			// then ignore all rules above. 
 			if (data.OriginIndex == 6 
 				|| data.OriginIndex == 8 
-				|| data.OriginIndex == 23)
+				|| data.OriginIndex == 13)
 			{
 				return 5;
 			}
