@@ -4337,6 +4337,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114061451168629134, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: ModuleType
+      value: NMAirTrafficManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061451168629134, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: ModuleDisplayName
+      value: Air Traffic Manager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00d14c220aba10241981f8a1e5f53035, type: 2}
   m_IsPrefabParent: 0
