@@ -13113,12 +13113,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneShot: 0
-  instantStart: 1
-  earlyEnd: 1
-  skipSpawnDelay: 1
-  skipSpawnDelayOnce: 1
-  skipEndMessage: 1
-  forceLane0: 1
+  instantStart: 0
+  earlyEnd: 0
+  skipSpawnDelay: 0
+  skipSpawnDelayOnce: 0
+  skipEndMessage: 0
+  forceLane0: 0
   onlyAllowLane0: 0
   ignoreCloseIntervalModifier: 0
   messageField: {fileID: 114841173164306722}
@@ -13139,6 +13139,8 @@ MonoBehaviour:
     Plane {0}, coming from {1}, is coming in on runway {4} with {2} passengers and
     {3} luggage.'
   startingDelay: 120
+  reducedStartingDelay: 45
+  reducedStartingDelayThreshold: 600
   deactivationAlpha: 0.2
   notYetStartedMessage: The airfield will open in {0} seconds.
   startedMessage: '- NOTIFICATION -

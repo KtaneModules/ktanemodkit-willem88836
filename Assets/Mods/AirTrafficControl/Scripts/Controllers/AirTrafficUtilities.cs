@@ -195,7 +195,7 @@ namespace WillemMeijer.NMAirTrafficControl
             // labels.
             for (int k = 0; k < data.GetLength(1); k++)
             {
-                html += "<th style=\"writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;\">"
+                html += "<th>"
                     + AirTrafficControlData.OriginCities[k] 
                     + "</th>";
             }
@@ -206,7 +206,7 @@ namespace WillemMeijer.NMAirTrafficControl
                 html += "<th>" + AirTrafficControlData.PlaneSerials[i] + "</th>";
                 for (int j = 0; j < data.GetLength(1); j++)
                 {
-                    html += "<th>" + data[i, j] + "</th>";
+                    html += "<th>" + (data[i, j] + 1) + "</th>";
                 }
                 html += "</tr>\n";
             }

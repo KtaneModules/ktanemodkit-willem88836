@@ -6,20 +6,18 @@ namespace WillemMeijer.NMAirTrafficControl
     {
         public static string[] PlaneSerials = new string[]
         {
-            "HV3-84",
-            "GQ1-02",
-            "VQ6-10",
-            "HF-062",
-            "GQ6-10",
-            "XP-600",
-            "KB0-87",
-            "YT0-84",
-            "LD-128",
-            "RR1-28",
-            "BF-521",
-            "GC5-75",
-            "PD-376",
-            "OO-332"
+            "VK4-25",
+            "SF-275",
+            "QS-022",
+            "MC2-25",
+            "NS-085",
+            "FR-030",
+            "PB7-86",
+            "QA4-31",
+            "FD-866",
+            "PE-801",
+            "AQ-120",
+            "YQ5-51"
         };
 
         public static string[] ShuttleSerials = new string[] 
@@ -61,37 +59,37 @@ namespace WillemMeijer.NMAirTrafficControl
         public static string[] OriginCities = new string[]
         {
             "Ashgabat",
-            "Quito",
+            "Cairo",
             "Harare",
-            "Ottawa",
-            "Bandar Seri Begawan",
+            "Praia",
+            "Sofia",
             "Wellington",
             "Victoria",
             "Lima",
-            "Mogadishu",
+            "Pretoria",
             "Riyadh",
             "Dushanbe",
             "Bishkek",
             "Belmopan",
-            "Abuja"
-        };
+            "Pyongyang",
+            "Palikir",
+            "Paramaribo"
+       };
 
         public static int[,] OriginSerialCrossTable = new int[,]
         {
-            {0,4,3,3,2,5,4,1,0,5,1,1,1,5},
-            {4,1,1,1,5,5,0,5,4,0,5,5,0,0},
-            {4,2,1,4,0,0,2,0,5,2,2,4,2,3},
-            {4,4,0,0,3,4,4,3,2,5,3,5,0,1},
-            {3,3,0,1,5,1,5,2,3,3,3,3,5,3},
-            {4,3,2,1,2,0,1,4,0,3,2,3,5,2},
-            {2,5,4,4,3,4,3,2,3,4,5,5,1,2},
-            {1,5,5,5,3,0,1,5,0,0,3,1,3,4},
-            {5,2,4,3,4,1,2,3,2,0,1,5,4,4},
-            {5,1,0,3,0,1,1,5,0,3,3,3,4,5},
-            {0,3,2,5,2,3,1,3,0,0,0,5,2,4},
-            {4,4,4,4,0,3,1,2,2,3,0,0,2,5},
-            {5,1,1,0,1,1,3,2,3,2,1,0,0,0},
-            {0,2,1,3,4,3,4,0,1,3,3,2,3,5}
+            {0,2,4,4,3,3,0,2,2,1,0,4,3,3,2,5},
+            {4,1,0,5,1,1,1,5,4,1,1,1,5,5,0,5},
+            {4,0,5,5,0,0,4,2,1,4,0,0,2,0,5,2},
+            {2,4,2,3,4,4,0,0,3,4,4,3,2,5,3,5},
+            {0,1,3,3,0,1,5,1,5,2,3,3,3,3,5,3},
+            {4,3,2,1,2,0,1,4,0,3,2,3,5,2,2,5},
+            {4,4,3,4,3,2,3,4,5,5,1,2,1,5,5,5},
+            {3,0,1,5,0,0,3,1,3,4,5,2,4,3,4,1},
+            {2,3,2,0,1,5,4,4,5,1,0,3,0,1,1,5},
+            {0,3,3,3,4,5,0,3,2,5,2,3,1,3,0,0},
+            {0,5,2,4,4,4,4,4,0,3,1,2,2,3,0,0},
+            {2,5,5,1,1,0,1,1,3,2,3,2,1,0,0,0}
         };
 
         public static string[] AllCities = new string[]
@@ -120,7 +118,6 @@ namespace WillemMeijer.NMAirTrafficControl
             "Sarajevo",
             "Gaborone",
             "Brasilia",
-            "Bandar Seri Begawan",
             "Sofia",
             "Ouagadougou",
             "Gitega",
@@ -297,7 +294,6 @@ namespace WillemMeijer.NMAirTrafficControl
             "Lusaka",
             "Harare"
         };
-    
         
         public static PlaneData GeneratePlane()
         {

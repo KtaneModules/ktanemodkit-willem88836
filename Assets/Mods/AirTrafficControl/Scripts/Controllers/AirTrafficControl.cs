@@ -32,6 +32,8 @@ namespace WillemMeijer.NMAirTrafficControl
         [SerializeField] private int eventIntervalMax;
         [SerializeField, Multiline] private string incomingPlaneMessage;
         [SerializeField] private int startingDelay;
+        [SerializeField] private int reducedStartingDelay;
+        [SerializeField] private int reducedStartingDelayThreshold;
         [SerializeField] private float deactivationAlpha;
         [SerializeField, Multiline] private string notYetStartedMessage;
         [SerializeField, Multiline] private string startedMessage;
@@ -53,21 +55,16 @@ namespace WillemMeijer.NMAirTrafficControl
         private void Start()
         {
             MonoRandom mRandom = new MonoRandom(0);
-
-            AirTrafficUtilities.GenerateOrigins(14, mRandom);
-            AirTrafficUtilities.GeneratePlaneSerials(14, mRandom);
+            AirTrafficUtilities.GenerateOrigins(16, mRandom);
+            AirTrafficUtilities.GeneratePlaneSerials(12, mRandom);
             AirTrafficUtilities.GenerateCrossTable(mRandom);
-            AirTrafficUtilities.PrintOrigins();
-            AirTrafficUtilities.PrintPlaneSerials();
-            AirTrafficUtilities.PrintCrosstableAsCS();
-            AirTrafficUtilities.PrintCrossTableAsHTML();
-            return;
 
             needyModule = GetComponent<KMNeedyModule>();
             bombInfo = GetComponent<KMBombInfo>();
             screenLock = new Lock();
             interactionLock = new Lock();
             bombTime = bombInfo.GetTime();
+
             StartCoroutine(DelayedModuleActivation());
         }
 
@@ -89,9 +86,8 @@ namespace WillemMeijer.NMAirTrafficControl
             }
 
 
-
-            //// Disables needymodule timer that automatically spawns. 
-            //// The Object only appears after the first frame.
+            // Disables needymodule timer that automatically spawns. 
+            // The Object only appears after the first frame.
             yield return new WaitForEndOfFrame();
             int c = transform.childCount;
             for (int i = 0; i < c; i++)
@@ -104,7 +100,9 @@ namespace WillemMeijer.NMAirTrafficControl
             }
 
             // Shows not yet started message every 1 seconds. 
-            int t = startingDelay;
+            int t = bombTime < reducedStartingDelayThreshold 
+                ? reducedStartingDelay
+                : startingDelay;
 
 #if UNITY_EDITOR
             if (instantStart)

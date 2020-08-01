@@ -3,56 +3,90 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <title>Module Name — Keep Talking and Nobody Explodes Module</title>
+        <title>Air Traffic Manager — Keep Talking and Nobody Explodes Module</title>
         <meta name="viewport" content="initial-scale=1">
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/font.css">
         <script src="js/ktane-utils.js"></script>
     </head>
+    <style>
+        .Serial-Origin-Crosstable tr th,
+        .Luggage-Table tr th {
+            font-size:10pt;
+        }
+
+        .Serial-Origin-Crosstable .Serial-Origin-Labels th {
+            writing-mode:vertical-rl;
+            text-orientation:mixed;
+            width:21.4px;
+        }
+
+        .Luggage-Table-Container {
+            width = 100%;
+        }
+
+        .Luggage-Table:nth-child(2) {
+            position:relative;
+            float:right;
+            margin-right:17%;
+        }
+
+        .Luggage-Table:nth-child(1) {
+            position:relative;
+            float:left;
+            margin-left:17%;
+        }
+    </style>
     <body>
         <div id="ManualContent">
             <div class="section">
                 <div class="page page-bg-01">
                     <div class="page-header">
                         <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                        <span class="page-header-section-title">Air Trafic Control</span>
+                        <span class="page-header-section-title">Air Traffic Manager</span>
                     </div>
                     <div class="page-content">
-                        <img src="img/Component/Module Name.svg" class="diagram">
-                        <h2>On the Subject of Air Traffic Control</h2>
+                        <img src="img/Component/Modele Air Traffic Control.png" class="diagram">
+                        <h2>On the Subject of Air Traffic Manager</h2>
                         <p class="flavour-text">If you manage to disarm a bomb, you can surely manage an airfield, right?</p>
 
                         <ul>
-                            <li>Two minutes after starting to dismantle the bomb (or 45 seconds if the bomb's time is less than 10 minutes), the bomb's airfield will open.</li>
+                            <li>Two minutes after starting to dismantle the bomb (or 45 seconds if the bomb's total time is less than 10 minutes), the bomb's airfield will open.</li>
                             <li>Indicentally, as indicated by the module's timer, a plane will arrive at one of four landing lanes.</li>
                             <li>Each plane is identified by a serial, city of origin, passenger count, and the amount of luggage it carries.</li>
-                            <li>Based on this information, a correct hangar, passenger shuttle, and luggage cart have to be selected.</li>
+                            <li>Based on this information, a correct hangar, passenger shuttle, and luggage cart have to be selected, using the three buttons at the right side.</li>
                             <li>When an incorrect hangar, shuttle or cart is chosen, the plane will be delayed.</li>
-                            <li>When a new plane arrives at a lane where another is still waiting, it will crash into the occupying one, crashing it and dealing a strike.</li>  
+                            <li>When a new plane arrives at a lane where another is still waiting, it will crash into the occupying one, crashing it and dealing a strike.</li>
                         </ul>
                         
                         <h3>Selecting the Correct Hangar</h3>
                         <p>Use the plane's serial number and city of origin to find the number of its designated hangar, using the table below.</p>
-                        <table>
-                            <tr><th></th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Ashgabat</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Quito</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Harare</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Ottawa</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Bandar Seri Begawan</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Wellington</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Victoria</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Lima</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Mogadishu</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Riyadh</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Dushanbe</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Bishkek</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Belmopan</th><th style="writing-mode:vertical-rl;text-orientation:mixed;width:21.4px;">Abuja</th>
-                            <tr><th>HV3-84</th><th>0</th><th>4</th><th>3</th><th>3</th><th>2</th><th>5</th><th>4</th><th>1</th><th>0</th><th>5</th><th>1</th><th>1</th><th>1</th><th>5</th></tr>
-                            <tr><th>GQ1-02</th><th>4</th><th>1</th><th>1</th><th>1</th><th>5</th><th>5</th><th>0</th><th>5</th><th>4</th><th>0</th><th>5</th><th>5</th><th>0</th><th>0</th></tr>
-                            <tr><th>VQ6-10</th><th>4</th><th>2</th><th>1</th><th>4</th><th>0</th><th>0</th><th>2</th><th>0</th><th>5</th><th>2</th><th>2</th><th>4</th><th>2</th><th>3</th></tr>
-                            <tr><th>HF-062</th><th>4</th><th>4</th><th>0</th><th>0</th><th>3</th><th>4</th><th>4</th><th>3</th><th>2</th><th>5</th><th>3</th><th>5</th><th>0</th><th>1</th></tr>
-                            <tr><th>GQ6-10</th><th>3</th><th>3</th><th>0</th><th>1</th><th>5</th><th>1</th><th>5</th><th>2</th><th>3</th><th>3</th><th>3</th><th>3</th><th>5</th><th>3</th></tr>
-                            <tr><th>XP-600</th><th>4</th><th>3</th><th>2</th><th>1</th><th>2</th><th>0</th><th>1</th><th>4</th><th>0</th><th>3</th><th>2</th><th>3</th><th>5</th><th>2</th></tr>
-                            <tr><th>KB0-87</th><th>2</th><th>5</th><th>4</th><th>4</th><th>3</th><th>4</th><th>3</th><th>2</th><th>3</th><th>4</th><th>5</th><th>5</th><th>1</th><th>2</th></tr>
-                            <tr><th>YT0-84</th><th>1</th><th>5</th><th>5</th><th>5</th><th>3</th><th>0</th><th>1</th><th>5</th><th>0</th><th>0</th><th>3</th><th>1</th><th>3</th><th>4</th></tr>
-                            <tr><th>LD-128</th><th>5</th><th>2</th><th>4</th><th>3</th><th>4</th><th>1</th><th>2</th><th>3</th><th>2</th><th>0</th><th>1</th><th>5</th><th>4</th><th>4</th></tr>
-                            <tr><th>RR1-28</th><th>5</th><th>1</th><th>0</th><th>3</th><th>0</th><th>1</th><th>1</th><th>5</th><th>0</th><th>3</th><th>3</th><th>3</th><th>4</th><th>5</th></tr>
-                            <tr><th>BF-521</th><th>0</th><th>3</th><th>2</th><th>5</th><th>2</th><th>3</th><th>1</th><th>3</th><th>0</th><th>0</th><th>0</th><th>5</th><th>2</th><th>4</th></tr>
-                            <tr><th>GC5-75</th><th>4</th><th>4</th><th>4</th><th>4</th><th>0</th><th>3</th><th>1</th><th>2</th><th>2</th><th>3</th><th>0</th><th>0</th><th>2</th><th>5</th></tr>
-                            <tr><th>PD-376</th><th>5</th><th>1</th><th>1</th><th>0</th><th>1</th><th>1</th><th>3</th><th>2</th><th>3</th><th>2</th><th>1</th><th>0</th><th>0</th><th>0</th></tr>
-                            <tr><th>OO-332</th><th>0</th><th>2</th><th>1</th><th>3</th><th>4</th><th>3</th><th>4</th><th>0</th><th>1</th><th>3</th><th>3</th><th>2</th><th>3</th><th>5</th></tr>
+                        <table class="Serial-Origin-Crosstable">
+                            <tr class="Serial-Origin-Labels"><th></th><th>Ashgabat</th><th>Cairo</th><th>Harare</th><th>Praia</th><th>Sofia</th><th>Wellington</th><th>Victoria</th><th>Lima</th><th>Pretoria</th><th>Riyadh</th><th>Dushanbe</th><th>Bishkek</th><th>Belmopan</th><th>Pyongyang</th><th>Palikir</th><th>Paramaribo</th>
+                            <tr><th>VK4-25</th><th>1</th><th>3</th><th>5</th><th>5</th><th>4</th><th>4</th><th>1</th><th>3</th><th>3</th><th>2</th><th>1</th><th>5</th><th>4</th><th>4</th><th>3</th><th>6</th></tr>
+                            <tr><th>SF-275</th><th>5</th><th>2</th><th>1</th><th>6</th><th>2</th><th>2</th><th>2</th><th>6</th><th>5</th><th>2</th><th>2</th><th>2</th><th>6</th><th>6</th><th>1</th><th>6</th></tr>
+                            <tr><th>QS-022</th><th>5</th><th>1</th><th>6</th><th>6</th><th>1</th><th>1</th><th>5</th><th>3</th><th>2</th><th>5</th><th>1</th><th>1</th><th>3</th><th>1</th><th>6</th><th>3</th></tr>
+                            <tr><th>MC2-25</th><th>3</th><th>5</th><th>3</th><th>4</th><th>5</th><th>5</th><th>1</th><th>1</th><th>4</th><th>5</th><th>5</th><th>4</th><th>3</th><th>6</th><th>4</th><th>6</th></tr>
+                            <tr><th>NS-085</th><th>1</th><th>2</th><th>4</th><th>4</th><th>1</th><th>2</th><th>6</th><th>2</th><th>6</th><th>3</th><th>4</th><th>4</th><th>4</th><th>4</th><th>6</th><th>4</th></tr>
+                            <tr><th>FR-030</th><th>5</th><th>4</th><th>3</th><th>2</th><th>3</th><th>1</th><th>2</th><th>5</th><th>1</th><th>4</th><th>3</th><th>4</th><th>6</th><th>3</th><th>3</th><th>6</th></tr>
+                            <tr><th>PB7-86</th><th>5</th><th>5</th><th>4</th><th>5</th><th>4</th><th>3</th><th>4</th><th>5</th><th>6</th><th>6</th><th>2</th><th>3</th><th>2</th><th>6</th><th>6</th><th>6</th></tr>
+                            <tr><th>QA4-31</th><th>4</th><th>1</th><th>2</th><th>6</th><th>1</th><th>1</th><th>4</th><th>2</th><th>4</th><th>5</th><th>6</th><th>3</th><th>5</th><th>4</th><th>5</th><th>2</th></tr>
+                            <tr><th>FD-866</th><th>3</th><th>4</th><th>3</th><th>1</th><th>2</th><th>6</th><th>5</th><th>5</th><th>6</th><th>2</th><th>1</th><th>4</th><th>1</th><th>2</th><th>2</th><th>6</th></tr>
+                            <tr><th>PE-801</th><th>1</th><th>4</th><th>4</th><th>4</th><th>5</th><th>6</th><th>1</th><th>4</th><th>3</th><th>6</th><th>3</th><th>4</th><th>2</th><th>4</th><th>1</th><th>1</th></tr>
+                            <tr><th>AQ-120</th><th>1</th><th>6</th><th>3</th><th>5</th><th>5</th><th>5</th><th>5</th><th>5</th><th>1</th><th>4</th><th>2</th><th>3</th><th>3</th><th>4</th><th>1</th><th>1</th></tr>
+                            <tr><th>YQ5-51</th><th>3</th><th>6</th><th>6</th><th>2</th><th>2</th><th>1</th><th>2</th><th>2</th><th>4</th><th>3</th><th>4</th><th>3</th><th>2</th><th>1</th><th>1</th><th>1</th></tr>
                         </table>
+                    </div>
+                    <div class="page-footer relative-footer">Page 1 of 2</div>
+                </div>
 
-
+                <div class="page page-bg-02">
+                    <div class="page-header">
+                        <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                        <span class="page-header-section-title">Air Trafic Manager</span>
+                    </div>
+                    <div class="page-content">
                         <h3>Selecting the Correct Passenger Shuttle</h3>
                         <p>Follow instructions listed below to determine the plane's designated passenger shuttle.</p>
                         <ul>
@@ -66,19 +100,7 @@
                         </ul>
 
 
-                    </div>
-                    <div class="page-footer relative-footer">Page 1 of 2</div>
-                </div>
-
-                <div class="page page-bg-02">
-                    <div class="page-header">
-                        <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                        <span class="page-header-section-title">Air Trafic Control</span>
-                    </div>
-                    <div class="page-content">
                         <h3>Selecting the Correct Luggage Cart</h3>
-                        <p>Follow the instructions below to determine the plane's designated luggage cart.</p>
-                        <p></p>
                         <p>
                             From the plane's serial number, select the pre-dash characters and translate these to numerical values (A = 1, B = 2, Z = 26), and sum these. 
                             Multiply this number by the plane's number of passengers. 
@@ -88,18 +110,23 @@
                             Add one to this number and you will have found the index of the plane's correct luggage cart. 
                             Use the table below to determine that cart's serial.
                         </p>
-                        <table style="margin:auto;">
-                            <tr><th>Cart Index</th><th>Cart Serial</th></tr>
-                            <tr><th>1</th><th>SQ2-16</th></tr>
-                            <tr><th>2</th><th>CQ3-01</th></tr>
-                            <tr><th>3</th><th>VG5-44</th></tr>
-                            <tr><th>4</th><th>LF2-01</th></tr>
-                            <tr><th>5</th><th>CS-612</th></tr>
-                            <tr><th>6</th><th>FK2-81</th></tr>
-                            <tr><th>7</th><th>BF-453</th></tr>
-                            <tr><th>8</th><th>RP3-48</th></tr>
-                            <tr><th>9</th><th>HO0-46</th></tr>
-                        </table>
+                        <div class="Luggage-Table-Container">
+                            <table class="Luggage-Table">
+                                <tr><th>Cart Index</th><th>Cart Serial</th></tr>
+                                <tr><th>1</th><th>SQ2-16</th></tr>
+                                <tr><th>2</th><th>CQ3-01</th></tr>
+                                <tr><th>3</th><th>VG5-44</th></tr>
+                                <tr><th>4</th><th>LF2-01</th></tr>
+                                <tr><th>5</th><th>CS-612</th></tr>
+                            </table>
+                            <table class="Luggage-Table">
+                                <tr><th>Cart Index</th><th>Cart Serial</th></tr>
+                                <tr><th>6</th><th>FK2-81</th></tr>
+                                <tr><th>7</th><th>BF-453</th></tr>
+                                <tr><th>8</th><th>RP3-48</th></tr>
+                                <tr><th>9</th><th>HO0-46</th></tr>
+                            </table>
+                        </div>
                     </div>
                     <div class="page-footer relative-footer">Page 2 of 2</div>
                 </div> 
