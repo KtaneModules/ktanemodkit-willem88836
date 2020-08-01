@@ -5634,8 +5634,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CountdownTime: -1
-  ModuleType: NMAirTrafficControl
-  ModuleDisplayName: Air Traffic Control
+  ModuleType: NMAirTrafficManager
+  ModuleDisplayName: Air Traffic Manager
   RequiresTimerVisibility: 0
   WarnAtFiveSeconds: 0
 --- !u!114 &114068932648397260
