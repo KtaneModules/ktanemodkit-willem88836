@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <title>Air Traffic Manager - Keep Talking and Nobody Explodes Module</title>
+        <title>Aviation Manager - Keep Talking and Nobody Explodes Module</title>
         <meta name="viewport" content="initial-scale=1">
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
@@ -23,19 +23,22 @@
         }
 
         .Luggage-Table-Container {
-            width = 100%;
+            width:100%;
+            border:0;
         }
 
-        .Luggage-Table:nth-child(2) {
+        .Luggage-Table-Container th {
+            border:0;
+        }
+        
+        .Luggage-Table {
             position:relative;
-            float:right;
-            margin-right:17%;
+            float:center;
+            border:0;
         }
 
-        .Luggage-Table:nth-child(1) {
-            position:relative;
-            float:left;
-            margin-left:17%;
+        .Luggage-Table th {
+            border:1px solid #222;
         }
     </style>
     <body>
@@ -44,16 +47,16 @@
                 <div class="page page-bg-01">
                     <div class="page-header">
                         <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                        <span class="page-header-section-title">Air Traffic Manager</span>
+                        <span class="page-header-section-title">Aviation Manager</span>
                     </div>
                     <div class="page-content">
                         <img src="img/Component/Modele Air Traffic Control.png" class="diagram">
-                        <h2>On the Subject of Air Traffic Manager</h2>
+                        <h2>On the Subject of Aviation Manager</h2>
                         <p class="flavour-text">If you manage to disarm a bomb, you can surely manage an airfield, right?</p>
 
                         <ul>
                             <li>Two minutes after starting to dismantle the bomb (or 45 seconds if the bomb's total time is less than 10 minutes), the bomb's airfield will open.</li>
-                            <li>Indicentally, as indicated by the module's timer, a plane will arrive at one of four landing lanes.</li>
+                            <li>Incidentally, as indicated by the module's timer, a plane will arrive at one of four landing lanes.</li>
                             <li>Each plane is identified by a serial, city of origin, passenger count, and the amount of luggage it carries.</li>
                             <li>Based on this information, a correct hangar, passenger shuttle, and luggage cart have to be selected, using the three buttons at the right side.</li>
                             <li>When an incorrect hangar, shuttle or cart is chosen, the plane will be delayed.</li>
@@ -84,7 +87,7 @@
                 <div class="page page-bg-02">
                     <div class="page-header">
                         <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                        <span class="page-header-section-title">Air Trafic Manager</span>
+                        <span class="page-header-section-title">Aviation Manager</span>
                     </div>
                     <div class="page-content">
                         <h3>Selecting the Correct Passenger Shuttle</h3>
@@ -105,28 +108,34 @@
                             From the plane's serial number, select the pre-dash characters and translate these to numerical values (A = 1, B = 2, Z = 26), and sum these. 
                             Multiply this number by the plane's number of passengers. 
                             Execute the same method for the serial's post-dash characters, however, instead multiply these with the plane's amount of luggage.
-                            Finally, perform an XOR operation with the sum of these two numbers and the entire serial number (translated similarly as the pre- and post-dash parts of it).
+                            Finally, perform an XOR-operation with the sum of these two numbers and the entire serial number (translated similarly as the pre- and post-dash parts of it).
                             By subtracting the number of different luggage carts from this number, until it is smaller than that number, the final result is unveiled. 
                             Add one to this number and you will have found the index of the plane's correct luggage cart. 
                             Use the table below to determine that cart's serial.
                         </p>
-                        <div class="Luggage-Table-Container">
-                            <table class="Luggage-Table">
+                        <p class="appendix-reference">
+                            Look at Appendix: Boolean Operations for XOR-operations.
+                        </p>
+                        <table class="Luggage-Table-Container">
+                            <th><table class="Luggage-Table">
                                 <tr><th>Cart Index</th><th>Cart Serial</th></tr>
                                 <tr><th>1</th><th>SQ2-16</th></tr>
                                 <tr><th>2</th><th>CQ3-01</th></tr>
                                 <tr><th>3</th><th>VG5-44</th></tr>
+                            </table></th>
+                            <th><table class="Luggage-Table">
+                                <tr><th>Cart Index</th><th>Cart Serial</th></tr>
                                 <tr><th>4</th><th>LF2-01</th></tr>
                                 <tr><th>5</th><th>CS-612</th></tr>
-                            </table>
-                            <table class="Luggage-Table">
-                                <tr><th>Cart Index</th><th>Cart Serial</th></tr>
                                 <tr><th>6</th><th>FK2-81</th></tr>
+                            </table></th>
+                            <th><table class="Luggage-Table">
+                                <tr><th>Cart Index</th><th>Cart Serial</th></tr>
                                 <tr><th>7</th><th>BF-453</th></tr>
                                 <tr><th>8</th><th>RP3-48</th></tr>
                                 <tr><th>9</th><th>HO0-46</th></tr>
-                            </table>
-                        </div>
+                            </table></th>
+                        </table>
                     </div>
                     <div class="page-footer relative-footer">Page 2 of 2</div>
                 </div> 
