@@ -94,6 +94,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			this.allLanes = lanes;
 			this.laneIndex = laneIndex;
 			this.airTrafficControl = airTrafficControl;
+			State = 0;
 		}
 
 
@@ -178,14 +179,44 @@ namespace WillemMeijer.NMAirTrafficControl
 			}
 		}
 
+
 		public void Launch()
+		{
+			if (IsCorrectSelection())
+			{
+				CorrectLaunch();
+			}
+			else
+			{
+				IncorrectLaunch();
+			}
+		}
+
+		private void IncorrectLaunch()
+		{
+			int c = 0;
+			Action onComplete = delegate
+			{
+				c += 1;
+				if (c == 2)
+				{
+					CorrectLaunch();
+				};
+			};
+
+			Debug.LogFormat("Incorrect Launch Started: {0}", occupyingPlane.A.Serial);
+			luggageFactory.CreateTrain(luggageCar, onComplete);
+			shuttleFactory.CreateTrain(shuttleCar, onComplete);
+		}
+
+		private void CorrectLaunch()
 		{
 			Action onLuggageComplete = delegate
 			{
 				State = 0;
 				Action onLaunchComplete = delegate
 				{
-					Debug.Log("Launch Completed!" + departingPlane.A.Serial);
+					Debug.LogFormat("Launch Completed: {0}", departingPlane.A.Serial);
 					Destroy(departingPlane.B.gameObject);
 					departingPlane.A = null;
 					departingPlane.B = null;
@@ -199,15 +230,14 @@ namespace WillemMeijer.NMAirTrafficControl
 				departingPlane.B.SetAsLastSibling();
 				planeAnimator.Animate(departingPlane.B, animatorEndNode, -1, onLaunchComplete);
 
-				Debug.Log("Starting launch: " + departingPlane.A.Serial);
+				Debug.LogFormat("Starting launch: {0}", departingPlane.A.Serial);
 			};
 
-			luggageFactory.CreateTrain(luggageCar, onLuggageComplete);
-			shuttleFactory.CreateTrain(shuttleCar, null);
+			luggageFactory.CreateTrain(luggageCar, null);
+			shuttleFactory.CreateTrain(shuttleCar, onLuggageComplete);
 		}
 	
 		
-
 		private bool IsCorrectSelection()
 		{
 			// Hangar Test.

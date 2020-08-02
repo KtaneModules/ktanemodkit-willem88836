@@ -51,6 +51,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			// Finds all SelectionOptions in children. 
 			int c = transform.childCount;
+			int k = 0;
 			for (int i = 0; i < c; i++)
 			{
 				Transform container = transform.GetChild(i);
@@ -60,7 +61,8 @@ namespace WillemMeijer.NMAirTrafficControl
 				{
 					Transform child = container.GetChild(j);
 					SelectionOption option = child.GetComponent<SelectionOption>();
-					option.Index = j;
+					option.Index = k;
+					k++;
 					options.Add(option);
 				}
 			}

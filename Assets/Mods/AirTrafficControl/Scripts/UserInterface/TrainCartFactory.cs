@@ -64,7 +64,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
 		public void CreateTrain(int type, Action onComplete)
 		{
-			onComplete += StopFolow;
+			onComplete = StopFollow + onComplete;
 
 			carts.Clear();
 			System.Random random = new System.Random(type);
@@ -98,13 +98,14 @@ namespace WillemMeijer.NMAirTrafficControl
 			}
 		}
 
-		private void StopFolow()
+		private void StopFollow()
 		{
 			for(int i = 0; i < carts.Count; i++)
 			{
 				Destroy(carts[i].gameObject);
 			}
 
+			animator.Remove(car);
 			Destroy(car.gameObject);
 
 			carts.Clear();

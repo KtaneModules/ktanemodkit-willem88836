@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace WillemMeijer.NMAirTrafficControl
@@ -7,7 +6,7 @@ namespace WillemMeijer.NMAirTrafficControl
 	[RequireComponent(typeof(Image))]
 	public class SelectionOption : MonoBehaviour
 	{
-		[NonSerialized] public int Index = -1;
+		public int Index = -1;
 		[SerializeField] private string selectEncapsulation;
 
 		private Text label;

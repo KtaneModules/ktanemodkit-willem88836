@@ -5676,6 +5676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114079411711359948
 MonoBehaviour:
@@ -6578,6 +6579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114143567386138096
 MonoBehaviour:
@@ -8126,6 +8128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114304570375507254
 MonoBehaviour:
@@ -9017,6 +9020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114386218202980414
 MonoBehaviour:
@@ -10900,6 +10904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114519542873886218
 MonoBehaviour:
@@ -11077,6 +11082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114543794059740334
 MonoBehaviour:
@@ -13131,8 +13137,8 @@ MonoBehaviour:
   - {fileID: 114096239854627362}
   - {fileID: 114136621683057630}
   - {fileID: 114627770469134694}
-  eventIntervalMin: 35
-  eventIntervalMax: 60
+  eventIntervalMin: 70
+  eventIntervalMax: 99
   incomingPlaneMessage: '- NOTIFICATION -
 
 
@@ -14385,6 +14391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114769171303015956
 MonoBehaviour:
@@ -15668,6 +15675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114899409486321230
 MonoBehaviour:
@@ -16627,6 +16635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114969486366822590
 MonoBehaviour:
@@ -16705,6 +16714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc43cfd1adf00445b9193aa08a1b232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
   selectEncapsulation: '- {0} -'
 --- !u!114 &114978594759035464
 MonoBehaviour:
