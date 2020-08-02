@@ -245,16 +245,16 @@ namespace WillemMeijer.NMAirTrafficControl
         {
             int[,] data = AirTrafficControlData.OriginSerialCrossTable;
 
-            string html = "                        <tr><th></th>";
+            string html = "                        <tr class=\"Serial-Origin-Labels\"><th></th>";
             
             // labels.
             for (int k = 0; k < data.GetLength(1); k++)
             {
-                html += "<th>"
+                html += "<th><div>"
                     + AirTrafficControlData.OriginCities[k] 
-                    + "</th>";
+                    + "</div></th>";
             }
-
+            html += "</tr>\n";
             for(int i = 0; i < data.GetLength(0); i++)
             {
                 html += "                        <tr>";

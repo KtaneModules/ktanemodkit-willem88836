@@ -10,16 +10,20 @@
         <link rel="stylesheet" type="text/css" href="css/font.css">
         <script src="js/ktane-utils.js"></script>
     </head>
-    <style>
+    <style rel="stylesheet" type="text/css">
+        .Serial-Origin-Crosstable {
+            width: 100%;
+        }
+
         .Serial-Origin-Crosstable tr th,
         .Luggage-Table tr th {
             font-size:10pt;
         }
 
-        .Serial-Origin-Crosstable .Serial-Origin-Labels th {
-            writing-mode:vertical-rl;
-            text-orientation:mixed;
-            width:21.4px;
+        .Serial-Origin-Crosstable .Serial-Origin-Labels div {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            height:60pt;
         }
 
         .Luggage-Table-Container {
@@ -66,7 +70,7 @@
                         <h3>Selecting the Correct Hangar</h3>
                         <p>Use the plane's serial number and city of origin to find the number of its designated hangar, using the table below.</p>
                         <table class="Serial-Origin-Crosstable">
-                            <tr class="Serial-Origin-Labels"><th></th><th>Ashgabat</th><th>Cairo</th><th>Harare</th><th>Praia</th><th>Sofia</th><th>Wellington</th><th>Victoria</th><th>Lima</th><th>Pretoria</th><th>Riyadh</th><th>Dushanbe</th><th>Bishkek</th><th>Belmopan</th><th>Pyongyang</th><th>Palikir</th><th>Paramaribo</th>
+                            <tr class="Serial-Origin-Labels"><th></th><th><div>Ashgabat</div></th><th><div>Cairo</div></th><th><div>Harare</div></th><th><div>Praia</div></th><th><div>Sofia</div></th><th><div>Wellington</div></th><th><div>Victoria</div></th><th><div>Lima</div></th><th><div>Pretoria</div></th><th><div>Riyadh</div></th><th><div>Dushanbe</div></th><th><div>Bishkek</div></th><th><div>Belmopan</div></th><th><div>Pyongyang</div></th><th><div>Palikir</div></th><th><div>Paramaribo</div></th></tr>
                             <tr><th>7K4-G5</th><th>1</th><th>3</th><th>5</th><th>5</th><th>4</th><th>4</th><th>1</th><th>3</th><th>3</th><th>2</th><th>1</th><th>5</th><th>4</th><th>4</th><th>3</th><th>6</th></tr>
                             <tr><th>6F-2V5</th><th>5</th><th>2</th><th>1</th><th>6</th><th>2</th><th>2</th><th>2</th><th>6</th><th>5</th><th>2</th><th>2</th><th>2</th><th>6</th><th>6</th><th>1</th><th>6</th></tr>
                             <tr><th>6S-0H2</th><th>5</th><th>1</th><th>6</th><th>6</th><th>1</th><th>1</th><th>5</th><th>3</th><th>2</th><th>5</th><th>1</th><th>1</th><th>3</th><th>1</th><th>6</th><th>3</th></tr>
@@ -114,7 +118,7 @@
                             Use the table below to determine that cart's serial.
                         </p>
                         <p class="appendix-reference">
-                            Look at Appendix: Boolean Operations for XOR-operations.
+                            See Appendix: Boolean Operations for XOR-operations reference.
                         </p>
                         <table class="Luggage-Table-Container">
                             <th><table class="Luggage-Table">
