@@ -326,15 +326,15 @@ namespace WillemMeijer.NMAirTrafficControl
 				return 0;
 			}
 
-			// 5) Alternatively, if the plane came in on lane 3 and it has more than 200 luggage.
-			if(laneIndex == 3 && data.LuggageCount > 200)
+			// 5) Alternatively, if the plane came in on lane 3 and it has more than 20 luggage.
+			if(laneIndex == 3 && data.LuggageCount > 20)
 			{
 				return 2;
 			}
 
 			// 6) Alternatively, if there is a plane present, departing from, 
 			// or currently approaching all landing lanes, and the cumulative 
-			// passenger count of their occupying planes is over 800, excluding wrecked lanes.
+			// passenger count of their occupying planes is over 80, excluding wrecked lanes.
 			int totalPassengers = 0;
 			bool allInUse = true;
 			foreach(LandingLane lane in allLanes)
@@ -349,7 +349,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				}
 			}
 
-			if(allInUse && totalPassengers >= 800)
+			if(allInUse && totalPassengers >= 80)
 			{
 				return 1;
 			}
