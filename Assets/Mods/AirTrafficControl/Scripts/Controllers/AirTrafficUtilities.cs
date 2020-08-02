@@ -1,18 +1,19 @@
-﻿using UnityEngine;
+﻿using System.CodeDom.Compiler;
+using UnityEngine;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
     public class AirTrafficUtilities
 	{
-        private static string GenerateSerial(MonoRandom mRandom)
+        private static string GeneratePlaneSerial(MonoRandom mRandom)
         {
             string serial = "";
 
-            int r0 = mRandom.Next(65, 90);
-            serial += (char)r0;
+            int q1 = mRandom.Next(0, 9);
+            serial += q1.ToString();
 
-            int r1 = mRandom.Next(65, 90);
-            serial += (char)r1;
+            int q2 = mRandom.Next(65, 90);
+            serial += (char)q2;
 
             double a = mRandom.NextDouble();
             if (a < 0.5f)
@@ -20,22 +21,56 @@ namespace WillemMeijer.NMAirTrafficControl
                 serial += "-";
             }
 
-            int r2 = mRandom.Next(0, 9);
-            serial += r2.ToString();
+            int q3 = mRandom.Next(0, 9);
+            serial += q3.ToString();
 
             if (a >= 0.5f)
             {
                 serial += "-";
             }
 
-            int r3 = mRandom.Next(0, 9);
-            serial += r3.ToString();
+            int q4 = mRandom.Next(65, 90);
+            serial += (char)q4;
 
-            int r4 = mRandom.Next(0, 9);
-            serial += r4.ToString();
+            int q5 = mRandom.Next(0, 9);
+            serial += q5.ToString();
 
             return serial;
         }
+
+        private static string GenerateGenericSerial(MonoRandom mRandom)
+        {
+            string serial = "";
+
+            int q1 = mRandom.Next(65, 90);
+            serial += (char)q1;
+
+            int q2 = mRandom.Next(65, 90);
+            serial += (char)q2;
+
+            double a = mRandom.NextDouble();
+            if (a < 0.5f)
+            {
+                serial += "-";
+            }
+
+            int q3 = mRandom.Next(0, 9);
+            serial += q3.ToString();
+
+            if (a >= 0.5f)
+            {
+                serial += "-";
+            }
+
+            int q4 = mRandom.Next(0, 9);
+            serial += q4.ToString();
+
+            int q5 = mRandom.Next(0, 9);
+            serial += q5.ToString();
+
+            return serial;
+        }
+
 
         public static void GeneratePlaneSerials(int n, MonoRandom mRandom)
         {
@@ -43,7 +78,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
             for (int i = 0; i < n; i++)
             {
-                string serial = GenerateSerial(mRandom);
+                string serial = GeneratePlaneSerial(mRandom);
                 serials[i] = serial;
             }
 
@@ -70,7 +105,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
             for (int i = 0; i < n; i++)
             {
-                string serial = GenerateSerial(mRandom);
+                string serial = GenerateGenericSerial(mRandom);
                 serials[i] = serial;
             }
 
@@ -83,7 +118,7 @@ namespace WillemMeijer.NMAirTrafficControl
 
             for (int i = 0; i < n; i++)
             {
-                string serial = GenerateSerial(mRandom);
+                string serial = GenerateGenericSerial(mRandom);
                 serials[i] = serial;
             }
 
@@ -152,6 +187,30 @@ namespace WillemMeijer.NMAirTrafficControl
             }
             cs += "};";
             Debug.Log(cs);
+        }
+
+        public static void PrintShuttles()
+        {
+            string s = "";
+            foreach(string shuttle in AirTrafficControlData.ShuttleSerials)
+            {
+                s += "\"";
+                s += shuttle;
+                s += "\",\n";
+            }
+            Debug.Log(s);
+        }
+
+        public static void PrintLuggage()
+        {
+            string l = "";
+            foreach (string luggage in AirTrafficControlData.LuggageSerials)
+            {
+                l += "\"";
+                l += luggage;
+                l += "\",\n";
+            }
+            Debug.Log(l);
         }
 
         public static void PrintCrosstableAsCS()

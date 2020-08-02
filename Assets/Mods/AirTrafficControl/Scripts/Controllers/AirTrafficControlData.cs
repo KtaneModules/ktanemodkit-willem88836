@@ -6,44 +6,44 @@ namespace WillemMeijer.NMAirTrafficControl
     {
         public static string[] PlaneSerials = new string[]
         {
-            "VK4-25",
-            "SF-275",
-            "QS-022",
-            "MC2-25",
-            "NS-085",
-            "FR-030",
-            "PB7-86",
-            "QA4-31",
-            "FD-866",
-            "PE-801",
-            "AQ-120",
-            "YQ5-51"
+            "7K4-G5",
+            "6F-2V5",
+            "6S-0H2",
+            "4C2-G5",
+            "4S-0X5",
+            "2R-0K0",
+            "5B7-Y6",
+            "5A4-L1",
+            "2D-8R6",
+            "5E-8B1",
+            "0Q-1G0",
+            "8Q5-P1"
         };
 
         public static string[] ShuttleSerials = new string[] 
         { 
-            "DG-780", 
-            "DO5-62", 
-            "GC-120", 
-            "GN-726", 
-            "LF-705", 
-            "MQ3-17", 
-            "JV6-32", 
-            "CQ-306", 
-            "HK4-82" 
+            "DG-780",
+            "DO5-62",
+            "GC-120",
+            "GN-726",
+            "LF-705",
+            "MQ3-17",
+            "JV6-32",
+            "CQ-306",
+            "HK4-82"
         };
 
         public static string[] LuggageSerials = new string[] 
-        { 
-            "SQ2-16", 
-            "CQ3-01", 
-            "VG5-44", 
-            "LF2-01", 
-            "CS-612", 
-            "FK2-81", 
-            "BF-453", 
-            "RP3-48", 
-            "HO0-46" 
+        {
+            "SQ2-16",
+            "CQ3-01",
+            "VG5-44",
+            "LF2-01",
+            "CS-612",
+            "FK2-81",
+            "BF-453",
+            "RP3-48",
+            "HO0-46"
         };
 
         public static string[] Hangars = new string[] 
@@ -74,7 +74,7 @@ namespace WillemMeijer.NMAirTrafficControl
             "Pyongyang",
             "Palikir",
             "Paramaribo"
-       };
+        };
 
         public static int[,] OriginSerialCrossTable = new int[,]
         {
@@ -299,8 +299,8 @@ namespace WillemMeijer.NMAirTrafficControl
         {
             int s = Random.Range(0, PlaneSerials.Length);
             int o = Random.Range(0, OriginCities.Length);
-            int p = Random.Range(100, 300);
-            int l = Random.Range(100, 255);
+            int p = Random.Range(10, 30);
+            int l = Random.Range(10, 25);
 
             PlaneData newPlane = new PlaneData(s, o, p, l);
 

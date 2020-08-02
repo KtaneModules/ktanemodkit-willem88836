@@ -13137,7 +13137,7 @@ MonoBehaviour:
   - {fileID: 114096239854627362}
   - {fileID: 114136621683057630}
   - {fileID: 114627770469134694}
-  eventIntervalMin: 70
+  eventIntervalMin: 50
   eventIntervalMax: 99
   incomingPlaneMessage: '- NOTIFICATION -
 

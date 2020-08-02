@@ -399,9 +399,9 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			int correctLuggage =
 				(
-					(predash * occupyingPlane.A.PassengerCount
-						+ postdash * occupyingPlane.A.LuggageCount)
-					^ (predash + postdash)
+					Mathf.Abs(predash * occupyingPlane.A.PassengerCount
+						- postdash * occupyingPlane.A.LuggageCount)
+					^ (predash * postdash)
 				)
 				% AirTrafficControlData.LuggageSerials.Length;
 
