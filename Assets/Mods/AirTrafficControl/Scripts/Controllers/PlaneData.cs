@@ -15,7 +15,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		{ 
 			get 
 			{ 
-				return AirTrafficControlData.PlaneSerials[SerialIndex]; 
+				return AirTrafficControlData.ErrorCodes[SerialIndex]; 
 			} 
 		}
 
@@ -23,7 +23,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		{
 			get
 			{
-				return AirTrafficControlData.OriginCities[OriginIndex];
+				return AirTrafficControlData.SourceFileNames[OriginIndex];
 			}
 		}
 

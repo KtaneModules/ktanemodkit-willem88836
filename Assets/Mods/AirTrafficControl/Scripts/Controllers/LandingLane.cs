@@ -354,7 +354,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				return 1;
 			}
 
-			return 3;
+			return 8;
 		}
 	
 		private int CalculateCorrectLuggage()
@@ -403,7 +403,7 @@ namespace WillemMeijer.NMAirTrafficControl
 						- postdash * occupyingPlane.A.LuggageCount)
 					^ (predash * postdash)
 				)
-				% AirTrafficControlData.LuggageSerials.Length;
+				% AirTrafficControlData.PatchFiles.Length;
 
 			return correctLuggage;
 		}

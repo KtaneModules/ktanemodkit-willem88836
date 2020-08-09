@@ -21,6 +21,7 @@ namespace WillemMeijer.NMAirTrafficControl
 #endif
 
         [Header("Module Settings")]
+        [SerializeField] private AirTrafficControlData data;
         [SerializeField] private MessageField messageField;
         [SerializeField] private SelectionMenu selectionMenu;
         [SerializeField] private InteractableButton okButton;
@@ -55,16 +56,16 @@ namespace WillemMeijer.NMAirTrafficControl
         private void Start()
         {
             MonoRandom mRandom = new MonoRandom(0);
-            AirTrafficUtilities.GenerateOrigins(16, mRandom);
-            AirTrafficUtilities.GeneratePlaneSerials(12, mRandom);
-            AirTrafficUtilities.GenerateCrossTable(mRandom);
+            data.Generate(16, 12, 6, 9, 9);
+            //AirTrafficUtilities.GenerateOrigins(16, mRandom);
+            //AirTrafficUtilities.GenerateErrorCodes(12, mRandom);
+            //AirTrafficUtilities.GenerateCrossTable(mRandom);
 
-            AirTrafficUtilities.PrintShuttles();
-            AirTrafficUtilities.PrintLuggage();
-            AirTrafficUtilities.PrintPlaneSerials();
-            AirTrafficUtilities.PrintOrigins();
-            AirTrafficUtilities.PrintCrosstableAsCS();
+            AirTrafficUtilities.PrintSourceFiles();
+            AirTrafficUtilities.PrintErrorCodes();
             AirTrafficUtilities.PrintCrossTableAsHTML();
+            AirTrafficUtilities.PrintVersions();
+            AirTrafficUtilities.PrintPatchFiles();
 
             needyModule = GetComponent<KMNeedyModule>();
             bombInfo = GetComponent<KMBombInfo>();
@@ -180,7 +181,7 @@ namespace WillemMeijer.NMAirTrafficControl
 #endif
 
                 // generates incoming plane.
-                PlaneData incoming = AirTrafficControlData.GeneratePlane();
+                PlaneData incoming = data.GeneratePlane();
 
                 // Notifies all the elements involved. 
                 LandingLane lane = lanes[laneIndex];
@@ -292,13 +293,13 @@ namespace WillemMeijer.NMAirTrafficControl
             switch (lane.State)
             {
                 case 0:
-                    selectionMenu.Show(AirTrafficControlData.Hangars);
+                    selectionMenu.Show(AirTrafficControlData.Parameters);
                     break;
                 case 1:
-                    selectionMenu.Show(AirTrafficControlData.ShuttleSerials);
+                    selectionMenu.Show(AirTrafficControlData.VersionNumbers);
                     break;
                 case 2:
-                    selectionMenu.Show(AirTrafficControlData.LuggageSerials);
+                    selectionMenu.Show(AirTrafficControlData.PatchFiles);
                     break;
             }
         }

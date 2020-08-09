@@ -913,7 +913,7 @@ Prefab:
     - target: {fileID: 114848120511536268, guid: 8814ea52310d2614a9feda02ec355ae4,
         type: 2}
       propertyPath: randomSeed
-      value: 8
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8814ea52310d2614a9feda02ec355ae4, type: 2}
@@ -4339,9 +4339,39 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
         type: 2}
-      propertyPath: eventIntervalMin
-      value: 50
+      propertyPath: instantStart
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: earlyEnd
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: skipSpawnDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: skipSpawnDelayOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: data.extentions
+      value: 
+      objectReference: {fileID: 4900000, guid: 0ba8cbafab84ecd499e506ca0988ce6e, type: 3}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: data.modulePrefixes
+      value: 
+      objectReference: {fileID: 4900000, guid: a5d18567ddd6ce54891733fa44e1b2f8, type: 3}
+    - target: {fileID: 114668782083222110, guid: 00d14c220aba10241981f8a1e5f53035,
+        type: 2}
+      propertyPath: data.moduleSuffixes
+      value: 
+      objectReference: {fileID: 4900000, guid: ac368b203e2b3684fad7006a01d55424, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00d14c220aba10241981f8a1e5f53035, type: 2}
   m_IsPrefabParent: 0

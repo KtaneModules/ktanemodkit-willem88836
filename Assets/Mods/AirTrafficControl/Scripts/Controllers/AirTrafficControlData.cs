@@ -1,304 +1,161 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace WillemMeijer.NMAirTrafficControl
 {
-    public static class AirTrafficControlData
+    [Serializable]
+    public class AirTrafficControlData
     {
-        public static string[] PlaneSerials = new string[]
-        {
-            "7K4-G5",
-            "6F-2V5",
-            "6S-0H2",
-            "4C2-G5",
-            "4S-0X5",
-            "2R-0K0",
-            "5B7-Y6",
-            "5A4-L1",
-            "2D-8R6",
-            "5E-8B1",
-            "0Q-1G0",
-            "8Q5-P1"
-        };
+        public static string[] SourceFileNames;
+        public static string[] ErrorCodes;
 
-        public static string[] ShuttleSerials = new string[] 
-        { 
-            "DG-780",
-            "DO5-62",
-            "GC-120",
-            "GN-726",
-            "LF-705",
-            "MQ3-17",
-            "JV6-32",
-            "CQ-306",
-            "HK4-82"
-        };
+        public static string[] PatchFiles;
+        public static string[] VersionNumbers;
+        public static string[] Parameters;
 
-        public static string[] LuggageSerials = new string[] 
-        {
-            "SQ2-16",
-            "CQ3-01",
-            "VG5-44",
-            "LF2-01",
-            "CS-612",
-            "FK2-81",
-            "BF-453",
-            "RP3-48",
-            "HO0-46"
-        };
+        public static int[,] OriginSerialCrossTable;
 
-        public static string[] Hangars = new string[] 
-        { 
-            "Hangar 1", 
-            "Hangar 2", 
-            "Hangar 3", 
-            "Hangar 4", 
-            "Hangar 5", 
-            "Hangar 6" 
-        };
+        [SerializeField] private int extentionEntryCount = 657;
+        [SerializeField] private int extentionLength = 4;
+        [SerializeField] private TextAsset extentions;
+        [SerializeField] private int moduleEntryCount = 58112;
+        [SerializeField] private int moduleLength = 6;
+        [SerializeField] private TextAsset modulePrefixes;
+        [SerializeField] private TextAsset moduleSuffixes;
 
-        public static string[] OriginCities = new string[]
-        {
-            "Ashgabat",
-            "Cairo",
-            "Harare",
-            "Praia",
-            "Sofia",
-            "Wellington",
-            "Victoria",
-            "Lima",
-            "Pretoria",
-            "Riyadh",
-            "Dushanbe",
-            "Bishkek",
-            "Belmopan",
-            "Pyongyang",
-            "Palikir",
-            "Paramaribo"
-        };
+        private MonoRandom mRandom;
 
-        public static int[,] OriginSerialCrossTable = new int[,]
+        public void Generate(int s, int e, int pf, int v, int pa)
         {
-            {0,2,4,4,3,3,0,2,2,1,0,4,3,3,2,5},
-            {4,1,0,5,1,1,1,5,4,1,1,1,5,5,0,5},
-            {4,0,5,5,0,0,4,2,1,4,0,0,2,0,5,2},
-            {2,4,2,3,4,4,0,0,3,4,4,3,2,5,3,5},
-            {0,1,3,3,0,1,5,1,5,2,3,3,3,3,5,3},
-            {4,3,2,1,2,0,1,4,0,3,2,3,5,2,2,5},
-            {4,4,3,4,3,2,3,4,5,5,1,2,1,5,5,5},
-            {3,0,1,5,0,0,3,1,3,4,5,2,4,3,4,1},
-            {2,3,2,0,1,5,4,4,5,1,0,3,0,1,1,5},
-            {0,3,3,3,4,5,0,3,2,5,2,3,1,3,0,0},
-            {0,5,2,4,4,4,4,4,0,3,1,2,2,3,0,0},
-            {2,5,5,1,1,0,1,1,3,2,3,2,1,0,0,0}
-        };
+            mRandom = new MonoRandom(0);
+            GenerateSourceFileNames(s, 4, 8);
+            GenerateErrorCodes(e, 6);
+            GeneratePatchFiles(pf);
+            GenerateVersions(v);
+            GenerateParameters(pa);
+            GenerateCrossTable(v);
+        }
 
-        public static string[] AllCities = new string[]
+
+        private void GenerateSourceFileNames(int n, int minLength, int maxLength)
         {
-            "Kabul",
-            "Tirana",
-            "Algiers",
-            "Andorra la Vella",
-            "Luanda",
-            "Saint John's",
-            "Buenos Aires",
-            "Yerevan",
-            "Canberra",
-            "Vienna",
-            "Baku",
-            "Nassau",
-            "Manama",
-            "Dhaka",
-            "Bridgetown",
-            "Minsk",
-            "Brussels",
-            "Belmopan",
-            "Porto Novo",
-            "Thimphu",
-            "Sucre",
-            "Sarajevo",
-            "Gaborone",
-            "Brasilia",
-            "Sofia",
-            "Ouagadougou",
-            "Gitega",
-            "Phnom Penh",
-            "Yaounde",
-            "Ottawa",
-            "Praia",
-            "Bangui",
-            "N'Djamena",
-            "Santiago",
-            "Beijing",
-            "Bogota",
-            "Moroni",
-            "Kinshasa",
-            "Brazzaville",
-            "San Jose",
-            "Yamoussoukro",
-            "Zagreb",
-            "Havana",
-            "Nicosia",
-            "Prague",
-            "Copenhagen",
-            "Djibouti",
-            "Roseau",
-            "Santo Domingo",
-            "Dili",
-            "Quito",
-            "Cairo",
-            "San Salvador",
-            "London",
-            "Malabo",
-            "Asmara",
-            "Tallinn",
-            "Mbabana",
-            "Addis Ababa",
-            "Palikir",
-            "Suva",
-            "Helsinki",
-            "Paris",
-            "Libreville",
-            "Banjul",
-            "Tbilisi",
-            "Berlin",
-            "Accra",
-            "Athens",
-            "Saint George's",
-            "Guatemala City",
-            "Conakry",
-            "Bissau",
-            "Georgetown",
-            "Port au Prince",
-            "Tegucigalpa",
-            "Budapest",
-            "Reykjavik",
-            "New Delhi",
-            "Jakarta",
-            "Tehran",
-            "Baghdad",
-            "Dublin",
-            "Jerusalem",
-            "Rome",
-            "Kingston",
-            "Tokyo",
-            "Amman",
-            "Nur-Sultan",
-            "Nairobi",
-            "Tarawa Atoll",
-            "Pristina",
-            "Kuwait City",
-            "Bishkek",
-            "Vientiane",
-            "Riga",
-            "Beirut",
-            "Maseru",
-            "Monrovia",
-            "Tripoli",
-            "Vaduz",
-            "Vilnius",
-            "Luxembourg",
-            "Antananarivo",
-            "Lilongwe",
-            "Kuala Lumpur",
-            "Male",
-            "Bamako",
-            "Valletta",
-            "Majuro",
-            "Nouakchott",
-            "Port Louis",
-            "Mexico City",
-            "Chisinau",
-            "Monaco",
-            "Ulaanbaatar",
-            "Podgorica",
-            "Rabat",
-            "Maputo",
-            "Nay Pyi Taw",
-            "Windhoek",
-            "Kathmandu",
-            "Amsterdam",
-            "Wellington",
-            "Managua",
-            "Niamey",
-            "Abuja",
-            "Pyongyang",
-            "Skopje",
-            "Belfast",
-            "Oslo",
-            "Muscat",
-            "Islamabad",
-            "Melekeok",
-            "Panama City",
-            "Port Moresby",
-            "Asuncion",
-            "Lima",
-            "Manila",
-            "Warsaw",
-            "Lisbon",
-            "Doha",
-            "Bucharest",
-            "Moscow",
-            "Kigali",
-            "Basseterre",
-            "Castries",
-            "Kingstown",
-            "Apia",
-            "San Marino",
-            "Sao Tome",
-            "Riyadh",
-            "Edinburgh",
-            "Dakar",
-            "Belgrade",
-            "Victoria",
-            "Freetown",
-            "Singapore",
-            "Bratislava",
-            "Ljubljana",
-            "Honiara",
-            "Mogadishu",
-            "Pretoria",
-            "Bloemfontein",
-            "Cape Town",
-            "Seoul",
-            "Juba",
-            "Madrid",
-            "Colombo",
-            "Khartoum",
-            "Paramaribo",
-            "Stockholm",
-            "Bern",
-            "Damascus",
-            "Taipei",
-            "Dushanbe",
-            "Dodoma",
-            "Bangkok",
-            "Lome",
-            "Nuku'alofa",
-            "Port of Spain",
-            "Tunis",
-            "Ankara",
-            "Ashgabat",
-            "Funafuti",
-            "Kampala",
-            "Kiev",
-            "Abu Dhabi",
-            "Washington D.C.",
-            "Montevideo",
-            "Tashkent",
-            "PortVila",
-            "Vatican City",
-            "Caracas",
-            "Hanoi",
-            "Cardiff",
-            "Sana'a",
-            "Lusaka",
-            "Harare"
-        };
-        
-        public static PlaneData GeneratePlane()
+            string modulePrefixes = this.modulePrefixes.text;
+            string moduleSuffixes = this.moduleSuffixes.text;
+            string extentions = this.extentions.text;
+
+            string[] names = new string[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                int length = mRandom.Next(minLength, maxLength);
+                int pivot = length / 2;
+
+                string name = "";
+
+                // Generates first half.
+                int w = mRandom.Next(0, moduleEntryCount);
+                string word = modulePrefixes.Substring(w, moduleLength);
+                for (int j = 0; j < pivot; j++)
+                {
+                    if (j >= word.Length || word[j] == ' ')
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        name += word[j];
+                    }
+                }
+
+                // Generates second half.
+                w = mRandom.Next(0, moduleEntryCount);
+                word = moduleSuffixes.Substring(w, moduleLength);
+                for (int j = word.Length - pivot; j < word.Length; j++)
+                {
+                    if (j < 0 || word[j] == ' ')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        name += word[j];
+                    }
+                }
+
+                // generates extention
+                w = mRandom.Next(0, extentionEntryCount);
+                word = extentions.Substring(w, extentionLength);
+                word = word.Trim();
+
+                name += "." + word;
+
+                names[i] = name;
+            }
+
+            SourceFileNames = names;
+        }
+
+        private void GenerateErrorCodes(int n, int l)
         {
-            int s = Random.Range(0, PlaneSerials.Length);
-            int o = Random.Range(0, OriginCities.Length);
+            string[] errorCodes = new string[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                string errorCode = "0x";
+
+                for (int j = 0; j < l; j++)
+                {
+                    int c = mRandom.Next(0, 16);
+                    string h = c.ToString("X");
+                    errorCode += h;
+                }
+
+                errorCodes[i] = errorCode;
+            }
+
+            ErrorCodes = errorCodes;
+        }
+
+        private void GeneratePatchFiles(int n)
+        {
+
+        }
+
+        private void GenerateVersions(int n)
+        {
+
+        }
+
+        private void GenerateParameters(int n)
+        {
+            // TODO;
+        }
+
+        private void GenerateCrossTable(int l)
+        {
+            int[,] crossTable = new int[ErrorCodes.Length, SourceFileNames.Length];
+
+            for (int i = 0; i < ErrorCodes.Length; i++)
+            {
+                for (int j = 0; j < SourceFileNames.Length; j++)
+                {
+                    int k = mRandom.Next(0, l);
+                    crossTable[i, j] = k;
+                }
+            }
+
+            OriginSerialCrossTable = crossTable;
+        }
+
+
+        public PlaneData GeneratePlane()
+        {
+            int s = Random.Range(0, ErrorCodes.Length);
+            int o = Random.Range(0, SourceFileNames.Length);
             int p = Random.Range(10, 30);
             int l = Random.Range(10, 25);
 
