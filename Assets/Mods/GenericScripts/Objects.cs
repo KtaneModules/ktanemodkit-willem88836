@@ -12,6 +12,20 @@ public class Tuple<T, T1>
 		this.A = a;
 		this.B = b;
 	}
+	
+	public override string ToString()
+	{
+		return string.Format(
+			"{0},\n{1}",
+			A.ToString(),
+			B.ToString());
+	}
+
+	public override int GetHashCode()
+	{
+		return A.GetHashCode()
+			^ B.GetHashCode();
+	}
 }
 
 [Serializable]
@@ -26,6 +40,57 @@ public class Truple<T, T1, T2>
 		this.A = a;
 		this.B = b;
 		this.C = c;
+	}
+
+	public override string ToString()
+	{
+		return string.Format(
+			"{0},\n{1},\n{2}", 
+			A.ToString(), 
+			B.ToString(), 
+			C.ToString());
+	}
+
+	public override int GetHashCode()
+	{
+		return A.GetHashCode()
+			^ B.GetHashCode()
+			^ C.GetHashCode();
+	}
+}
+
+[Serializable]
+public class Quatruple<T, T1, T2, T3>
+{
+	public T A;
+	public T1 B;
+	public T2 C;
+	public T3 D;
+
+	public Quatruple(T a, T1 b, T2 c, T3 d)
+	{
+		this.A = a;
+		this.B = b;
+		this.C = c;
+		this.D = d;
+	}
+
+	public override string ToString()
+	{
+		return string.Format(
+			"{0},\n{1},\n{2},\n{3}",
+			A.ToString(),
+			B.ToString(),
+			C.ToString(),
+			D.ToString());
+	}
+
+	public override int GetHashCode()
+	{
+		return A.GetHashCode()
+			^ B.GetHashCode()
+			^ C.GetHashCode()
+			^ D.GetHashCode();
 	}
 }
 

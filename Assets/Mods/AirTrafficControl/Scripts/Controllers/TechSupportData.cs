@@ -25,10 +25,10 @@ namespace WillemMeijer.NMTechSupport
         [SerializeField] private TextAsset moduleSuffixes;
 
 
-        private string extentionText;
-        private string modulePrefixText;
-        private string moduleSuffixtext;
-        private MonoRandom mRandom;
+        [NonSerialized] private string extentionText;
+        [NonSerialized] private string modulePrefixText;
+        [NonSerialized] private string moduleSuffixtext;
+        private MonoRandom monoRandom;
 
 
         public ErrorData GenerateError()
@@ -44,9 +44,9 @@ namespace WillemMeijer.NMTechSupport
         }
 
 
-        public void Generate(int seed, int s, int e, int pf, int v, int pa)
+        public void Generate(MonoRandom monoRandom, int s, int e, int pf, int v, int pa)
         {
-            mRandom = new MonoRandom(seed);
+            this.monoRandom = monoRandom;
 
             extentionText = extentions.text;
             modulePrefixText = modulePrefixes.text;
@@ -63,13 +63,13 @@ namespace WillemMeijer.NMTechSupport
 
         private string GenerateFileName(int minLength, int maxLength)
         {
-            int length = mRandom.Next(minLength, maxLength);
+            int length = monoRandom.Next(minLength, maxLength);
             int pivot = length / 2;
 
             string name = "";
 
             // Generates first half.
-            int w = mRandom.Next(0, moduleEntryCount) * moduleLength;
+            int w = monoRandom.Next(0, moduleEntryCount) * moduleLength;
             string word = modulePrefixText.Substring(w, moduleLength);
             for (int j = 0; j < pivot; j++)
             {
@@ -84,7 +84,7 @@ namespace WillemMeijer.NMTechSupport
             }
 
             // Generates second half.
-            w = mRandom.Next(0, moduleEntryCount) * moduleLength;
+            w = monoRandom.Next(0, moduleEntryCount) * moduleLength;
             word = moduleSuffixtext.Substring(w, moduleLength);
             for (int j = word.Length - pivot; j < word.Length; j++)
             {
@@ -99,7 +99,7 @@ namespace WillemMeijer.NMTechSupport
             }
 
             // generates extention
-            w = mRandom.Next(0, extentionEntryCount) * extentionLength;
+            w = monoRandom.Next(0, extentionEntryCount) * extentionLength;
             word = extentionText.Substring(w, extentionLength);
             word = word.Trim();
 
@@ -130,7 +130,7 @@ namespace WillemMeijer.NMTechSupport
 
                 for (int j = 0; j < l; j++)
                 {
-                    int c = mRandom.Next(0, 16);
+                    int c = monoRandom.Next(0, 16);
                     string h = c.ToString("X");
                     errorCode += h;
                 }
@@ -173,11 +173,11 @@ namespace WillemMeijer.NMTechSupport
             {
                 string p = "";
 
-                int k = mRandom.Next(minLength, maxLength);
+                int k = monoRandom.Next(minLength, maxLength);
                 for (int j = 0; j < k; j++)
                 {
                     // the range 97 to 123 are lower case letters in ascii.
-                    p += "-" + (char)mRandom.Next(97, 123) + " ";
+                    p += "-" + (char)monoRandom.Next(97, 123) + " ";
                 }
 
                 parameters[i] = p;
@@ -194,7 +194,7 @@ namespace WillemMeijer.NMTechSupport
             {
                 for (int j = 0; j < SourceFileNames.Length; j++)
                 {
-                    int k = mRandom.Next(0, l);
+                    int k = monoRandom.Next(0, l);
                     crossTable[i, j] = k;
                 }
             }
