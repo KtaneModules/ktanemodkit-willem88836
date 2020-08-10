@@ -29,7 +29,7 @@ namespace WillemMeijer.NMTechSupport
 
 		public void Remove(int hash)
 		{
-			for(int i = messages.Count; i >= 0; i--)
+			for(int i = messages.Count - 1; i >= 0; i--)
 			{
 				Tuple<string, int> message = messages[i];
 				if (message.B == hash)
@@ -45,7 +45,7 @@ namespace WillemMeijer.NMTechSupport
 
 		public int Replace(int hash, string message)
 		{
-			for(int i = messages.Count; i >= 0; i--)
+			for(int i = messages.Count - 1; i >= 0; i--)
 			{
 				Tuple<string, int> current = messages[i];
 				if(current.B == hash)
@@ -69,7 +69,7 @@ namespace WillemMeijer.NMTechSupport
 
 			int low = Mathf.Max(0, messages.Count - messageCount);
 
-			for(int i = messages.Count - 1; i >= low; i--)
+			for (int i = low; i < messages.Count; i++)
 			{
 				string message = messages[i].A;
 				o += message + "\n";

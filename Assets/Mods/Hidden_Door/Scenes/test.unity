@@ -3456,11 +3456,13 @@ MonoBehaviour:
   errorFormat: '> Caught exception in module {0} with message {1}. Source File {2}
     halted at line {3}, column {4}.'
   selectedOptionFormat: '- {0}'
+  unselectedOptionFormat: '   {0}'
   optionConfirmedFormat: '> {0}'
   moduleReleasedFormat: '> Exception resolved, Module {0} is fully operational again.'
+  startMessage: '> Loaded System {0}. System is stable.'
   selectVersionMessage: '> Select software version: '
   selectPatchFileMessage: '> Select patch file: '
-  selectParametersMessage: '> Select launch paramters: '
+  selectParametersMessage: '> Select launch parameters: '
   incorrectSelectionMessage: '> INCORRECT SELECTION'
   correctSelectionMessage: '> CORRECT SELECTION'
 --- !u!114 &639452294
@@ -9097,7 +9099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConsoleText: {fileID: 1917967043}
-  messageCount: 10
+  messageCount: 20
 --- !u!114 &1917967043
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using KModkit;
+using System;
 using System.Collections.Generic;
-using System.Net.Configuration;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
 
 namespace WillemMeijer.NMTechSupport
 {
@@ -25,8 +24,10 @@ namespace WillemMeijer.NMTechSupport
 		[Header("Text")]
 		[SerializeField] private string errorFormat;
 		[SerializeField] private string selectedOptionFormat;
+		[SerializeField] private string unselectedOptionFormat;
 		[SerializeField] private string optionConfirmedFormat;
 		[SerializeField] private string moduleReleasedFormat;
+		[SerializeField] private string startMessage;
 		[SerializeField] private string selectVersionMessage;
 		[SerializeField] private string selectPatchFileMessage;
 		[SerializeField] private string selectParametersMessage;
@@ -81,6 +82,9 @@ namespace WillemMeijer.NMTechSupport
 			timer.StopTimer(NeedyTimer.NeedyState.Terminated);
 			segDisplay.On = true;
 
+			string message = string.Format(startMessage, bombInfo.GetSerialNumber());
+			console.Show(message);
+
 			StartCoroutine(Interrupt());
 		}
 
@@ -116,7 +120,6 @@ namespace WillemMeijer.NMTechSupport
 			{
 				segDisplay.DisplayValue = Mathf.Min(99, d);
 				d--;
-				Debug.Log(d);
 				yield return new WaitForSeconds(1);
 			}
 
@@ -135,6 +138,7 @@ namespace WillemMeijer.NMTechSupport
 
 				interrupted = Random.Range(0, interruptableModules.Count);
 				var current = interruptableModules[interrupted];
+
 				if (!current.C.activeSelf)
 				{
 					selected = current;
@@ -144,8 +148,7 @@ namespace WillemMeijer.NMTechSupport
 					// If the module is passed, it can no longer be interrupted.
 					interruptableModules.RemoveAt(interrupted);
 				}
-			} while (selected != null);
-
+			} while (selected == null);
 
 			// All other lights are disabled, and the error light is enabled.
 			Transform parent = selected.D.transform.parent;
@@ -177,6 +180,7 @@ namespace WillemMeijer.NMTechSupport
 			OnSelected = delegate
 			{
 				ConfirmSelection();
+				Debug.Log("hit!");
 
 				bool isCorrect = true;
 				if (isCorrect)
@@ -272,7 +276,8 @@ namespace WillemMeijer.NMTechSupport
 			options.Clear();
 			for (int i = 0; i < list.Length; i++)
 			{
-				int h = console.Show(list[i]);
+				string message = string.Format(unselectedOptionFormat, list[i]);
+				int h = console.Show(message);
 				Tuple<string, int> option = new Tuple<string, int>(list[i], h);
 				options.Add(option);
 			}
@@ -298,11 +303,12 @@ namespace WillemMeijer.NMTechSupport
 		private void UpdateSelected(int previous)
 		{
 			Tuple<string, int> ph = options[previous];
-			ph.B = console.Replace(ph.B, ph.A);
+			string message = string.Format(unselectedOptionFormat, ph.A);
+			ph.B = console.Replace(ph.B, message);
 			options[previous] = ph;
 
 			Tuple<string, int> ch = options[currentOption];
-			string message = string.Format(selectedOptionFormat, ch.A);
+			message = string.Format(selectedOptionFormat, ch.A);
 			ch.B = console.Replace(ch.B, message);
 			options[currentOption] = ch;
 		}
@@ -319,10 +325,10 @@ namespace WillemMeijer.NMTechSupport
 		private void OnUpClicked()
 		{
 			int previous = currentOption;
-			currentOption++;
-			if (currentOption >= options.Count)
+			currentOption--;
+			if (currentOption <= 0)
 			{
-				currentOption = options.Count;
+				currentOption = 0;
 			}
 			UpdateSelected(previous);
 		}
@@ -330,10 +336,10 @@ namespace WillemMeijer.NMTechSupport
 		private void OnDownClicked()
 		{
 			int previous = currentOption;
-			currentOption--;
-			if (currentOption <= 0)
+			currentOption++;
+			if (currentOption >= options.Count - 1)
 			{
-				currentOption = 0;
+				currentOption = options.Count - 1;
 			}
 			UpdateSelected(previous);
 		}
