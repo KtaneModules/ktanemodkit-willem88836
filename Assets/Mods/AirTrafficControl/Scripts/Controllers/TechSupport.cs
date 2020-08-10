@@ -180,7 +180,6 @@ namespace WillemMeijer.NMTechSupport
 			OnSelected = delegate
 			{
 				ConfirmSelection();
-				Debug.Log("hit!");
 
 				bool isCorrect = true;
 				if (isCorrect)

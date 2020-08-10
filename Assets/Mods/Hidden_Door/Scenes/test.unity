@@ -3453,8 +3453,9 @@ MonoBehaviour:
   interruptInterval:
     X: 60
     Y: 120
-  errorFormat: '> Caught exception in module {0} with message {1}. Source File {2}
-    halted at line {3}, column {4}.'
+  errorFormat: '> Caught exception in module {0}. Source file {2} halted with message
+    {1} at line {3}, column {4}. Additional information is required to resolve this
+    issue.'
   selectedOptionFormat: '- {0}'
   unselectedOptionFormat: '   {0}'
   optionConfirmedFormat: '> {0}'
@@ -9132,8 +9133,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Caught exception 0x1f99d3 in source file prle.cba at line 55, column 33.
-    Caught exception 0x1f99d3 in source file prle.cba at line 55, column 33. '
+  m_Text: '> Caught exception in module Wires. Source file debs.cs halted with message
+    0x325FBA at line 115, column 88.'
 --- !u!222 &1917967044
 CanvasRenderer:
   m_ObjectHideFlags: 0
