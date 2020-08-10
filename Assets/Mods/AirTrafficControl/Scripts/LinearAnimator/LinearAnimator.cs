@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
 	[ExecuteInEditMode]
 	public class LinearAnimator : MonoBehaviour

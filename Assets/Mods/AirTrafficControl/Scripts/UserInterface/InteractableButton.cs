@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
 	public class InteractableButton : MonoBehaviour
 	{

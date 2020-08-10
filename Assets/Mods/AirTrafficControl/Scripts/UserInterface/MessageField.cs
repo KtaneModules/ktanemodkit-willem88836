@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
 	public class MessageField : MonoBehaviour
 	{

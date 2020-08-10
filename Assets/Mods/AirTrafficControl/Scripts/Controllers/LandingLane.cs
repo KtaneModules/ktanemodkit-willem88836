@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
 	public class LandingLane : MonoBehaviour
 	{
@@ -36,12 +36,12 @@ namespace WillemMeijer.NMAirTrafficControl
 		private int shuttleCar;
 		private int luggageCar;
 
-		private Tuple<PlaneData, Transform> incomingPlane 
-			= new Tuple<PlaneData, Transform>(null, null);
-		private Tuple<PlaneData, Transform> occupyingPlane 
-			= new Tuple<PlaneData, Transform>(null, null);
-		private Tuple<PlaneData,Transform> departingPlane
-			= new Tuple<PlaneData, Transform>(null, null);
+		private Tuple<ErrorData, Transform> incomingPlane 
+			= new Tuple<ErrorData, Transform>(null, null);
+		private Tuple<ErrorData, Transform> occupyingPlane 
+			= new Tuple<ErrorData, Transform>(null, null);
+		private Tuple<ErrorData,Transform> departingPlane
+			= new Tuple<ErrorData, Transform>(null, null);
 
 		private string status = "";
 
@@ -50,13 +50,13 @@ namespace WillemMeijer.NMAirTrafficControl
 			status = "";
 			status += incomingPlane.A == null
 				? "Incoming: null, "
-				: string.Format("Incoming: {0}, ", incomingPlane.A.Serial);
+				: string.Format("Incoming: {0}, ", incomingPlane.A.Error);
 			status += occupyingPlane.A == null
 				? "Occupying: null, "
-				: string.Format("Occupying: {0}, ", occupyingPlane.A.Serial);
+				: string.Format("Occupying: {0}, ", occupyingPlane.A.Error);
 			status += departingPlane.A == null
 				? "Departing: null, "
-				: string.Format("Departing: {0}, ", departingPlane.A.Serial);
+				: string.Format("Departing: {0}, ", departingPlane.A.Error);
 
 
 
@@ -98,7 +98,7 @@ namespace WillemMeijer.NMAirTrafficControl
 		}
 
 
-		public void Incoming(PlaneData plane)
+		public void Incoming(ErrorData plane)
 		{
 			GameObject planeObject = Instantiate(
 				planePrefabs.PickRandom(), 
@@ -106,7 +106,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				Quaternion.identity,
 				planeContainer);
 
-			planeObject.name = "Plane - " + plane.Serial;
+			planeObject.name = "Plane - " + plane.Error;
 
 			incomingPlane.A = plane;
 			incomingPlane.B = planeObject.transform;
@@ -204,7 +204,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				};
 			};
 
-			Debug.LogFormat("Incorrect Launch Started: {0}", occupyingPlane.A.Serial);
+			Debug.LogFormat("Incorrect Launch Started: {0}", occupyingPlane.A.Error);
 			luggageFactory.CreateTrain(luggageCar, onComplete);
 			shuttleFactory.CreateTrain(shuttleCar, onComplete);
 		}
@@ -216,7 +216,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				State = 0;
 				Action onLaunchComplete = delegate
 				{
-					Debug.LogFormat("Launch Completed: {0}", departingPlane.A.Serial);
+					Debug.LogFormat("Launch Completed: {0}", departingPlane.A.Error);
 					Destroy(departingPlane.B.gameObject);
 					departingPlane.A = null;
 					departingPlane.B = null;
@@ -230,7 +230,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				departingPlane.B.SetAsLastSibling();
 				planeAnimator.Animate(departingPlane.B, animatorEndNode, -1, onLaunchComplete);
 
-				Debug.LogFormat("Starting launch: {0}", departingPlane.A.Serial);
+				Debug.LogFormat("Starting launch: {0}", departingPlane.A.Error);
 			};
 
 			luggageFactory.CreateTrain(luggageCar, null);
@@ -267,31 +267,31 @@ namespace WillemMeijer.NMAirTrafficControl
 	
 		private int CalculateCorrectHangar()
 		{
-			return AirTrafficControlData.OriginSerialCrossTable[occupyingPlane.A.SerialIndex, occupyingPlane.A.OriginIndex];
+			return TechSupportData.OriginSerialCrossTable[occupyingPlane.A.ErrorIndex, occupyingPlane.A.SourceFileIndex];
 		}
 	
 		private int CalculateCorrectShuttle()
 		{
-			PlaneData data = occupyingPlane.A;
+			ErrorData data = occupyingPlane.A;
 
 			// 7) However, if the plane's origin is {0}, {1}, {2}, 
 			// then ignore all rules above. 
-			if (data.OriginIndex == 6 
-				|| data.OriginIndex == 8 
-				|| data.OriginIndex == 13)
+			if (data.SourceFileIndex == 6 
+				|| data.SourceFileIndex == 8 
+				|| data.SourceFileIndex == 13)
 			{
 				return 5;
 			}
 
 			// 1) If one of the plane's serial letters is contained in its origin's.
-			string serialNumber = data.Serial;
+			string serialNumber = data.Error;
 			char l1 = serialNumber[0];
 			char l2 = serialNumber[1];
 			char l3 = serialNumber[2] == '-'
 				? serialNumber[3]
 				: serialNumber[2];
 
-			string origin = data.Origin;
+			string origin = data.SourceFile;
 			if (origin.Contains(l1.ToString())
 				|| origin.Contains(l2.ToString())
 				|| origin.Contains(l3.ToString()))
@@ -301,8 +301,8 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			// 2) Alternatively, if the plane's passenger and 
 			// luggage count are both even. 
-			if (data.PassengerCount % 2 == 0
-				&& data.LuggageCount % 2 == 0)
+			if (data.LineIndex % 2 == 0
+				&& data.ColumnIndex % 2 == 0)
 			{
 				return 2;
 			}
@@ -327,7 +327,7 @@ namespace WillemMeijer.NMAirTrafficControl
 			}
 
 			// 5) Alternatively, if the plane came in on lane 3 and it has more than 20 luggage.
-			if(laneIndex == 3 && data.LuggageCount > 20)
+			if(laneIndex == 3 && data.ColumnIndex > 20)
 			{
 				return 2;
 			}
@@ -345,7 +345,7 @@ namespace WillemMeijer.NMAirTrafficControl
 				}
 				else
 				{
-					totalPassengers += lane.occupyingPlane.A.PassengerCount;
+					totalPassengers += lane.occupyingPlane.A.LineIndex;
 				}
 			}
 
@@ -359,7 +359,7 @@ namespace WillemMeijer.NMAirTrafficControl
 	
 		private int CalculateCorrectLuggage()
 		{
-			string serial = occupyingPlane.A.Serial;
+			string serial = occupyingPlane.A.Error;
 			int predash = 0;
 			int postdash = 0;
 			bool isPostDash = false;
@@ -399,11 +399,11 @@ namespace WillemMeijer.NMAirTrafficControl
 
 			int correctLuggage =
 				(
-					Mathf.Abs(predash * occupyingPlane.A.PassengerCount
-						- postdash * occupyingPlane.A.LuggageCount)
+					Mathf.Abs(predash * occupyingPlane.A.LineIndex
+						- postdash * occupyingPlane.A.ColumnIndex)
 					^ (predash * postdash)
 				)
-				% AirTrafficControlData.PatchFiles.Length;
+				% TechSupportData.PatchFiles.Length;
 
 			return correctLuggage;
 		}

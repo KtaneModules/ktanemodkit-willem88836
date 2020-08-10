@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
 	public class LinearAnimationNode : MonoBehaviour
 	{

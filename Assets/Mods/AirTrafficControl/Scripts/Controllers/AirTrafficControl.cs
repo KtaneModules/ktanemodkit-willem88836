@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace WillemMeijer.NMAirTrafficControl
+namespace WillemMeijer.NMTechSupport
 {
     [RequireComponent(typeof(KMNeedyModule))]
     [RequireComponent(typeof(KMBombInfo))]
@@ -21,7 +21,7 @@ namespace WillemMeijer.NMAirTrafficControl
 #endif
 
         [Header("Module Settings")]
-        [SerializeField] private AirTrafficControlData data;
+        [SerializeField] private TechSupportData data;
         [SerializeField] private MessageField messageField;
         [SerializeField] private SelectionMenu selectionMenu;
         [SerializeField] private InteractableButton okButton;
@@ -56,16 +56,7 @@ namespace WillemMeijer.NMAirTrafficControl
         private void Start()
         {
             MonoRandom mRandom = new MonoRandom(0);
-            data.Generate(16, 12, 6, 9, 9);
-            //AirTrafficUtilities.GenerateOrigins(16, mRandom);
-            //AirTrafficUtilities.GenerateErrorCodes(12, mRandom);
-            //AirTrafficUtilities.GenerateCrossTable(mRandom);
-
-            AirTrafficUtilities.PrintSourceFiles();
-            AirTrafficUtilities.PrintErrorCodes();
-            AirTrafficUtilities.PrintCrossTableAsHTML();
-            AirTrafficUtilities.PrintVersions();
-            AirTrafficUtilities.PrintPatchFiles();
+            data.Generate(0, 16, 12, 9, 9, 9);
 
             needyModule = GetComponent<KMNeedyModule>();
             bombInfo = GetComponent<KMBombInfo>();
@@ -181,7 +172,7 @@ namespace WillemMeijer.NMAirTrafficControl
 #endif
 
                 // generates incoming plane.
-                PlaneData incoming = data.GeneratePlane();
+                ErrorData incoming = data.GenerateError();
 
                 // Notifies all the elements involved. 
                 LandingLane lane = lanes[laneIndex];
@@ -189,10 +180,10 @@ namespace WillemMeijer.NMAirTrafficControl
 
                 string message = string.Format(
                     incomingPlaneMessage, 
-                    incoming.Serial, 
-                    incoming.Origin, 
-                    incoming.PassengerCount, 
-                    incoming.LuggageCount, 
+                    incoming.Error, 
+                    incoming.SourceFile, 
+                    incoming.LineIndex, 
+                    incoming.ColumnIndex, 
                     laneIndex + 1); // incremented to match the lane's visual numbers.
 
                 selectionMenu.Disable();
@@ -293,13 +284,13 @@ namespace WillemMeijer.NMAirTrafficControl
             switch (lane.State)
             {
                 case 0:
-                    selectionMenu.Show(AirTrafficControlData.Parameters);
+                    selectionMenu.Show(TechSupportData.Parameters);
                     break;
                 case 1:
-                    selectionMenu.Show(AirTrafficControlData.VersionNumbers);
+                    selectionMenu.Show(TechSupportData.VersionNumbers);
                     break;
                 case 2:
-                    selectionMenu.Show(AirTrafficControlData.PatchFiles);
+                    selectionMenu.Show(TechSupportData.PatchFiles);
                     break;
             }
         }

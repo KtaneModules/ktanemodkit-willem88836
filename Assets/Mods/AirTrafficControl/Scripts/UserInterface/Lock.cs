@@ -1,4 +1,4 @@
-﻿namespace WillemMeijer.NMAirTrafficControl
+﻿namespace WillemMeijer.NMTechSupport
 {
 	/// <summary>
 	///		A simple and flexible object lock. 
