@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -173,11 +174,22 @@ namespace WillemMeijer.NMTechSupport
             {
                 string p = "";
 
+                List<char> par = new List<char>();
+
                 int k = monoRandom.Next(minLength, maxLength);
                 for (int j = 0; j < k; j++)
                 {
                     // the range 97 to 123 are lower case letters in ascii.
-                    p += "-" + (char)monoRandom.Next(97, 123) + " ";
+                    char c = (char)monoRandom.Next(97, 123);
+                    if (par.Contains(c))
+                    {
+                        j--;
+                    }
+                    else
+                    {
+                        p += "-" + c + " ";
+                        par.Add(c);
+                    }
                 }
 
                 parameters[i] = p;
