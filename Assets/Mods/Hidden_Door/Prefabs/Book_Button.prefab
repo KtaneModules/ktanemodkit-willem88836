@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 4876926681511990}
   - component: {fileID: 33187195758982526}
   - component: {fileID: 23277003994816132}
+  - component: {fileID: 114028282074685420}
   m_Layer: 0
   m_Name: Pages
   m_TagString: Untagged
@@ -149,6 +150,7 @@ GameObject:
   - component: {fileID: 114692860486369514}
   - component: {fileID: 65951225212786776}
   - component: {fileID: 114847530571934608}
+  - component: {fileID: 114308560029588908}
   m_Layer: 11
   m_Name: Highlight
   m_TagString: Untagged
@@ -219,6 +221,7 @@ GameObject:
   - component: {fileID: 4488236342498978}
   - component: {fileID: 33822307553275416}
   - component: {fileID: 23876331392695128}
+  - component: {fileID: 114490768033230012}
   m_Layer: 0
   m_Name: Large_Book
   m_TagString: Untagged
@@ -820,6 +823,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000001, y: 1.0000002, z: 1.0000004}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114028282074685420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1616554228246182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Standard
 --- !u!114 &114044333928420902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -847,7 +863,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - KT/Outline
+  - Standard
+--- !u!114 &114308560029588908
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1753630828813496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames: []
 --- !u!114 &114325011957587950
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -873,7 +901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Standard
+  - KT/Mobile/DiffuseTint
 --- !u!114 &114348317589576024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -889,6 +917,19 @@ MonoBehaviour:
   HighlightPrefab: {fileID: 100000, guid: d78a484c6e87f1b47b6596ac080fe942, type: 2}
   OutlineAmount: 0
   MaterialOverride: {fileID: 0}
+--- !u!114 &114490768033230012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1998526820740932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Standard
 --- !u!114 &114525715840882802
 MonoBehaviour:
   m_ObjectHideFlags: 1

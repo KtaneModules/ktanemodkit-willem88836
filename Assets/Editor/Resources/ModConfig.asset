@@ -11,11 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: pinHole
-  title: Pin Hole
+  id: NMTechSupport
+  title: Tech Support
   author: Willem Meijer
-  description: 'You''ve got 45 buttons, and only one is safe to press. You''ll figure
-    it out. '
+  description: "Tech Support is a pseudo-needy module, that interrupts your gameplay.
+    \nIncidentally, one of the modules on the bomb crashes, making it completely inoperable.
+    \nWith the information provided in the terminal, you'll be able to figure out
+    how to fix it. "
   version: 0.1
   outputFolder: build
   previewImage: {fileID: 0}

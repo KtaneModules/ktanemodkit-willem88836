@@ -46,7 +46,7 @@ namespace WillemMeijer.NMTechSupport
 		private KMBombInfo bombInfo;
 		private KMNeedyModule needyModule;
 		private KMAudio bombAudio;
-		private SevenSegDisplay segDisplay;
+		//private SevenSegDisplay segDisplay;
 		private MonoRandom monoRandom;
 
 		// Respectively: module, selectable, passed light, error light.
@@ -92,10 +92,10 @@ namespace WillemMeijer.NMTechSupport
 
 			FindAllModules();
 			NeedyTimer timer = GetComponentInChildren<NeedyTimer>();
-			segDisplay = timer.Display;
+			//segDisplay = timer.Display;
 			// Disables the original timer, to assure TechSupport has full control.
 			timer.StopTimer(NeedyTimer.NeedyState.Terminated);
-			segDisplay.On = true;
+			//segDisplay.On = true;
 
 			string message = string.Format(startMessage, bombInfo.GetSerialNumber());
 			console.Show(message);
@@ -135,7 +135,7 @@ namespace WillemMeijer.NMTechSupport
 
 			while (delay >= 0)
 			{
-				segDisplay.DisplayValue = Mathf.Min(99, delay);
+				//segDisplay.DisplayValue = Mathf.Min(99, delay);
 				delay--;
 				yield return new WaitForSeconds(1);
 			}
@@ -199,7 +199,7 @@ namespace WillemMeijer.NMTechSupport
 				moduleResolveCountdown = moduleResolveDuration;
 				while (moduleResolveCountdown >= 0)
 				{
-					segDisplay.DisplayValue = Mathf.Min(99, moduleResolveCountdown);
+					//segDisplay.DisplayValue = Mathf.Min(99, moduleResolveCountdown);
 					moduleResolveCountdown--;
 					yield return new WaitForSeconds(1);
 				}

@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4411778564662064}
   - component: {fileID: 33756425336297750}
   - component: {fileID: 23383694626385418}
+  - component: {fileID: 114158253054821160}
   m_Layer: 0
   m_Name: Large_Book
   m_TagString: Untagged
@@ -191,6 +192,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1, y: 1, z: 1}
   OutlineAmount: 0
+--- !u!114 &114158253054821160
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576361388312338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Standard
 --- !u!114 &114295178564213730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,4 +239,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - KT/Outline
+  - Standard
