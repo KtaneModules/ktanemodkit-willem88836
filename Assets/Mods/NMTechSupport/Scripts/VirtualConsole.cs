@@ -6,7 +6,7 @@ namespace WillemMeijer.NMTechSupport
 {
 	public class VirtualConsole : MonoBehaviour
 	{
-		public Text ConsoleText;
+		public TextMeshBox ConsoleText;
 		public int messageCount;
 
 		private List<Tuple<string, int>> messages;
@@ -65,17 +65,17 @@ namespace WillemMeijer.NMTechSupport
 
 		private void UpdateConsole()
 		{
-			string o = "";
+			string output = "";
 
 			int low = Mathf.Max(0, messages.Count - messageCount);
 
 			for (int i = low; i < messages.Count; i++)
 			{
 				string message = messages[i].A;
-				o += message + "\n";
+				output += message + "\n";
 			}
 
-			ConsoleText.text = o;
+			ConsoleText.SetText(output);
 		}
 	
 
