@@ -1,11 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+///		Potential Improvements: 
+///			* There's a lot of string manipulation. 
+///			* If the TextMesh' text has changed, it is automatically formatted (e.g. in Update()). 
+///				This makes the component easer to use, and less laborous to integrate.
+///			* Calculate the width and height based on the component's RectTransform and TextMesh settings.
+
+
 /// <summary>
 ///		TextMeshbox is an extention to TextMesh that allows you to control text overflow. 
 /// </summary>
 [RequireComponent(typeof(TextMesh))]
-public class TextMeshBox : MonoBehaviour 
+public sealed class TextMeshBox : MonoBehaviour 
 {
 	private readonly char[] textSplitCharacters = new char[] { '\n', '\r' };
 	private readonly char[] lineSplitCharacters = new char[] { ' ' };
@@ -105,7 +112,7 @@ public class TextMeshBox : MonoBehaviour
 		}
 
 		// the output string ends with a newline, and occasionally spaces. 
-		// These aer trimmed.
+		// These are trimmed.
 		if (TrimOutputEnd)
 		{
 			output = output.TrimEnd(trimEndCharacters);
