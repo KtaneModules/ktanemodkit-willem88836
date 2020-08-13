@@ -1846,7 +1846,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HorizontalCharacterLimit: 40
-  VerticalLineLimit: 20
+  VerticalLineLimit: 17
+  CutOffLastLines: 0
   TrimOutputEnd: 1
   IgnoreEmptyEntries: 0
 --- !u!114 &114842139418728466

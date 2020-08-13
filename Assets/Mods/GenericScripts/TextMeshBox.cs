@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///		TextMeshbox is an extention to TextMesh that allows you to control text overflow. 
+/// </summary>
 [RequireComponent(typeof(TextMesh))]
-public class TextMeshBox : MonoBehaviour {
-
+public class TextMeshBox : MonoBehaviour 
+{
 	private readonly char[] textSplitCharacters = new char[] { '\n', '\r' };
 	private readonly char[] lineSplitCharacters = new char[] { ' ' };
 	private readonly char[] trimEndCharacters = new char[] { ' ', '\n', '\r' };
@@ -11,7 +14,7 @@ public class TextMeshBox : MonoBehaviour {
 
 	public int HorizontalCharacterLimit;
 	public int VerticalLineLimit;
-	public int VerticalAlignBottom; //TODO: Do stuff with this.
+	public bool CutOffLastLines;
 	public bool TrimOutputEnd;
 	public bool IgnoreEmptyEntries;
 
@@ -37,6 +40,7 @@ public class TextMeshBox : MonoBehaviour {
 
 		for(int i = 0; i < lines.Length; i++)
 		{
+			// Each word in each line is dealt with separately. 
 			string line = lines[i];
 			string[] words = IgnoreEmptyEntries
 				? line.Split(lineSplitCharacters, System.StringSplitOptions.RemoveEmptyEntries)
@@ -46,6 +50,11 @@ public class TextMeshBox : MonoBehaviour {
 			{
 				string word = words[j];
 				int wordLength = word.Length;
+
+				// Each line of text can only take somany characters. 
+				// if the current word exceeds that amount, or is the last word. 
+				// A new string is created using all the words between 
+				// lineStartIndex, and the previous word.
 				if (lineLength + wordLength > HorizontalCharacterLimit
 					|| j == words.Length - 1)
 				{
@@ -78,13 +87,25 @@ public class TextMeshBox : MonoBehaviour {
 		lines = splitLines.ToArray();
 
 		string output = "";
-		for (int i = 0; i < lines.Length
-			&& i < VerticalLineLimit; i++)
+
+		// Depending on the settings either the first or last sentences 
+		// are cut off, if there are too many.
+		int k = CutOffLastLines
+			? 0
+			: Mathf.Max(0, lines.Length - VerticalLineLimit);
+
+		int l = 0;
+		while (l < VerticalLineLimit
+			&& k < lines.Length)
 		{
-			string line = lines[i];
+			string line = lines[k];
 			output += line + "\n";
+			l++;
+			k++;
 		}
 
+		// the output string ends with a newline, and occasionally spaces. 
+		// These aer trimmed.
 		if (TrimOutputEnd)
 		{
 			output = output.TrimEnd(trimEndCharacters);
