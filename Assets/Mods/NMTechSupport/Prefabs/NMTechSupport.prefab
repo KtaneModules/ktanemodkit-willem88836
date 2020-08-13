@@ -261,6 +261,7 @@ GameObject:
   - component: {fileID: 102051056364570828}
   - component: {fileID: 114790113962423086}
   - component: {fileID: 114011031761777226}
+  - component: {fileID: 114870399691779528}
   m_Layer: 0
   m_Name: Console
   m_TagString: Untagged
@@ -1902,6 +1903,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - Standard
+--- !u!114 &114870399691779528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1362811299090824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - GUI/Text Shader
 --- !u!114 &114909230517172988
 MonoBehaviour:
   m_ObjectHideFlags: 1

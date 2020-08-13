@@ -5363,6 +5363,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1217771974}
     m_Modifications:
+    - target: {fileID: 114870399691779528, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: ShaderNames.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4697329979534940, guid: d52172bb6cc2f7948af42499416df503, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5395,6 +5400,31 @@ Prefab:
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 23945660450706184, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23945660450706184, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114870399691779528, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: ShaderNames.Array.data[1]
+      value: GUI/3D Text Shader - Cull Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 114870399691779528, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: ShaderNames.Array.data[0]
+      value: GUI/3D Text Shader
+      objectReference: {fileID: 0}
+    - target: {fileID: 23945660450706184, guid: d52172bb6cc2f7948af42499416df503,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ea7383a11cc28a24cbea15073b68bf56, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d52172bb6cc2f7948af42499416df503, type: 2}
   m_IsPrefabParent: 0

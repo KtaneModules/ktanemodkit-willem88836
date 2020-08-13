@@ -6,6 +6,10 @@ using Random = UnityEngine.Random;
 
 namespace WillemMeijer.NMTechSupport
 {
+	// TODO: Replace SevenSegDisplay usage;
+	// TODO: Replace NeedyModule usage;
+	// TODO: Replace StatusLight usage;
+
 	[RequireComponent(typeof(KMBombInfo))]
 	[RequireComponent(typeof(KMNeedyModule))]
 	[RequireComponent(typeof(KMAudio))]
@@ -46,7 +50,7 @@ namespace WillemMeijer.NMTechSupport
 		private KMBombInfo bombInfo;
 		private KMNeedyModule needyModule;
 		private KMAudio bombAudio;
-		private SevenSegDisplay segDisplay;
+		//private SevenSegDisplay segDisplay;
 		private MonoRandom monoRandom;
 
 		// Respectively: module, selectable, passed light, error light.
@@ -91,11 +95,11 @@ namespace WillemMeijer.NMTechSupport
 			yield return new WaitForEndOfFrame();
 
 			FindAllModules();
-			NeedyTimer timer = GetComponentInChildren<NeedyTimer>();
-			segDisplay = timer.Display;
+			//NeedyTimer timer = GetComponentInChildren<NeedyTimer>();
+			//segDisplay = timer.Display;
 			// Disables the original timer, to assure TechSupport has full control.
-			timer.StopTimer(NeedyTimer.NeedyState.Terminated);
-			segDisplay.On = true;
+			//timer.StopTimer(NeedyTimer.NeedyState.Terminated);
+			//segDisplay.On = true;
 
 			string message = string.Format(startMessage, bombInfo.GetSerialNumber());
 			console.Show(message);
@@ -114,14 +118,19 @@ namespace WillemMeijer.NMTechSupport
 
 				// Spawns the module's error light.
 				// Selects the module's pass light.
-				StatusLight statusLight = bombModule.gameObject.GetComponentInChildren<StatusLight>();
-				GameObject passLight = statusLight.PassLight;
-				GameObject errorLight = Instantiate(errorLightPrefab, statusLight.transform);
+				///TODO: ADD THIS AGAIN.
+				//StatusLight statusLight = bombModule.gameObject.GetComponentInChildren<StatusLight>();
 
-				// Stores the acquired data.
-				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> interruptableModule
-					= new Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>(bombModule, selectable, passLight, errorLight);
-				interruptableModules.Add(interruptableModule);
+				//if (statusLight != null)
+				//{
+				//	GameObject passLight = statusLight.PassLight;
+				//	GameObject errorLight = Instantiate(errorLightPrefab, statusLight.transform);
+
+				//	// Stores the acquired data.
+				//	Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> interruptableModule
+				//		= new Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>(bombModule, selectable, passLight, errorLight);
+				//	interruptableModules.Add(interruptableModule);
+				//}
 			}
 		}
 
@@ -135,7 +144,7 @@ namespace WillemMeijer.NMTechSupport
 
 			while (delay >= 0)
 			{
-				segDisplay.DisplayValue = Mathf.Min(99, delay);
+				//segDisplay.DisplayValue = Mathf.Min(99, delay);
 				delay--;
 				yield return new WaitForSeconds(1);
 			}
@@ -199,7 +208,7 @@ namespace WillemMeijer.NMTechSupport
 				moduleResolveCountdown = moduleResolveDuration;
 				while (moduleResolveCountdown >= 0)
 				{
-					segDisplay.DisplayValue = Mathf.Min(99, moduleResolveCountdown);
+					//segDisplay.DisplayValue = Mathf.Min(99, moduleResolveCountdown);
 					moduleResolveCountdown--;
 					yield return new WaitForSeconds(1);
 				}
