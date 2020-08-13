@@ -1,50 +1,46 @@
 ﻿using System;
 
-namespace WillemMeijer.NMTechSupport
+[Serializable]
+public class ErrorData
 {
-	[Serializable]
-	public class ErrorData
-	{
-		public int ErrorIndex;
-		public int SourceFileIndex;
-		public int LineIndex;
-		public int ColumnIndex;
+	public int ErrorIndex;
+	public int SourceFileIndex;
+	public int LineIndex;
+	public int ColumnIndex;
 
 
-		public string Error 
+	public string Error 
+	{ 
+		get 
 		{ 
-			get 
-			{ 
-				return TechSupportData.ErrorCodes[ErrorIndex]; 
-			} 
-		}
+			return TechSupportData.ErrorCodes[ErrorIndex]; 
+		} 
+	}
 
-		public string SourceFile
+	public string SourceFile
+	{
+		get
 		{
-			get
-			{
-				return TechSupportData.SourceFileNames[SourceFileIndex];
-			}
+			return TechSupportData.SourceFileNames[SourceFileIndex];
 		}
+	}
 
-		public ErrorData(
-			int errorIndex, 
-			int sourceFileIndex, 
-			int lineIndex, 
-			int columnIndex)
-		{
-			this.ErrorIndex = errorIndex;
-			this.SourceFileIndex = sourceFileIndex;
-			this.LineIndex = lineIndex;
-			this.ColumnIndex = columnIndex;
+	public ErrorData(
+		int errorIndex, 
+		int sourceFileIndex, 
+		int lineIndex, 
+		int columnIndex)
+	{
+		this.ErrorIndex = errorIndex;
+		this.SourceFileIndex = sourceFileIndex;
+		this.LineIndex = lineIndex;
+		this.ColumnIndex = columnIndex;
 
-
-			UnityEngine.Debug.LogFormat(
-				"Created New Error - Error: {0}, Source: {1}, Line: {2}, Column: {3}",
-				Error,
-				SourceFile,
-				lineIndex,
-				columnIndex);
-		}
+		TechSupportLog.LogFormat(
+			"Created New Error - Error: {0}, Source: {1}, Line: {2}, Column: {3}",
+			Error,
+			SourceFile,
+			lineIndex,
+			columnIndex);
 	}
 }

@@ -1,31 +1,28 @@
 ﻿using System;
 using UnityEngine;
 
-namespace WillemMeijer.NMTechSupport
+public class InteractableButton : MonoBehaviour
 {
-	public class InteractableButton : MonoBehaviour
+	private Action onClick; 
+
+	private void Start()
 	{
-		private Action onClick; 
+		KMSelectable selectable = GetComponent<KMSelectable>();
+		selectable.OnInteract += OnClick;
+	}
 
-		private void Start()
+	public void AddListener(Action action)
+	{
+		onClick += action;
+	}
+
+	private bool OnClick()
+	{
+		if(onClick != null)
 		{
-			KMSelectable selectable = GetComponent<KMSelectable>();
-			selectable.OnInteract += OnClick;
+			onClick.Invoke();
 		}
 
-		public void AddListener(Action action)
-		{
-			onClick += action;
-		}
-
-		private bool OnClick()
-		{
-			if(onClick != null)
-			{
-				onClick.Invoke();
-			}
-
-			return true;
-		}
+		return true;
 	}
 }
