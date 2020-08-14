@@ -74,9 +74,18 @@ public sealed class TextMeshBox : MonoBehaviour
 
 					if (j == words.Length - 1)
 					{
-						newLine += words[j] + " ";
-						lineLength = 0;
-						lineStartIndex = 0;
+						if(nextLength > HorizontalCharacterLimit)
+						{
+							splitLines.Add(newLine);
+							splitLines.Add(words[j]);
+							break;
+						}
+						else
+						{
+							newLine += words[j] + " ";
+							lineLength = 0;
+							lineStartIndex = 0;
+						}
 					}
 					else
 					{

@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-// TODO: Replace SevenSegDisplay usage;
-// TODO: Replace NeedyModule usage;
-// TODO: use Component_LIGHT_PASS for error light instead of custom light.
 
 [RequireComponent(typeof(KMBombInfo))]
 [RequireComponent(typeof(KMNeedyModule))]
@@ -15,7 +11,6 @@ using Random = UnityEngine.Random;
 public class TechSupport : MonoBehaviour
 {
 	[Header("Debug")]
-	[SerializeField] private bool ignoreCountdown = false;
 	[SerializeField] private bool forceVersionCorrect = false;
 	[SerializeField] private bool forcePatchFileCorrect = false;
 	[SerializeField] private bool forceParametersCorrect = false;
@@ -24,15 +19,13 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private TechSupportData data;
 	[SerializeField] private VirtualConsole console;
 	[SerializeField] private GameObject errorLightPrefab;
-	[SerializeField] private Color32 errorLightColor;
 	[SerializeField] private InteractableButton okButton;
 	[SerializeField] private InteractableButton upButton;
 	[SerializeField] private InteractableButton downButton;
-	[SerializeField] private Image screenOverlay;
+	[SerializeField] private ObjectToggle screenOverlay;
 
 	[Header("Settings")]
-	[SerializeField] private Int2 interruptInterval;
-	[SerializeField] private int moduleResolveDuration;
+	[SerializeField] private int rebootDuration;
 
 	[Header("Text")]
 	[SerializeField] private string errorFormat;
@@ -47,14 +40,15 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private string selectParametersMessage;
 	[SerializeField] private string incorrectSelectionMessage;
 	[SerializeField] private string correctSelectionMessage;
+	[SerializeField] private string timerExpiredMessage;
+	[SerializeField] private string[] rebootMessages;
+	[SerializeField] private string rebootCompletedMessage;
 
 
 	private KMBombInfo bombInfo;
 	private KMNeedyModule needyModule;
 	private KMAudio bombAudio;
-	//private SevenSegDisplay segDisplay;
 	private MonoRandom monoRandom;
-	private Color32 screenOverlayColor;
 
 	// Respectively: module, selectable, passed light, error light.
 	private List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>> interruptableModules;
@@ -65,7 +59,6 @@ public class TechSupport : MonoBehaviour
 	private int selectedOption;
 	private List<Tuple<string, int>> options;
 	private Action OnSelected;
-	private int moduleResolveCountdown;
 	private List<ErrorData> allErrors;
 
 
@@ -73,17 +66,20 @@ public class TechSupport : MonoBehaviour
 	{
 		bombInfo = GetComponent<KMBombInfo>();
 		needyModule = GetComponent<KMNeedyModule>();
-		needyModule.OnActivate += OnActivate;
-		screenOverlayColor = screenOverlay.color;
-		screenOverlay.color = new Color32(0, 0, 0, screenOverlayColor.a);
 		bombAudio = GetComponent<KMAudio>();
+
 		interruptableModules = new List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>>();
 		options = new List<Tuple<string, int>>();
 		allErrors = new List<ErrorData>();
 
+		needyModule.OnActivate += OnActivate;
+		needyModule.OnNeedyActivation += Interrupt;
+		needyModule.OnTimerExpired += OnTimerExpired; 
+
+		screenOverlay.Toggle(false);
+
 		// TODO: do something with KMSeedable here.
 		monoRandom = new MonoRandom(0);
-		TechSupportLog.LogFormat("Data: {0}", data);
 		data.Generate(monoRandom, 16, 12, 9, 9, 9);
 
 
@@ -98,8 +94,7 @@ public class TechSupport : MonoBehaviour
 
 	public void OnActivate()
 	{
-		screenOverlay.color = screenOverlayColor;
-
+		screenOverlay.Toggle(true);
 		string message = string.Format(startMessage, bombInfo.GetSerialNumber());
 		console.Show(message);
 		message = string.Format(startMessageExtended, interruptableModules.Count);
@@ -110,18 +105,6 @@ public class TechSupport : MonoBehaviour
 	{
 		yield return new WaitForEndOfFrame();
 
-		PrepareInterruptableModules();
-		//NeedyTimer timer = GetComponentInChildren<NeedyTimer>();
-		//segDisplay = timer.Display;
-		// Disables the original timer, to assure TechSupport has full control.
-		//timer.StopTimer(NeedyTimer.NeedyState.Terminated);
-		//segDisplay.On = true;
-
-		StartCoroutine(Interrupt());
-	}
-
-	private void PrepareInterruptableModules()
-	{
 		KMBombModule[] bombModules = FindObjectsOfType<KMBombModule>();
 
 		foreach (KMBombModule bombModule in bombModules)
@@ -133,17 +116,12 @@ public class TechSupport : MonoBehaviour
 
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
-
-				// A copy of the pass light is made (to use the right model).
-				// Its colors are updated to the error colors.
-				GameObject errorLight = Instantiate(passLight, statusLight.transform);
-				errorLight.name = "Component_LED_ERROR";
-
-				MeshRenderer[] renderers = errorLight.GetComponentsInChildren<MeshRenderer>();
-				foreach(MeshRenderer renderer in renderers)
-				{
-					renderer.material.SetColor("_Color", errorLightColor);
-				}
+				GameObject errorLight = Instantiate(
+					errorLightPrefab, 
+					statusLight.position, 
+					statusLight.rotation, 
+					statusLight.transform);
+				errorLight.SetActive(false);
 
 				// Stores the acquired data.
 				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> interruptableModule
@@ -163,22 +141,8 @@ public class TechSupport : MonoBehaviour
 		TechSupportLog.LogFormat("Loaded total of {0} interruptable modules", interruptableModules.Count);
 	}
 
-
-	private IEnumerator<YieldInstruction> Interrupt()
+	private void Interrupt()
 	{
-		// After X seconds, a module is interrupted.
-		int delay = ignoreCountdown 
-			? 0
-			: Random.Range(interruptInterval.X, interruptInterval.Y);
-
-		while (delay >= 0)
-		{
-			//segDisplay.DisplayValue = Mathf.Min(99, delay);
-			delay--;
-			yield return new WaitForSeconds(1);
-		}
-
-
 		// Selects module to interrupt.
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> selected = null;
 		do
@@ -188,11 +152,7 @@ public class TechSupport : MonoBehaviour
 			if (interruptableModules.Count == 0)
 			{
 				TechSupportLog.Log("Out of Interruptable modules.");
-				StopAllCoroutines();
-				while(true)
-				{
-					yield return null;
-				}
+				return;
 			}
 
 			interrupted = Random.Range(0, interruptableModules.Count);
@@ -225,8 +185,7 @@ public class TechSupport : MonoBehaviour
 		interruptedInteractHandler = selected.B.OnInteract;
 		selected.B.OnInteract = new KMSelectable.OnInteractHandler(delegate 
 		{
-			// TODO: test audio.
-			bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CapacitorPop, selected.A.transform);
+			bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, selected.A.transform);
 			return false; 
 		});
 
@@ -237,19 +196,6 @@ public class TechSupport : MonoBehaviour
 		console.Show(message);
 
 		StartVersionSelection();
-
-		while (true)
-		{
-			moduleResolveCountdown = moduleResolveDuration;
-			while (moduleResolveCountdown >= 0)
-			{
-				//segDisplay.DisplayValue = Mathf.Min(99, moduleResolveCountdown);
-				moduleResolveCountdown--;
-				yield return new WaitForSeconds(1);
-			}
-
-			needyModule.HandleStrike();
-		}
 	}
 
 
@@ -391,7 +337,7 @@ public class TechSupport : MonoBehaviour
 		}
 
 		//Otherwise, if the less than 99 seconds is still available and the column is higher than 75, select linion.dart.
-		if (moduleResolveCountdown < 99 
+		if (needyModule.GetNeedyTimeRemaining() < 99f 
 			&& errorData.ColumnIndex > 75)
 		{
 			return 7;
@@ -433,33 +379,13 @@ public class TechSupport : MonoBehaviour
 
 			if (selectedOption == correctParameter || forceParametersCorrect)
 			{
+				ReactivateInterruptedModule();
+
 				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
 
-				// Console updates and removes interaction.
 				console.Show(correctSelectionMessage);
 				string message = string.Format(moduleReleasedFormat, module.A.ModuleDisplayName);
 				console.Show(message);
-				OnSelected = null;
-
-				// Enables interrupted module.
-				module.B.OnInteract = interruptedInteractHandler;
-				Transform parent = module.C.transform.parent;
-				int childCount = parent.childCount;
-				for (int i = 0; i < childCount; i++)
-				{
-					Transform child = parent.GetChild(i);
-					if (child.name == "Component_LED_OFF")
-					{
-						child.gameObject.SetActive(true);
-					}
-					else
-					{
-						child.gameObject.SetActive(false);
-					}
-				}
-
-				StopCoroutine(Interrupt());
-				StartCoroutine(Interrupt());
 			}
 			else
 			{
@@ -503,6 +429,63 @@ public class TechSupport : MonoBehaviour
 
 		return x;
 	}
+
+	private void ReactivateInterruptedModule()
+	{
+		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
+
+		OnSelected = null;
+
+		// Enables interrupted module.
+		module.B.OnInteract = interruptedInteractHandler;
+		Transform parent = module.C.transform.parent;
+		int childCount = parent.childCount;
+		for (int i = 0; i < childCount; i++)
+		{
+			Transform child = parent.GetChild(i);
+			if (child.name == "Component_LED_OFF")
+			{
+				child.gameObject.SetActive(true);
+			}
+			else
+			{
+				child.gameObject.SetActive(false);
+			}
+		}
+	}
+
+	private void OnTimerExpired()
+	{
+		TechSupportLog.Log("Timer Expired");
+		needyModule.HandleStrike();
+
+		for(int i = 0; i < options.Count; i++)
+		{
+			console.Remove(options[i].B);
+		}
+
+		console.Show(timerExpiredMessage);
+		StartCoroutine(RebootModule());
+	}
+
+	private IEnumerator<YieldInstruction> RebootModule()
+	{
+		string moduleName = interruptableModules[interrupted].A.ModuleDisplayName;
+		string message = string.Format(rebootMessages[0], moduleName);
+		int messageHash = console.Show(message);
+		for (int i = 1; i < rebootDuration + 1; i++)
+		{
+			yield return new WaitForSeconds(1);
+			message = string.Format(rebootMessages[i % rebootMessages.Length], moduleName);
+			messageHash = console.Replace(messageHash, message);
+		}
+
+		message = string.Format(rebootCompletedMessage, moduleName);
+		console.Replace(messageHash, message);
+
+		ReactivateInterruptedModule();
+	}
+
 
 	private void ShowOptions(string[] list, string caption)
 	{
