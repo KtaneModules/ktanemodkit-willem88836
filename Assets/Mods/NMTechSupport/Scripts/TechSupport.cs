@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 // TODO: Replace SevenSegDisplay usage;
 // TODO: Replace NeedyModule usage;
-// TODO: Replace StatusLight usage;
+// TODO: use Component_LIGHT_PASS for error light instead of custom light.
 
 [RequireComponent(typeof(KMBombInfo))]
 [RequireComponent(typeof(KMNeedyModule))]
@@ -23,9 +24,11 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private TechSupportData data;
 	[SerializeField] private VirtualConsole console;
 	[SerializeField] private GameObject errorLightPrefab;
+	[SerializeField] private Color32 errorLightColor;
 	[SerializeField] private InteractableButton okButton;
 	[SerializeField] private InteractableButton upButton;
 	[SerializeField] private InteractableButton downButton;
+	[SerializeField] private Image screenOverlay;
 
 	[Header("Settings")]
 	[SerializeField] private Int2 interruptInterval;
@@ -38,6 +41,7 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private string optionConfirmedFormat;
 	[SerializeField] private string moduleReleasedFormat;
 	[SerializeField] private string startMessage;
+	[SerializeField] private string startMessageExtended;
 	[SerializeField] private string selectVersionMessage;
 	[SerializeField] private string selectPatchFileMessage;
 	[SerializeField] private string selectParametersMessage;
@@ -50,6 +54,7 @@ public class TechSupport : MonoBehaviour
 	private KMAudio bombAudio;
 	//private SevenSegDisplay segDisplay;
 	private MonoRandom monoRandom;
+	private Color32 screenOverlayColor;
 
 	// Respectively: module, selectable, passed light, error light.
 	private List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>> interruptableModules;
@@ -68,6 +73,9 @@ public class TechSupport : MonoBehaviour
 	{
 		bombInfo = GetComponent<KMBombInfo>();
 		needyModule = GetComponent<KMNeedyModule>();
+		needyModule.OnActivate += OnActivate;
+		screenOverlayColor = screenOverlay.color;
+		screenOverlay.color = new Color32(0, 0, 0, screenOverlayColor.a);
 		bombAudio = GetComponent<KMAudio>();
 		interruptableModules = new List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>>();
 		options = new List<Tuple<string, int>>();
@@ -75,6 +83,7 @@ public class TechSupport : MonoBehaviour
 
 		// TODO: do something with KMSeedable here.
 		monoRandom = new MonoRandom(0);
+		TechSupportLog.LogFormat("Data: {0}", data);
 		data.Generate(monoRandom, 16, 12, 9, 9, 9);
 
 
@@ -87,25 +96,31 @@ public class TechSupport : MonoBehaviour
 		StartCoroutine(DelayedStart());
 	}
 
+	public void OnActivate()
+	{
+		screenOverlay.color = screenOverlayColor;
+
+		string message = string.Format(startMessage, bombInfo.GetSerialNumber());
+		console.Show(message);
+		message = string.Format(startMessageExtended, interruptableModules.Count);
+		console.Show(message);
+	}
 
 	private IEnumerator<YieldInstruction> DelayedStart()
 	{
 		yield return new WaitForEndOfFrame();
 
-		FindAllModules();
+		PrepareInterruptableModules();
 		//NeedyTimer timer = GetComponentInChildren<NeedyTimer>();
 		//segDisplay = timer.Display;
 		// Disables the original timer, to assure TechSupport has full control.
 		//timer.StopTimer(NeedyTimer.NeedyState.Terminated);
 		//segDisplay.On = true;
 
-		string message = string.Format(startMessage, bombInfo.GetSerialNumber());
-		console.Show(message);
-
 		StartCoroutine(Interrupt());
 	}
 
-	private void FindAllModules()
+	private void PrepareInterruptableModules()
 	{
 		KMBombModule[] bombModules = FindObjectsOfType<KMBombModule>();
 
@@ -116,19 +131,32 @@ public class TechSupport : MonoBehaviour
 				// Collects the module's KMSelectable.
 				KMSelectable selectable = bombModule.GetComponent<KMSelectable>();
 
-				Transform statusLight = bombModule.transform.Find("StatusLight");
+				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
+				Transform statusLight = passLight.transform.parent;
 
-				GameObject passLight = statusLight.Find("Component_LED_PASS").gameObject;
-				GameObject errorLight = Instantiate(errorLightPrefab, statusLight.transform);
+				// A copy of the pass light is made (to use the right model).
+				// Its colors are updated to the error colors.
+				GameObject errorLight = Instantiate(passLight, statusLight.transform);
+				errorLight.name = "Component_LED_ERROR";
 
-				//	// Stores the acquired data.
+				MeshRenderer[] renderers = errorLight.GetComponentsInChildren<MeshRenderer>();
+				foreach(MeshRenderer renderer in renderers)
+				{
+					renderer.material.SetColor("_Color", errorLightColor);
+				}
+
+				// Stores the acquired data.
 				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> interruptableModule
 					= new Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>(bombModule, selectable, passLight, errorLight);
 				interruptableModules.Add(interruptableModule);
 			}
-			catch(Exception exception)
+			catch (Exception exception)
 			{
-				TechSupportLog.LogFormat("Set-Up Interruptable ({0}) failed with message ({1})", bombModule.ModuleDisplayName, exception.Message);
+				TechSupportLog.LogFormat
+					("Set-Up Interruptable ({0}) failed with message ({1}), at ({2}).",
+					bombModule.ModuleDisplayName,
+					exception.Message,
+					exception.StackTrace);
 			}
 		}
 

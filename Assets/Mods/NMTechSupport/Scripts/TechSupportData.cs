@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[Serializable]
-public class TechSupportData
+public class TechSupportData : MonoBehaviour
 {
     public static string[] SourceFileNames;
     public static string[] ErrorCodes;

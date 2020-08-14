@@ -15,7 +15,7 @@ public class TechSupportLog : MonoBehaviour
 
 	public static void Log(string message)
 	{
-		Debug.LogFormat("[{0}] {1}", instance.needyModule.ModuleType, message);
+		Debug.LogFormat("[{0}] {1}", instance.needyModule.ModuleDisplayName, message);
 	}
 
 	public static void LogFormat(string format, params object[] elements)

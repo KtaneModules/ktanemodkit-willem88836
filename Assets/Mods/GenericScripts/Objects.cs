@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -214,5 +215,52 @@ public static class StringManipulation
 	{
 		i += 64;
 		return (char)i;
+	}
+}
+
+public static class TransformUtilities
+{
+	/// <summary>
+	///		Searches through all children, and their children, of the parent object.
+	///		if a child's name matches the provided name, it is returned.
+	/// </summary>
+	public static Transform FindChildIn(Transform parent, string childName)
+	{
+		return FindChildIn(parent, new string[] { childName });
+	}
+
+	/// <summary>
+	///		Searches through all children, and their children, of the parent object.
+	///		if a child's name matches one of the provided names, it is returned.
+	/// </summary>
+	public static Transform FindChildIn(Transform parent, params string[] childNames)
+	{
+		if (parent == null)
+		{
+			return null;
+		}
+
+		return FindChildInHelperMethod(parent, childNames);
+	}
+
+	private static Transform FindChildInHelperMethod(Transform parent, string[] childName)
+	{
+		int childCount = parent.childCount;
+		for (int i = 0; i < childCount; i++)
+		{
+			Transform child = parent.GetChild(i);
+			if (childName.Contains(child.name))
+			{
+				return child;
+			}
+
+			Transform childResult = FindChildIn(child, childName);
+			if (childResult != null)
+			{
+				return childResult;
+			}
+		}
+
+		return null;
 	}
 }

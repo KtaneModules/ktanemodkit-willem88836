@@ -287,22 +287,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1460206352724690
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4744014549475174}
-  - component: {fileID: 114951284195280144}
-  m_Layer: 0
-  m_Name: SceneSerializer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1471153858097058
 GameObject:
   m_ObjectHideFlags: 1
@@ -368,6 +352,7 @@ GameObject:
   - component: {fileID: 114647491488964926}
   - component: {fileID: 114312906926775360}
   - component: {fileID: 114024775540105756}
+  - component: {fileID: 114532234587176212}
   - component: {fileID: 114009864943838186}
   m_Layer: 0
   m_Name: NMTechSupport
@@ -584,7 +569,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4295578839612744
 Transform:
@@ -627,7 +612,7 @@ Transform:
   - {fileID: 4721538078315284}
   - {fileID: 4625765548723740}
   m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4357427582976526
 Transform:
@@ -686,7 +671,7 @@ Transform:
   - {fileID: 4413238028201860}
   - {fileID: 4510360840803696}
   m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4413238028201860
 Transform:
@@ -713,7 +698,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4460738270992594
 Transform:
@@ -819,7 +804,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4744014549475174}
   - {fileID: 4433858086092428}
   - {fileID: 4211424690793676}
   - {fileID: 4304219328859396}
@@ -854,19 +838,6 @@ Transform:
   m_Father: {fileID: 4304219328859396}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!4 &4744014549475174
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1460206352724690}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_Children: []
-  m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4836618338743532
 Transform:
   m_ObjectHideFlags: 1
@@ -1518,24 +1489,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14190d8e444a4348a8fff17595318d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreCountdown: 1
-  forceVersionCorrect: 1
-  forcePatchFileCorrect: 1
-  forceParametersCorrect: 1
-  data:
-    extentionEntryCount: 657
-    extentionLength: 4
-    extentions: {fileID: 4900000, guid: 0ba8cbafab84ecd499e506ca0988ce6e, type: 3}
-    moduleEntryCount: 58112
-    moduleLength: 6
-    modulePrefixes: {fileID: 4900000, guid: a5d18567ddd6ce54891733fa44e1b2f8, type: 3}
-    moduleSuffixes: {fileID: 4900000, guid: ac368b203e2b3684fad7006a01d55424, type: 3}
+  ignoreCountdown: 0
+  forceVersionCorrect: 0
+  forcePatchFileCorrect: 0
+  forceParametersCorrect: 0
+  data: {fileID: 114532234587176212}
   console: {fileID: 114011031761777226}
   errorLightPrefab: {fileID: 1474364467951780, guid: aea66346959cbe740b676ee1e0fbb4b9,
     type: 2}
   okButton: {fileID: 114208752513084296}
   upButton: {fileID: 114576066491396832}
   downButton: {fileID: 114127541858508802}
+  screenOverlay: {fileID: 114926494676140566}
   interruptInterval:
     X: 60
     Y: 120
@@ -1547,7 +1512,8 @@ MonoBehaviour:
   unselectedOptionFormat: '   {0}'
   optionConfirmedFormat: '> {0}'
   moduleReleasedFormat: '> Exception resolved, Module {0} is fully operational again.'
-  startMessage: '> Loaded System {0}. System is stable.'
+  startMessage: '> Loaded System {0}.'
+  startMessageExtended: '> Located {0} unstable modules.'
   selectVersionMessage: '> Select software version: '
   selectPatchFileMessage: '> Select patch file: '
   selectParametersMessage: '> Select launch parameters: '
@@ -1629,7 +1595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CountdownTime: -1
-  ModuleType: NMTechSupport
+  ModuleType: TechSupport
   ModuleDisplayName: Tech Support
   RequiresTimerVisibility: 0
   WarnAtFiveSeconds: 0
@@ -1759,7 +1725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Standard
+  - KT/Mobile/DiffuseTint
 --- !u!114 &114401963158983866
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1819,7 +1785,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Standard
+  - KT/Mobile/DiffuseTint
+--- !u!114 &114532234587176212
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1565616158909610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 946bc3f4690d36e4fa08473fa24a0f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extentionEntryCount: 657
+  extentionLength: 4
+  extentions: {fileID: 4900000, guid: 0ba8cbafab84ecd499e506ca0988ce6e, type: 3}
+  moduleEntryCount: 58112
+  moduleLength: 6
+  modulePrefixes: {fileID: 4900000, guid: a5d18567ddd6ce54891733fa44e1b2f8, type: 3}
+  moduleSuffixes: {fileID: 4900000, guid: ac368b203e2b3684fad7006a01d55424, type: 3}
 --- !u!114 &114576066491396832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1865,7 +1849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - UI/Unlit/Detail
+  - Standard
 --- !u!114 &114785869547726744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1944,7 +1928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Standard
+  - KT/Mobile/DiffuseTint
 --- !u!114 &114870399691779528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1957,7 +1941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/3D Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114909230517172988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2024,17 +2008,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114951284195280144
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1460206352724690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f06079a7ce98454db561e53e561e54b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114956979845201618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2060,7 +2033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Standard
+  - KT/Mobile/DiffuseTint
 --- !u!136 &136385993206442462
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -2069,7 +2042,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1369990038641408}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 5
   m_Direction: 1
@@ -2082,7 +2055,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1283609317198300}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 5
   m_Direction: 1
@@ -2095,7 +2068,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1071305072277132}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 5
   m_Direction: 1
@@ -2139,7 +2112,7 @@ RectTransform:
   - {fileID: 224383937075992516}
   - {fileID: 224486360008019798}
   m_Father: {fileID: 4697329979534940}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

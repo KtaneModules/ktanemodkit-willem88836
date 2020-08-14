@@ -62,7 +62,8 @@ public sealed class TextMeshBox : MonoBehaviour
 				// if the current word exceeds that amount, or is the last word. 
 				// A new string is created using all the words between 
 				// lineStartIndex, and the previous word.
-				if (lineLength + wordLength > HorizontalCharacterLimit
+				int nextLength = lineLength + wordLength;
+				if (nextLength > HorizontalCharacterLimit
 					|| j == words.Length - 1)
 				{
 					string newLine = "";

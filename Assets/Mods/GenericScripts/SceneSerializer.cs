@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SceneSerializer : MonoBehaviour
 {
-	public void Start()
+	private void Start()
 	{
 		StartCoroutine(DelayedStart());
 	}
