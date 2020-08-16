@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,6 +10,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(KMBombInfo))]
 [RequireComponent(typeof(KMNeedyModule))]
 [RequireComponent(typeof(KMAudio))]
+[RequireComponent(typeof(KMBossModule))]
 public class TechSupport : MonoBehaviour
 {
 	[Header("Debug")]
@@ -49,6 +51,7 @@ public class TechSupport : MonoBehaviour
 	private KMBombInfo bombInfo;
 	private KMNeedyModule needyModule;
 	private KMAudio bombAudio;
+	private KMBossModule bossModule;
 	private MonoRandom monoRandom;
 
 	// Respectively: module, selectable, passed light, error light.
@@ -98,14 +101,24 @@ public class TechSupport : MonoBehaviour
 	{
 		yield return new WaitForEndOfFrame();
 
+		KMBossModule bossModule = GetComponent<KMBossModule>();
+		string[] ignoredModules = bossModule.GetIgnoredModules(needyModule.ModuleDisplayName);
+
 		KMBombModule[] bombModules = FindObjectsOfType<KMBombModule>();
 
 		foreach (KMBombModule bombModule in bombModules)
 		{
 			try
 			{
+				// Ignored modules are ignored.
+				if (ignoredModules.Contains(bombModule.ModuleDisplayName))
+				{
+					continue;
+				}
+
 				// Collects the module's KMSelectable.
 				KMSelectable selectable = bombModule.GetComponent<KMSelectable>();
+
 
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
