@@ -1,5 +1,6 @@
 ﻿using KModkit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -93,16 +94,7 @@ public class TechSupport : MonoBehaviour
 		StartCoroutine(DelayedStart());
 	}
 
-	public void OnActivate()
-	{
-		screenOverlay.Toggle(true);
-		string message = string.Format(startMessage, bombInfo.GetSerialNumber());
-		console.Show(message);
-		message = string.Format(startMessageExtended, interruptableModules.Count);
-		console.Show(message);
-	}
-
-	private IEnumerator<YieldInstruction> DelayedStart()
+	private IEnumerator DelayedStart()
 	{
 		yield return new WaitForEndOfFrame();
 
@@ -118,9 +110,9 @@ public class TechSupport : MonoBehaviour
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
 				GameObject errorLight = Instantiate(
-					errorLightPrefab, 
-					statusLight.position, 
-					statusLight.rotation, 
+					errorLightPrefab,
+					statusLight.position,
+					statusLight.rotation,
 					statusLight.transform);
 				errorLight.SetActive(false);
 
@@ -140,6 +132,18 @@ public class TechSupport : MonoBehaviour
 		}
 
 		TechSupportLog.LogFormat("Loaded total of {0} interruptable modules", interruptableModules.Count);
+	}
+
+
+	#region NeedyModuleHooks
+
+	public void OnActivate()
+	{
+		screenOverlay.Toggle(true);
+		string message = string.Format(startMessage, bombInfo.GetSerialNumber());
+		console.Show(message);
+		message = string.Format(startMessageExtended, interruptableModules.Count);
+		console.Show(message);
 	}
 
 	private void Interrupt()
@@ -203,6 +207,29 @@ public class TechSupport : MonoBehaviour
 		StartVersionSelection();
 	}
 
+	private void OnTimerExpired()
+	{
+		if (moduleResolved)
+		{
+			return;
+		}
+
+		TechSupportLog.Log("STRIKE: Timer Expired");
+		needyModule.HandleStrike();
+
+		for (int i = 0; i < options.Count; i++)
+		{
+			console.Remove(options[i].B);
+		}
+
+		console.Show(timerExpiredMessage);
+		StartCoroutine(RebootModule());
+	}
+
+	#endregion
+
+
+	#region ModuleStages
 
 	private void StartVersionSelection()
 	{
@@ -440,6 +467,11 @@ public class TechSupport : MonoBehaviour
 		return x;
 	}
 
+	#endregion
+
+
+	#region Resetting
+
 	private void ReactivateInterruptedModule()
 	{
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
@@ -464,26 +496,7 @@ public class TechSupport : MonoBehaviour
 		}
 	}
 
-	private void OnTimerExpired()
-	{
-		if(moduleResolved)
-		{
-			return;
-		}
-
-		TechSupportLog.Log("STRIKE: Timer Expired");
-		needyModule.HandleStrike();
-
-		for(int i = 0; i < options.Count; i++)
-		{
-			console.Remove(options[i].B);
-		}
-
-		console.Show(timerExpiredMessage);
-		StartCoroutine(RebootModule());
-	}
-
-	private IEnumerator<YieldInstruction> RebootModule()
+	private IEnumerator RebootModule()
 	{
 		string moduleName = interruptableModules[interrupted].A.ModuleDisplayName;
 		string message = string.Format(rebootMessages[0], moduleName);
@@ -504,6 +517,10 @@ public class TechSupport : MonoBehaviour
 		ReactivateInterruptedModule();
 	}
 
+	#endregion
+
+
+	#region Selection
 
 	private void ShowOptions(string[] list, string caption)
 	{
@@ -555,6 +572,11 @@ public class TechSupport : MonoBehaviour
 		options[selectedOption] = hashCurrent;
 	}
 
+	#endregion
+
+
+	#region ModuleInteraction
+
 
 	private void OnOKClicked()
 	{
@@ -592,16 +614,16 @@ public class TechSupport : MonoBehaviour
 		UpdateSelected(previous);
 	}
 
+	#endregion
+
 
 	#region TwitchPlays
 
-	#pragma warning disable 414
 	public readonly string TwitchHelpMessage = "Press the Confirm button with \"!confirm\". " +
 		"Press the up button with \"!up\" followed by the number times you want to go up." +
 		"Press the down button with \"!down\" followed by the number of timers you want to go down.";
-	#pragma warning restore 414
 
-	public System.Collections.IEnumerator ProcessTwitchCommand(string command)
+	public IEnumerator ProcessTwitchCommand(string command)
 	{
 		command = command.ToLowerInvariant().Trim();
 		string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
