@@ -161,11 +161,13 @@ public class TechSupport : MonoBehaviour
 			interrupted = Random.Range(0, interruptableModules.Count);
 			var current = interruptableModules[interrupted];
 
-			if (!current.C.activeSelf)
+			// a module can't be interrupted when it's either finished 
+			// or already being interrupted.
+			if (!current.C.activeSelf && !current.D.activeSelf)
 			{
 				selected = current;
 			}
-			else
+			else if (current.C.activeSelf)
 			{
 				// If the module is passed, it can no longer be interrupted.
 				interruptableModules.RemoveAt(interrupted);
