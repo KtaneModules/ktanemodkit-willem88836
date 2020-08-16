@@ -497,6 +497,9 @@ public class TechSupport : MonoBehaviour
 
 		message = string.Format(rebootCompletedMessage, moduleName);
 		console.Replace(messageHash, message);
+		
+		options.Clear();
+		selectedOption = 0;
 
 		ReactivateInterruptedModule();
 	}
@@ -536,6 +539,11 @@ public class TechSupport : MonoBehaviour
 
 	private void UpdateSelected(int previous)
 	{
+		if(options.Count == 0)
+		{
+			return;
+		}
+
 		Tuple<string, int> hashPrevious = options[previous];
 		string message = string.Format(unselectedOptionFormat, hashPrevious.A);
 		hashPrevious.B = console.Replace(hashPrevious.B, message);
@@ -583,4 +591,51 @@ public class TechSupport : MonoBehaviour
 		}
 		UpdateSelected(previous);
 	}
+
+
+	#region TwitchPlays
+
+	#pragma warning disable 414
+	public readonly string TwitchHelpMessage = "Press the Confirm button with \"!confirm\". " +
+		"Press the up button with \"!up\" followed by the number times you want to go up." +
+		"Press the down button with \"!down\" followed by the number of timers you want to go down.";
+	#pragma warning restore 414
+
+	public System.Collections.IEnumerator ProcessTwitchCommand(string command)
+	{
+		command = command.ToLowerInvariant().Trim();
+		string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+		if (split[0] == "confirm")
+		{
+			OnOKClicked();
+			yield return new WaitForEndOfFrame();
+		}
+		else if (split[0] == "up")
+		{
+			int i;
+			if(int.TryParse(split[1], out i) && i > 0 && i < 10)
+			{
+				for (; i > 0; i--)
+				{
+					OnUpClicked();
+					yield return new WaitForSeconds(0.1f);
+				}
+			}
+		}
+		else if (split[0] == "down")
+		{
+			int i;
+			if (int.TryParse(split[1], out i) && i > 0 && i < 10)
+			{
+				for (; i > 0; i--)
+				{
+					OnDownClicked();
+					yield return new WaitForSeconds(0.1f);
+				}
+			}
+		}
+	}
+
+	#endregion
 }
