@@ -60,6 +60,7 @@ public class TechSupport : MonoBehaviour
 	private List<Tuple<string, int>> options;
 	private Action OnSelected;
 	private List<ErrorData> allErrors;
+	private bool moduleResolved;
 
 
 	public void Start()
@@ -143,6 +144,8 @@ public class TechSupport : MonoBehaviour
 
 	private void Interrupt()
 	{
+		moduleResolved = false;
+
 		// Selects module to interrupt.
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> selected = null;
 		do
@@ -220,6 +223,7 @@ public class TechSupport : MonoBehaviour
 			}
 			else
 			{
+				TechSupportLog.Log("STRIKE: Wrong software version.");
 				needyModule.HandleStrike();
 				console.Show(incorrectSelectionMessage);
 				StartVersionSelection();
@@ -254,6 +258,7 @@ public class TechSupport : MonoBehaviour
 			}
 			else
 			{
+				TechSupportLog.Log("STRIKE: Wrong patch file.");
 				needyModule.HandleStrike();
 				console.Show(incorrectSelectionMessage);
 				StartPatchFileSelection();
@@ -386,9 +391,12 @@ public class TechSupport : MonoBehaviour
 				console.Show(correctSelectionMessage);
 				string message = string.Format(moduleReleasedFormat, module.A.ModuleDisplayName);
 				console.Show(message);
+
+				moduleResolved = true;
 			}
 			else
 			{
+				TechSupportLog.Log("STRIKE: Wrong parameters.");
 				needyModule.HandleStrike();
 				console.Show(incorrectSelectionMessage);
 				StartParametersSelection();
@@ -456,7 +464,12 @@ public class TechSupport : MonoBehaviour
 
 	private void OnTimerExpired()
 	{
-		TechSupportLog.Log("Timer Expired");
+		if(moduleResolved)
+		{
+			return;
+		}
+
+		TechSupportLog.Log("STRIKE: Timer Expired");
 		needyModule.HandleStrike();
 
 		for(int i = 0; i < options.Count; i++)
@@ -535,6 +548,8 @@ public class TechSupport : MonoBehaviour
 
 	private void OnOKClicked()
 	{
+		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, okButton.transform);
+
 		if (OnSelected != null)
 		{
 			OnSelected.Invoke();
@@ -543,6 +558,8 @@ public class TechSupport : MonoBehaviour
 
 	private void OnUpClicked()
 	{
+		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, upButton.transform);
+
 		int previous = selectedOption;
 		selectedOption--;
 		if (selectedOption <= 0)
@@ -554,6 +571,8 @@ public class TechSupport : MonoBehaviour
 
 	private void OnDownClicked()
 	{
+		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, downButton.transform);
+
 		int previous = selectedOption;
 		selectedOption++;
 		if (selectedOption >= options.Count - 1)

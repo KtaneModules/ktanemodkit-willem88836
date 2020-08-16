@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 2a0026fd8230e0545870208c23d2a020
+guid: 93571bbf8b2d846409aae88e74d2c291
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Component_LED(Clone)_0_0
+    100002: key(Clone)_1_0
     400000: //RootNode
-    400002: Component_LED(Clone)_0_0
-    2100000: Component_LED(Clone)_0_0Mat
-    2300000: Component_LED(Clone)_0_0
-    3300000: Component_LED(Clone)_0_0
-    4300000: Component_LED(Clone)_0_0
+    400002: key(Clone)_1_0
+    2100000: key(Clone)_1_0Mat
+    2300000: key(Clone)_1_0
+    3300000: key(Clone)_1_0
+    4300000: key(Clone)_1_0
   externalObjects: {}
   materials:
     importMaterials: 1
