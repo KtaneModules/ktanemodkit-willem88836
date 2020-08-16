@@ -239,7 +239,7 @@ public class TechSupport : MonoBehaviour
 		{
 			ConfirmSelection();
 
-			int correctVersion = CorrectVersion();
+			int correctVersion = CorrectVersion(errorData);
 
 			TechSupportLog.LogFormat("Software Version: Selected option: {0}; Correct option {1}.", 
 				TechSupportData.VersionNumbers[selectedOption], 
@@ -259,7 +259,7 @@ public class TechSupport : MonoBehaviour
 			}
 		};
 	}
-	private int CorrectVersion()
+	private int CorrectVersion(ErrorData errorData)
 	{
 		int correctVersion = TechSupportData.OriginSerialCrossTable[errorData.ErrorIndex, errorData.SourceFileIndex];
 		return correctVersion;
@@ -274,7 +274,7 @@ public class TechSupport : MonoBehaviour
 		{
 			ConfirmSelection();
 
-			int correctPatchFile = CorrectPatchFile();
+			int correctPatchFile = CorrectPatchFile(errorData);
 
 			TechSupportLog.LogFormat("Patch File: Selected option: {0}; Correct option {1}.",
 				TechSupportData.PatchFiles[selectedOption],
@@ -294,7 +294,7 @@ public class TechSupport : MonoBehaviour
 			}
 		};
 	}
-	private int CorrectPatchFile()
+	private int CorrectPatchFile(ErrorData errorData)
 	{
 		// Data where seed = 0;
 		// 0 "prle.cba",
@@ -309,31 +309,9 @@ public class TechSupport : MonoBehaviour
 
 		//However, if the error's source file is either satcle.bb, plor.pom, or equely.ctl, ignore all rules above and select exed.asc.
 		if (errorData.SourceFileIndex == 2
-			|| errorData.SourceFileIndex == 5
 			|| errorData.SourceFileIndex == 9)
 		{
 			return 5;
-		}
-
-		//If any of the error code's letters are contained in the crashed source file's name, select wane.drf.
-		for (int i = 2; i < errorData.Error.Length; i++)
-		{
-			string l1 = errorData.Error[i].ToString().ToLower();
-			foreach(char l in errorData.SourceFile)
-			{
-				string l2 = l.ToString().ToLower();
-				if(l1 == l2)
-				{
-					return 3;
-				}
-			}
-		}
-
-		//Otherwise, if the error's line and column are both even, select razcle.pxi.
-		if (errorData.LineIndex % 2 == 0
-			&& errorData.ColumnIndex % 2 == 0)
-		{
-			return 2;
 		}
 
 		//Otherwise, if the source file's number of vowels is equal to or greater than the number of consonants, or the column index is higher than the line index, select faee.sup.
@@ -363,9 +341,9 @@ public class TechSupport : MonoBehaviour
 			return 4;
 		}
 
-		//Otherwise, if the source file's first letter is in the last fourth of the alphabet, select prle.cba.
+		//Otherwise, if the source file's first letter is in the last third of the alphabet, select prle.cba.
 		if(StringManipulation.AlphabetToIntPlusOne(errorData.SourceFile[0]) 
-			>= 26f / 4f * 3f)
+			>= 26f / 3f * 2f)
 		{
 			return 0;
 		}
@@ -375,6 +353,27 @@ public class TechSupport : MonoBehaviour
 			&& errorData.ColumnIndex > 75)
 		{
 			return 7;
+		}
+
+		//Otherwise, if the error's line and column are both even, select razcle.pxi.
+		if (errorData.LineIndex % 2 == 0
+			&& errorData.ColumnIndex % 2 == 0)
+		{
+			return 2;
+		}
+
+		//If any of the error code's letters are contained in the crashed source file's name, select wane.drf.
+		for (int i = 2; i < errorData.Error.Length; i++)
+		{
+			string l1 = errorData.Error[i].ToString().ToLower();
+			foreach (char l in errorData.SourceFile)
+			{
+				string l2 = l.ToString().ToLower();
+				if (l1 == l2)
+				{
+					return 3;
+				}
+			}
 		}
 
 		//Otherwise, if this is the fourth or later crash and the cumulative line number of all previous errors is over 450, select gilick.pxd.
@@ -405,7 +404,7 @@ public class TechSupport : MonoBehaviour
 		{
 			ConfirmSelection();
 
-			int correctParameter = CorrectParameter();
+			int correctParameter = CorrectParameter(errorData);
 
 			TechSupportLog.LogFormat("Parameter: Selected option: {0}; Correct option {1}.",
 				TechSupportData.Parameters[selectedOption],
@@ -432,7 +431,7 @@ public class TechSupport : MonoBehaviour
 			}
 		};
 	}
-	private int CorrectParameter()
+	private int CorrectParameter(ErrorData errorData)
 	{
 		// sum of the first three icons.
 		int a = 0;
