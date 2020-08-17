@@ -38,27 +38,27 @@ public class ExampleModule2 : MonoBehaviour
 
     private void OnDeselect()
     {
-        Debug.Log("ExampleModule2 OnDeselect.");
+        //Debug.Log("ExampleModule2 OnDeselect.");
     }
 
     private void OnLeft()
     {
-        Debug.Log("ExampleModule2 OnLeft.");
+        //Debug.Log("ExampleModule2 OnLeft.");
     }
 
     private void OnRight()
     {
-        Debug.Log("ExampleModule2 OnRight.");
+        //Debug.Log("ExampleModule2 OnRight.");
     }
 
     private void OnSelect()
     {
-        Debug.Log("ExampleModule2 OnSelect.");
+        //Debug.Log("ExampleModule2 OnSelect.");
     }
 
     private void OnHighlight()
     {
-        Debug.Log("ExampleModule2 OnHighlight.");
+        //Debug.Log("ExampleModule2 OnHighlight.");
     }
 
     void OnActivate()

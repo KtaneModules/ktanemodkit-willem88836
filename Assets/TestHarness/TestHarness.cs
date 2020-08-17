@@ -412,6 +412,7 @@ public enum TwitchPlaysMode
 
 public class TestHarness : MonoBehaviour
 {
+    public int randomSeed = -1;
     public StatusLight StatusLightPrefab;
     public TimerModule TimerModulePrefab;
     public TimerModule StrikelessTimerModulePrefab;
@@ -476,6 +477,11 @@ public class TestHarness : MonoBehaviour
 
     void Awake()
     {
+        if(randomSeed != -1)
+        {
+            Random.InitState(randomSeed);
+        }
+
         Instance = this;
 
         _camera = Camera.main.transform;
