@@ -9,46 +9,39 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/font.css">
         <script src="js/ktane-utils.js"></script>
+        <style rel="stylesheet" type="text/css">
+            .Serial-Origin-Crosstable {
+                width: 100%;
+            }
+            .Serial-Origin-Crosstable tr th,
+            .Luggage-Table tr th {
+                font-size:10pt;
+            }
+            .Serial-Origin-Crosstable .Serial-Origin-Labels div {
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                height:60pt;
+            }
+            .Luggage-Table-Container {
+                width:100%;
+                border:0;
+            }
+            .Luggage-Table-Container th {
+                border:0;
+            }
+            .Luggage-Table {
+                position:relative;
+                margin:auto;
+                border:0;
+            }
+            .Luggage-Table th {
+                border:1px solid #222;
+            }
+            .appendix-reference {
+                margin: 4px 0 8px 0;
+            }
+        </style>
     </head>
-    <style rel="stylesheet" type="text/css">
-        .Serial-Origin-Crosstable {
-            width: 100%;
-        }
-
-        .Serial-Origin-Crosstable tr th,
-        .Luggage-Table tr th {
-            font-size:10pt;
-        }
-
-        .Serial-Origin-Crosstable .Serial-Origin-Labels div {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            height:60pt;
-        }
-
-        .Luggage-Table-Container {
-            width:100%;
-            border:0;
-        }
-
-        .Luggage-Table-Container th {
-            border:0;
-        }
-        
-        .Luggage-Table {
-            position:relative;
-            margin:auto;
-            border:0;
-        }
-
-        .Luggage-Table th {
-            border:1px solid #222;
-        }
-
-        .appendix-reference {
-            margin: 4px 0 8px 0;
-        }
-    </style>
     <body>
         <div id="ManualContent">
             <div class="section">
@@ -61,7 +54,6 @@
                         <img src="img/Component/Model Tech Support.png" class="diagram">
                         <h2>On the Subject of Tech Support</h2>
                         <p class="flavour-text">Have you tried turning it off and on again?</p>
-
                         <ul>
                             <li>Incidentally, one of the modules on the bomb will break down giving an error report on the terminal screen.</li>
                             <li>The affected module can be found by looking for the module with a yellow indicator light. While this light is on, the module will be completely inoperable.</li>
@@ -71,7 +63,6 @@
                             <li>A strike is dealth when incorrect information is entered.</li>
                             <li>When too much time is taken, a strike is dealt as well and the interrupted module is automatically rebooted.</li>
                         </ul>
-                        
                         <h3>Selecting the Software Version</h3>
                         <p>Use the exception's error code and source file to determine the correct software version, using the table below.</p>
                         <table class="Serial-Origin-Crosstable">
@@ -92,7 +83,6 @@
                     </div>
                     <div class="page-footer relative-footer">Page 1 of 2</div>
                 </div>
-
                 <div class="page page-bg-02">
                     <div class="page-header">
                         <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
@@ -111,10 +101,9 @@
                             <li>Otherwise, select shuttle lonist.ftl.</li>
                             <li>However, if the error's source file is either satcle.bb, or equely.ctl, ignore all rules above and select exed.asc.</li>
                         </ul>
-
                         <h3>Selecting the Correct Launch Parameters</h3>
                         <p>
-                            Select the first three characters of ohe exception's error code, starting after the "0x", translate these to numerical values (A = 1, B = 2, Z = 26), and sum these.
+                            Select the first three characters of ohe exception's error code, starting after the “0x”, translate these to numerical values (A = 1, B = 2, Z = 26), and sum these.
                             Multiply this number by the exception's line index. 
                             Execute the same method for the last three characters of the exception's error code, however, instead multiply this result with the exception's column index.
                             Finally, perform an XOR-operation with the delta between these two numbers, and the value of the sum of the first three and the sum of the last three values multiplied with each other.
