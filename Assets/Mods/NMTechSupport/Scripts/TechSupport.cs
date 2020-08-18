@@ -43,6 +43,7 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private string timerExpiredMessage;
 	[SerializeField] private string[] rebootMessages;
 	[SerializeField] private string rebootCompletedMessage;
+	[SerializeField] private string[] exceptionWithoutModuleMessages;
 
 
 	private KMBombInfo bombInfo;
@@ -172,57 +173,83 @@ public class TechSupport : MonoBehaviour
 
 		// Selects module to interrupt.
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> selected = null;
-		do
+
+
+		// The module can no longer reset when too little time is left.
+		float bombTime = bombInfo.GetTime();
+		if (bombTime >= needyModule.CountdownTime)
 		{
-			// Small safety measure to prevent bricking the bomb
-			// if for whatever reason there are no more modules.
-			if (interruptableModules.Count == 0)
+			do
 			{
-				TechSupportLog.Log("Out of Interruptable modules.");
-				return;
-			}
+				// Small safety measure to prevent bricking the bomb
+				// if for whatever reason there are no more modules.
+				if (interruptableModules.Count == 0)
+				{
+					break;
+				}
 
-			interrupted = Random.Range(0, interruptableModules.Count);
-			var current = interruptableModules[interrupted];
+				interrupted = Random.Range(0, interruptableModules.Count);
+				var current = interruptableModules[interrupted];
 
-			// a module can't be interrupted when it's either finished 
-			// or already being interrupted.
-			if (!current.C.activeSelf && !current.D.activeSelf)
-			{
-				selected = current;
-			}
-			else if (current.C.activeSelf)
-			{
-				// If the module is passed, it can no longer be interrupted.
-				interruptableModules.RemoveAt(interrupted);
-			}
-		} while (selected == null);
-
-		TechSupportLog.LogFormat("Interrupting: {0}", selected.A.ModuleDisplayName);
-
-		// All other lights are disabled, and the error light is enabled.
-		Transform parent = selected.D.transform.parent;
-		int childCount = parent.childCount;
-		for (int i = 0; i < childCount; i++)
+				// a module can't be interrupted when it's either finished 
+				// or already being interrupted.
+				if (!current.C.activeSelf && !current.D.activeSelf)
+				{
+					selected = current;
+				}
+				else if (current.C.activeSelf)
+				{
+					// If the module is passed, it can no longer be interrupted.
+					interruptableModules.RemoveAt(interrupted);
+				}
+			} while (selected == null);
+		}
+		else
 		{
-			parent.GetChild(i).gameObject.SetActive(false);
+			TechSupportLog.Log("Not enough time left, forcing to interrupt without module.");
 		}
 
-		selected.D.SetActive(true);
-
-		// Disabling all interaction with the module.
-		interruptedInteractHandler = selected.B.OnInteract;
-		selected.B.OnInteract = new KMSelectable.OnInteractHandler(delegate 
+		// Interrupts that module (if there is one).
+		if (selected == null)
 		{
-			bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, selected.A.transform);
-			return false; 
-		});
+			TechSupportLog.Log("Out of interruptable modules. Creating exception without one.");
 
-		// Updating the console. 
-		errorData = data.GenerateError();
-		allErrors.Add(errorData);
-		string message = string.Format(errorFormat, selected.A.ModuleDisplayName, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
-		console.Show(message);
+			errorData = data.GenerateError(null);
+			allErrors.Add(errorData);
+
+			string message = exceptionWithoutModuleMessages[Random.Range(0, exceptionWithoutModuleMessages.Length)];
+			message = string.Format(message, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
+			console.Show(message);
+		}
+		else
+		{
+			TechSupportLog.LogFormat("Interrupting: {0}", selected.A.ModuleDisplayName);
+
+			// All other lights are disabled, and the error light is enabled.
+			Transform parent = selected.D.transform.parent;
+			int childCount = parent.childCount;
+			for (int i = 0; i < childCount; i++)
+			{
+				parent.GetChild(i).gameObject.SetActive(false);
+			}
+
+			selected.D.SetActive(true);
+
+			// Disabling all interaction with the module.
+			interruptedInteractHandler = selected.B.OnInteract;
+			selected.B.OnInteract = new KMSelectable.OnInteractHandler(delegate 
+			{
+				bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, selected.A.transform);
+				return false; 
+			});
+
+			// Generating error and Updating the console. 
+			errorData = data.GenerateError(selected.A.ModuleDisplayName);
+			allErrors.Add(errorData);
+
+			string message = string.Format(errorFormat, selected.A.ModuleDisplayName, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
+			console.Show(message);
+		}
 
 		StartVersionSelection();
 	}
@@ -493,6 +520,11 @@ public class TechSupport : MonoBehaviour
 
 	private void ReactivateInterruptedModule()
 	{
+		if (errorData.ModuleName == null)
+		{
+			return;
+		}
+
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
 
 		onSelected = null;

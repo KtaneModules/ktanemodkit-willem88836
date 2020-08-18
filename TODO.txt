@@ -6,16 +6,18 @@
 ## [Done] Implement Mystery Modules "Must not be hidden" modules. 
 ## [Done] Filter the ignore list based on MM (there's no use for duplicate ignores).
 ## [Done] Remember to give credit to "Itachi".
-## Update Modkit for custom KMNeedy interrupt intervals. 
-## Prevent module from interrupting after the final X minutes.
+## [Done] Update Modkit. 
+## [Done] Prevent module from interrupting after the final X minutes.
+## [Done] Implement interrupt that occurs when no modules are available (e.g. when none of the active modules can be blocked).
 ## Ignore modules that get an a strike (might mess-up the light).
-## Implement interrupt that occurs when no modules are available (e.g. when none of the active modules can be blocked).
-## Double check what happens when a module is selected and then interrupted (use should be "pushed back").
+## Ignore modules that are selected when interrupting.
+## Add local ignore list.
 
 
 #### Additions for version 1.2 #### 
 
 ## Intersect Twitch Plays Commands (so they are interrupted as well).
 ## Remove highlight on module when interrupted.
+## Look at custom KMNeedy interrupt intervals
 ## Implement KMSeedable.
 

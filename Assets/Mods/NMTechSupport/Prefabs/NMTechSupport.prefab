@@ -2866,6 +2866,15 @@ MonoBehaviour:
   - '> Rebooting Module {0}...'
   - '> Rebooting Module {0}......'
   rebootCompletedMessage: '> Module {0} successfully rebooted.'
+  exceptionWithoutModuleMessages:
+  - '> Caught exception in bomb_root. Source file {1} halted with message {0} at line
+    {2}, column {3}. Additional information is required to resolve this issue.'
+  - '> Caught exception in module_timer. Source file {1} halted with message {0} at
+    line {2}, column {3}. Additional information is required to resolve this issue.'
+  - '> Caught exception in wirehandler. Source file {1} halted with message {0} at
+    line {2}, column {3}. Additional information is required to resolve this issue.'
+  - '> Caught exception in moduleinterfacer. Source file {1} halted with message {0}
+    at line {2}, column {3}. Additional information is required to resolve this issue.'
 --- !u!114 &114011031761777226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3084,6 +3093,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CountdownTime: 300
+  ResetDelayMin: 10
+  ResetDelayMax: 40
   ModuleType: TechSupport
   ModuleDisplayName: Tech Support
   RequiresTimerVisibility: 0

@@ -29,14 +29,14 @@ public class TechSupportData : MonoBehaviour
     private MonoRandom monoRandom;
 
 
-    public ErrorData GenerateError()
+    public ErrorData GenerateError(string moduleName)
     {
         int e = Random.Range(0, ErrorCodes.Length);
         int s = Random.Range(0, SourceFileNames.Length);
         int l = Random.Range(10, 150);
         int c = Random.Range(10, 100);
 
-        ErrorData newError = new ErrorData(e, s, l, c);
+        ErrorData newError = new ErrorData(e, s, l, c, moduleName);
 
         return newError;
     }
