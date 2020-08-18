@@ -7,10 +7,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-[RequireComponent(typeof(KMBombInfo))]
-[RequireComponent(typeof(KMNeedyModule))]
-[RequireComponent(typeof(KMAudio))]
-[RequireComponent(typeof(KMBossModule))]
+[RequireComponent(typeof(KMBombInfo), typeof(KMNeedyModule), typeof(KMAudio)), 
+	RequireComponent(typeof(KMBossModule), typeof(TechSupportService), typeof(TechSupportData))]
 public class TechSupport : MonoBehaviour
 {
 	[Header("Debug")]
@@ -19,7 +17,6 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private bool forceParametersCorrect = false;
 
 	[Header("References")]
-	[SerializeField] private TechSupportData data;
 	[SerializeField] private VirtualConsole console;
 	[SerializeField] private GameObject errorLightPrefab;
 	[SerializeField] private InteractableButton okButton;
@@ -51,7 +48,7 @@ public class TechSupport : MonoBehaviour
 	private KMBombInfo bombInfo;
 	private KMNeedyModule needyModule;
 	private KMAudio bombAudio;
-	private KMBossModule bossModule;
+	private TechSupportData data;
 	private MonoRandom monoRandom;
 
 	// Respectively: module, selectable, passed light, error light.
@@ -62,7 +59,7 @@ public class TechSupport : MonoBehaviour
 
 	private int selectedOption;
 	private List<Tuple<string, int>> options;
-	private Action OnSelected;
+	private Action onSelected;
 	private List<ErrorData> allErrors;
 	private bool moduleResolved;
 
@@ -72,6 +69,7 @@ public class TechSupport : MonoBehaviour
 		bombInfo = GetComponent<KMBombInfo>();
 		needyModule = GetComponent<KMNeedyModule>();
 		bombAudio = GetComponent<KMAudio>();
+		data = GetComponent<TechSupportData>();
 
 		interruptableModules = new List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>>();
 		options = new List<Tuple<string, int>>();
@@ -87,19 +85,22 @@ public class TechSupport : MonoBehaviour
 		monoRandom = new MonoRandom(0);
 		data.Generate(monoRandom, 16, 12, 9, 9, 9);
 
-
 		// Adds methods to buttons.
 		okButton.AddListener(OnOKClicked);
 		upButton.AddListener(OnUpClicked);
 		downButton.AddListener(OnDownClicked);
 
-		// Starts interrupting.
 		StartCoroutine(DelayedStart());
 	}
 
 	private IEnumerator DelayedStart()
 	{
-		yield return new WaitForEndOfFrame();
+		TechSupportService mysteryKeyService = GetComponent<TechSupportService>();
+
+		while (!mysteryKeyService.SettingsLoaded)
+		{
+			yield return null;
+		}
 
 		KMBossModule bossModule = GetComponent<KMBossModule>();
 		string[] ignoredModules = bossModule.GetIgnoredModules(needyModule.ModuleDisplayName);
@@ -110,15 +111,21 @@ public class TechSupport : MonoBehaviour
 		{
 			try
 			{
+				bool mustNotBeHidden = mysteryKeyService.MustNotBeHidden(bombModule.ModuleType);
+				bool isIgnored = ignoredModules.Contains(bombModule.ModuleDisplayName);
+
 				// Ignored modules are ignored.
-				if (ignoredModules.Contains(bombModule.ModuleDisplayName))
+				if (mustNotBeHidden || isIgnored)
 				{
+					TechSupportLog.LogFormat("Ignored module {0} - Must Not Be Hidden: {1}; Is Ignored {2}", 
+						bombModule.ModuleDisplayName, 
+						mustNotBeHidden, 
+						isIgnored);
 					continue;
 				}
 
 				// Collects the module's KMSelectable.
 				KMSelectable selectable = bombModule.GetComponent<KMSelectable>();
-
 
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
@@ -248,7 +255,7 @@ public class TechSupport : MonoBehaviour
 	{
 		ShowOptions(TechSupportData.VersionNumbers, selectVersionMessage);
 
-		OnSelected = delegate
+		onSelected = delegate
 		{
 			ConfirmSelection();
 
@@ -283,7 +290,7 @@ public class TechSupport : MonoBehaviour
 	{
 		ShowOptions(TechSupportData.PatchFiles, selectPatchFileMessage);
 
-		OnSelected = delegate
+		onSelected = delegate
 		{
 			ConfirmSelection();
 
@@ -413,7 +420,7 @@ public class TechSupport : MonoBehaviour
 	{
 		ShowOptions(TechSupportData.Parameters, selectParametersMessage);
 
-		OnSelected = delegate
+		onSelected = delegate
 		{
 			ConfirmSelection();
 
@@ -488,7 +495,7 @@ public class TechSupport : MonoBehaviour
 	{
 		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
 
-		OnSelected = null;
+		onSelected = null;
 
 		// Enables interrupted module.
 		module.B.OnInteract = interruptedInteractHandler;
@@ -594,9 +601,9 @@ public class TechSupport : MonoBehaviour
 	{
 		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, okButton.transform);
 
-		if (OnSelected != null)
+		if (onSelected != null)
 		{
-			OnSelected.Invoke();
+			onSelected.Invoke();
 		}
 	}
 
