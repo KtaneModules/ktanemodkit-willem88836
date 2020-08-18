@@ -8,6 +8,8 @@ public class InterruptableModule
 	public GameObject StrikeLight;
 	public GameObject ErrorLight;
 
+	public bool IsFocussed { get; private set; }
+
 	public InterruptableModule(
 		KMBombModule bombModule, 
 		KMSelectable selectable, 
@@ -20,6 +22,9 @@ public class InterruptableModule
 		PassLight = passLight;
 		StrikeLight = strikeLight;
 		ErrorLight = errorLight;
+
+		Selectable.OnFocus += delegate { IsFocussed = true; };
+		Selectable.OnDefocus += delegate { IsFocussed = false; };
 	}
 }
 

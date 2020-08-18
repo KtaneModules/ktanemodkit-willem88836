@@ -175,37 +175,37 @@ public class TechSupport : MonoBehaviour
 		// Selects module to interrupt.
 		InterruptableModule selected = null;
 
-
 		// The module can no longer reset when too little time is left.
 		float bombTime = bombInfo.GetTime();
 		if (bombTime >= needyModule.CountdownTime)
 		{
-			do
+			InterruptableModule[] potentials = new InterruptableModule[interruptableModules.Count];
+			interruptableModules.CopyTo(potentials);
+			potentials.Shuffle();
+
+			foreach(InterruptableModule current in potentials)
 			{
-				// Small safety measure to prevent bricking the bomb
-				// if for whatever reason there are no more modules.
-				if (interruptableModules.Count == 0)
-				{
-					break;
-				}
+				// A module is only interrupted when the off light is on, 
+				// and it isn't currently used. 
+				TechSupportLog.Log(!current.PassLight.activeSelf
+					+ " " + !current.StrikeLight.activeSelf
+					+ " " + !current.ErrorLight.activeSelf
+					+ " " + !current.IsFocussed);
 
-				interrupted = Random.Range(0, interruptableModules.Count);
-				InterruptableModule current = interruptableModules[interrupted];
-
-				// a module can't be interrupted when it's either finished 
-				// or already being interrupted.
-				if (!current.PassLight.activeSelf 
+				if (!current.PassLight.activeSelf
 					&& !current.StrikeLight.activeSelf
-					&& !current.ErrorLight.activeSelf)
+					&& !current.ErrorLight.activeSelf
+					&& !current.IsFocussed)
 				{
 					selected = current;
+					break;
 				}
 				else if (current.PassLight.activeSelf)
 				{
 					// If the module is passed, it can no longer be interrupted.
 					interruptableModules.RemoveAt(interrupted);
 				}
-			} while (selected == null);
+			}
 		}
 		else
 		{

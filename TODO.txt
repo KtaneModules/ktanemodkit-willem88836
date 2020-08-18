@@ -10,7 +10,7 @@
 ## [Done] Prevent module from interrupting after the final X minutes.
 ## [Done] Implement interrupt that occurs when no modules are available (e.g. when none of the active modules can be blocked).
 ## [Done] Ignore modules that get an a strike (might mess-up the light).
-## Ignore modules that are selected when interrupting.
+## [Done] Ignore modules that are selected when interrupting.
 ## Add local ignore list.
 
 
