@@ -45,6 +45,7 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private string[] rebootMessages;
 	[SerializeField] private string rebootCompletedMessage;
 	[SerializeField] private string[] exceptionWithoutModuleMessages;
+	[SerializeField] private string exceptionWithoutModuleResolvedMessage;
 
 
 	private KMBombInfo bombInfo;
@@ -207,12 +208,9 @@ public class TechSupport : MonoBehaviour
 					selected = current;
 					break;
 				}
-				else if (current.PassLight.activeSelf)
-				{
-					// If the module is passed, it can no longer be interrupted.
-					interruptableModules.RemoveAt(interrupted);
-				}
 			}
+
+			interrupted = interruptableModules.IndexOf(selected);
 		}
 		else
 		{
@@ -470,14 +468,19 @@ public class TechSupport : MonoBehaviour
 			if (selectedOption == correctParameter || forceParametersCorrect)
 			{
 				ReactivateInterruptedModule();
-
-				InterruptableModule module = interruptableModules[interrupted];
-
-				console.Show(correctSelectionMessage);
-				string message = string.Format(moduleReleasedFormat, module.BombModule.ModuleDisplayName);
-				console.Show(message);
-
 				moduleResolved = true;
+				console.Show(correctSelectionMessage);
+
+				if (errorData.ModuleName == null)
+				{
+					console.Show(exceptionWithoutModuleResolvedMessage);
+				}
+				else
+				{
+					InterruptableModule module = interruptableModules[interrupted];
+					string message = string.Format(moduleReleasedFormat, module.BombModule.ModuleDisplayName);
+					console.Show(message);
+				}
 			}
 			else
 			{
