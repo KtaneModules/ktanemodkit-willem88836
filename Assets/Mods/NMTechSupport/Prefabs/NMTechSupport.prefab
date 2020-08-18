@@ -2838,6 +2838,7 @@ MonoBehaviour:
   forceVersionCorrect: 0
   forcePatchFileCorrect: 0
   forceParametersCorrect: 0
+  backUpIgnoreList: {fileID: 4900000, guid: 9b8b67730e7415c4caf8399d65b92124, type: 3}
   console: {fileID: 114011031761777226}
   errorLightPrefab: {fileID: 1947296581329806, guid: 9b38df0f99ca50a44996e25320314754,
     type: 2}

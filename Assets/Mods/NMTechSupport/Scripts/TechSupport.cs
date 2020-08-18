@@ -17,6 +17,7 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private bool forceParametersCorrect = false;
 
 	[Header("References")]
+	[SerializeField] private TextAsset backUpIgnoreList;
 	[SerializeField] private VirtualConsole console;
 	[SerializeField] private GameObject errorLightPrefab;
 	[SerializeField] private InteractableButton okButton;
@@ -105,6 +106,12 @@ public class TechSupport : MonoBehaviour
 
 		KMBossModule bossModule = GetComponent<KMBossModule>();
 		string[] ignoredModules = bossModule.GetIgnoredModules(needyModule.ModuleDisplayName);
+
+		if (ignoredModules == null || ignoredModules.Length == 0)
+		{
+			TechSupportLog.Log("Using backup ignorelist.");
+			ignoredModules = backUpIgnoreList.text.Split('\n');
+		}
 
 		KMBombModule[] bombModules = FindObjectsOfType<KMBombModule>();
 
