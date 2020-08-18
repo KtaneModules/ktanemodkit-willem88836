@@ -5,6 +5,7 @@
 ## Implement Mystery Modules "Must not be hidden" modules. 
 ## Filter the ignore list based on MM (there's no use for duplicate ignores).
 ## Remember to give credit to "Itachi".
+## Update Modkit for custom KMNeedy interrupt intervals. 
 ## Prevent module from interrupting after the final X minutes.
 ## Ignore modules that get an a strike (might mess-up the light).
 ## Implement interrupt that occurs when no modules are available (e.g. when none of the active modules can be blocked).
