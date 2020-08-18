@@ -53,7 +53,7 @@ public class TechSupport : MonoBehaviour
 	private MonoRandom monoRandom;
 
 	// Respectively: module, selectable, passed light, error light.
-	private List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>> interruptableModules;
+	private List<InterruptableModule> interruptableModules;
 	private int interrupted;
 	private KMSelectable.OnInteractHandler interruptedInteractHandler;
 	private ErrorData errorData;
@@ -72,7 +72,7 @@ public class TechSupport : MonoBehaviour
 		bombAudio = GetComponent<KMAudio>();
 		data = GetComponent<TechSupportData>();
 
-		interruptableModules = new List<Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>>();
+		interruptableModules = new List<InterruptableModule>();
 		options = new List<Tuple<string, int>>();
 		allErrors = new List<ErrorData>();
 
@@ -130,6 +130,7 @@ public class TechSupport : MonoBehaviour
 
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
+				GameObject strikeLight = TransformUtilities.FindChildIn(statusLight, "Component_LED_STRIKE").gameObject;
 				GameObject errorLight = Instantiate(
 					errorLightPrefab,
 					statusLight.position,
@@ -138,8 +139,8 @@ public class TechSupport : MonoBehaviour
 				errorLight.SetActive(false);
 
 				// Stores the acquired data.
-				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> interruptableModule
-					= new Quatruple<KMBombModule, KMSelectable, GameObject, GameObject>(bombModule, selectable, passLight, errorLight);
+				InterruptableModule interruptableModule = new InterruptableModule(bombModule, selectable, passLight, strikeLight, errorLight);
+				
 				interruptableModules.Add(interruptableModule);
 			}
 			catch (Exception exception)
@@ -172,7 +173,7 @@ public class TechSupport : MonoBehaviour
 		moduleResolved = false;
 
 		// Selects module to interrupt.
-		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> selected = null;
+		InterruptableModule selected = null;
 
 
 		// The module can no longer reset when too little time is left.
@@ -189,15 +190,17 @@ public class TechSupport : MonoBehaviour
 				}
 
 				interrupted = Random.Range(0, interruptableModules.Count);
-				var current = interruptableModules[interrupted];
+				InterruptableModule current = interruptableModules[interrupted];
 
 				// a module can't be interrupted when it's either finished 
 				// or already being interrupted.
-				if (!current.C.activeSelf && !current.D.activeSelf)
+				if (!current.PassLight.activeSelf 
+					&& !current.StrikeLight.activeSelf
+					&& !current.ErrorLight.activeSelf)
 				{
 					selected = current;
 				}
-				else if (current.C.activeSelf)
+				else if (current.PassLight.activeSelf)
 				{
 					// If the module is passed, it can no longer be interrupted.
 					interruptableModules.RemoveAt(interrupted);
@@ -212,7 +215,7 @@ public class TechSupport : MonoBehaviour
 		// Interrupts that module (if there is one).
 		if (selected == null)
 		{
-			TechSupportLog.Log("Out of interruptable modules. Creating exception without one.");
+			TechSupportLog.Log("Could not find interruptable module. Creating exception without one.");
 
 			errorData = data.GenerateError(null);
 			allErrors.Add(errorData);
@@ -223,31 +226,31 @@ public class TechSupport : MonoBehaviour
 		}
 		else
 		{
-			TechSupportLog.LogFormat("Interrupting: {0}", selected.A.ModuleDisplayName);
+			TechSupportLog.LogFormat("Interrupting: {0}", selected.BombModule.ModuleDisplayName);
 
 			// All other lights are disabled, and the error light is enabled.
-			Transform parent = selected.D.transform.parent;
+			Transform parent = selected.PassLight.transform.parent;
 			int childCount = parent.childCount;
 			for (int i = 0; i < childCount; i++)
 			{
 				parent.GetChild(i).gameObject.SetActive(false);
 			}
 
-			selected.D.SetActive(true);
+			selected.ErrorLight.SetActive(true);
 
 			// Disabling all interaction with the module.
-			interruptedInteractHandler = selected.B.OnInteract;
-			selected.B.OnInteract = new KMSelectable.OnInteractHandler(delegate 
+			interruptedInteractHandler = selected.Selectable.OnInteract;
+			selected.Selectable.OnInteract = new KMSelectable.OnInteractHandler(delegate 
 			{
-				bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, selected.A.transform);
+				bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, selected.BombModule.transform);
 				return false; 
 			});
 
 			// Generating error and Updating the console. 
-			errorData = data.GenerateError(selected.A.ModuleDisplayName);
+			errorData = data.GenerateError(selected.BombModule.ModuleDisplayName);
 			allErrors.Add(errorData);
 
-			string message = string.Format(errorFormat, selected.A.ModuleDisplayName, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
+			string message = string.Format(errorFormat, selected.BombModule.ModuleDisplayName, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
 			console.Show(message);
 		}
 
@@ -461,10 +464,10 @@ public class TechSupport : MonoBehaviour
 			{
 				ReactivateInterruptedModule();
 
-				Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
+				InterruptableModule module = interruptableModules[interrupted];
 
 				console.Show(correctSelectionMessage);
-				string message = string.Format(moduleReleasedFormat, module.A.ModuleDisplayName);
+				string message = string.Format(moduleReleasedFormat, module.BombModule.ModuleDisplayName);
 				console.Show(message);
 
 				moduleResolved = true;
@@ -525,13 +528,13 @@ public class TechSupport : MonoBehaviour
 			return;
 		}
 
-		Quatruple<KMBombModule, KMSelectable, GameObject, GameObject> module = interruptableModules[interrupted];
+		InterruptableModule module = interruptableModules[interrupted];
 
 		onSelected = null;
 
 		// Enables interrupted module.
-		module.B.OnInteract = interruptedInteractHandler;
-		Transform parent = module.C.transform.parent;
+		module.Selectable.OnInteract = interruptedInteractHandler;
+		Transform parent = module.PassLight.transform.parent;
 		int childCount = parent.childCount;
 		for (int i = 0; i < childCount; i++)
 		{
@@ -549,7 +552,7 @@ public class TechSupport : MonoBehaviour
 
 	private IEnumerator RebootModule()
 	{
-		string moduleName = interruptableModules[interrupted].A.ModuleDisplayName;
+		string moduleName = interruptableModules[interrupted].BombModule.ModuleDisplayName;
 		string message = string.Format(rebootMessages[0], moduleName);
 		int messageHash = console.Show(message);
 		for (int i = 1; i < rebootDuration + 1; i++)
