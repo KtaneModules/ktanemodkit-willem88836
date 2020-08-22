@@ -16,6 +16,8 @@
 
 #### Additions for version 1.2 #### 
 
+## [Done] Use .svg image in manual.
+## [Done] Json description should be more concise and have tags. 
 ## Intersect Twitch Plays Commands (so they are interrupted as well).
 ## Remove highlight on module when interrupted.
 ## Look at custom KMNeedy interrupt intervals
