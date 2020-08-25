@@ -7,8 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(KMBossModule))]
 public class TamagotchiModule : MonoBehaviour 
 {
-	[SerializeField] private float completionThreshold;
+	[SerializeField, Range(0f, 1f)] private float completionThreshold;
+	[SerializeField] private ToggleLight completedLight;
 	[SerializeField] private BombButton[] buttons;
+
 
 	private KMBombInfo bombInfo;
 	private KMAudio bombAudio;
@@ -55,6 +57,10 @@ public class TamagotchiModule : MonoBehaviour
 				current.OnPass += delegate
 				{
 					completionAlpha += alphaIncrement;
+					if(completionAlpha >= completionThreshold)
+					{
+						completedLight.Toggle(true);
+					}
 					return true;
 				};
 			}
