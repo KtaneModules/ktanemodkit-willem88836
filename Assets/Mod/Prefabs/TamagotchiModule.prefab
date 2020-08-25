@@ -3996,6 +3996,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completionThreshold: 0.8
+  diseaseChance: 0.05
+  replenishChance: 0.5
+  timeUntilImpairment: 60
+  timeUntilSickness: 120
+  timeUntilDeath: 120
+  timeUntilReset: 30
+  timesUntilGrowth: 2c01000058020000b004000060090000b80b0000
+  wellbeingChart: 
+  wellbeingDeviation: 0
+  tamagotchiSprite: {fileID: 224666132759490850}
   completedLight: {fileID: 114267604026517184}
   buttons:
   - {fileID: 114372770157867502}
@@ -4004,6 +4014,12 @@ MonoBehaviour:
   - {fileID: 114700030106696276}
   - {fileID: 114780163645485650}
   - {fileID: 114780163645485650}
+  tamagotchiTypes:
+  - {fileID: 11400000, guid: 19bb01aead138a54faf1371136192484, type: 2}
+  - {fileID: 11400000, guid: 98ef40f615e21104ab7d4d8c73f69ac7, type: 2}
+  - {fileID: 11400000, guid: a92f50150f84f8a4a9e742b97c3d7f18, type: 2}
+  - {fileID: 11400000, guid: 0ba8268399a42a34cb0a9d75abbc80b2, type: 2}
+  - {fileID: 11400000, guid: 13f4ab27d7566c841af56f88392e1b19, type: 2}
 --- !u!114 &114267604026517184
 MonoBehaviour:
   m_ObjectHideFlags: 1
