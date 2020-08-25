@@ -308,6 +308,126 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114015602675094238, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114950369220629216, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114965559936902514, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114906483826717832, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114015602675094238, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114950369220629216, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114965559936902514, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114906483826717832, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114015602675094238, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114950369220629216, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114965559936902514, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114906483826717832, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114015602675094238, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114950369220629216, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114965559936902514, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114906483826717832, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114303777254784302, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114693844715756692, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114303777254784302, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114693844715756692, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114303777254784302, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114693844715756692, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: HighlightScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114303777254784302, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 114693844715756692, guid: e66f9423983d45541be3d6859925b9b2,
+        type: 2}
+      propertyPath: OutlineAmount
+      value: 0.01
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e66f9423983d45541be3d6859925b9b2, type: 2}
   m_IsPrefabParent: 0

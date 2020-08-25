@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23449364191184918}
   - component: {fileID: 114067355616695138}
   - component: {fileID: 114303777254784302}
-  - component: {fileID: 114256769832751994}
+  - component: {fileID: 114111962701318396}
   m_Layer: 0
   m_Name: buttonLid(Clone)_0_0
   m_TagString: Untagged
@@ -3617,6 +3617,21 @@ MonoBehaviour:
   m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114111962701318396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1028096074474714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777c60c62ebaa094581c251b893e7317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  child: {fileID: 114718835234517332}
+  minRot: {x: 0, y: 0, z: 0}
+  maxRot: {x: -90, y: 0, z: 0}
+  acceleration: 4
 --- !u!114 &114116701245142192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3658,19 +3673,8 @@ MonoBehaviour:
   - {fileID: 114047709008255134}
   - {fileID: 114733553910692092}
   - {fileID: 114700030106696276}
-  - {fileID: 0}
   - {fileID: 114780163645485650}
---- !u!114 &114256769832751994
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1028096074474714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 532b79668167e2d46a06761a7b16e935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - {fileID: 114780163645485650}
 --- !u!114 &114303777254784302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3764,7 +3768,7 @@ MonoBehaviour:
   - {fileID: 114888602207978064}
   - {fileID: 114546005641472792}
   - {fileID: 114718835234517332}
-  - {fileID: 0}
+  - {fileID: 114067355616695138}
   IsPassThrough: 1
   ChildRowLength: 0
   Highlight: {fileID: 114906483826717832}
@@ -3854,7 +3858,7 @@ MonoBehaviour:
   - {fileID: 114888602207978064}
   - {fileID: 114546005641472792}
   - {fileID: 114718835234517332}
-  - {fileID: 0}
+  - {fileID: 114067355616695138}
   IsPassThrough: 1
   ChildRowLength: 0
   Highlight: {fileID: 114693844715756692}
@@ -3893,7 +3897,7 @@ MonoBehaviour:
   - {fileID: 114888602207978064}
   - {fileID: 114546005641472792}
   - {fileID: 114718835234517332}
-  - {fileID: 0}
+  - {fileID: 114067355616695138}
   IsPassThrough: 1
   ChildRowLength: 0
   Highlight: {fileID: 114950369220629216}
@@ -3921,7 +3925,7 @@ MonoBehaviour:
   - {fileID: 114888602207978064}
   - {fileID: 114546005641472792}
   - {fileID: 114718835234517332}
-  - {fileID: 0}
+  - {fileID: 114067355616695138}
   IsPassThrough: 1
   ChildRowLength: 0
   Highlight: {fileID: 114015602675094238}
@@ -3973,7 +3977,7 @@ MonoBehaviour:
   - {fileID: 114888602207978064}
   - {fileID: 114546005641472792}
   - {fileID: 114718835234517332}
-  - {fileID: 0}
+  - {fileID: 114067355616695138}
   IsPassThrough: 1
   ChildRowLength: 0
   Highlight: {fileID: 114965559936902514}

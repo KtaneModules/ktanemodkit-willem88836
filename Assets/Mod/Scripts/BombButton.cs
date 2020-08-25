@@ -5,6 +5,7 @@ using UnityEngine;
 public class BombButton : MonoBehaviour
 {
 	private Action onClick;
+	private KMAudio bombAudio;
 
 	private void Awake()
 	{
@@ -14,6 +15,8 @@ public class BombButton : MonoBehaviour
 
 	private bool OnClick()
 	{
+		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+
 		if (onClick != null)
 		{
 			onClick.Invoke();
@@ -26,6 +29,10 @@ public class BombButton : MonoBehaviour
 		return true;
 	}
 
+	public void SetAudio(KMAudio bombAudio)
+	{
+		this.bombAudio = bombAudio;
+	}
 
 	public void AddListener(Action onClick)
 	{
