@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(KMBombInfo), typeof(KMAudio), typeof(KMBombModule))]
@@ -14,6 +14,8 @@ public class TamagotchiModule : MonoBehaviour
 	[SerializeField, Range(0f, 1f)] private float completionThreshold;
 	[SerializeField, Range(0f, 1f)] private float diseaseChance;
 	[SerializeField, Range(0f, 1f)] private float replenishChance;
+	[SerializeField, Range(0f, 1f)] private float nauseaChance;
+	[SerializeField] private float spriteScaleFactor;
 	[SerializeField] private int timeUntilImpairment;
 	[SerializeField] private int timeUntilSickness;
 	[SerializeField] private int timeUntilDeath;
@@ -21,10 +23,10 @@ public class TamagotchiModule : MonoBehaviour
 	[SerializeField] private int[] timesUntilGrowth;
 	[SerializeField] private int[] wellbeingChart;
 	[SerializeField] private int wellbeingDeviation;
-	[SerializeField] private RectTransform tamagotchiSprite;
+	[SerializeField] private Transform tamagotchiSprite;
 	[SerializeField] private ToggleLight completedLight;
 	[SerializeField] private BombButton[] buttons;
-	[SerializeField] private TamagotchiTypes[] tamagotchiTypes;
+	[SerializeField] private Tamagotchi[] tamagotchiTypes;
 
 
 	private KMBombInfo bombInfo;
@@ -32,9 +34,10 @@ public class TamagotchiModule : MonoBehaviour
 	private KMBombModule bombModule;
 	private KMBossModule bossModule;
 
+	private Vector3 creatureBasePosition;
 	private float completionAlpha = 0f;
 	private float alphaIncrement;
-	private Tamagotchi tamagotchi;
+	private TamagotchiStats tamagotchi;
 	private int timeSinceStateChange;
 
 
@@ -63,6 +66,8 @@ public class TamagotchiModule : MonoBehaviour
 		buttons[3].AddListener(OnPlayButtonClicked);
 		buttons[4].AddListener(OnCompleteButtonClicked);
 
+		creatureBasePosition = tamagotchiSprite.localPosition;
+
 		// Sets up storage of the module data on bomb end. 
 		bombInfo.OnBombSolved += OnBombExploded;
 		bombInfo.OnBombExploded += OnBombExploded;
@@ -70,7 +75,7 @@ public class TamagotchiModule : MonoBehaviour
 		// Loads tamagotchi json data if existing.
 		if (!TryLoadTamagotchi(out tamagotchi))
 		{
-			tamagotchi = new Tamagotchi(tamagotchiTypes[0]);
+			tamagotchi = new TamagotchiStats(tamagotchiTypes[0]);
 		}
 		UpdateTamagotchiSprite();
 
@@ -81,7 +86,7 @@ public class TamagotchiModule : MonoBehaviour
 		StartCoroutine(PlayTamagotchi());
 	}
 
-	private bool TryLoadTamagotchi(out Tamagotchi tamagotchi)
+	private bool TryLoadTamagotchi(out TamagotchiStats tamagotchi)
 	{
 		try
 		{
@@ -89,7 +94,7 @@ public class TamagotchiModule : MonoBehaviour
 			if (File.Exists(path))
 			{
 				string json = File.ReadAllText(path);
-				tamagotchi = (Tamagotchi)JsonConvert.DeserializeObject(json, typeof(Tamagotchi));
+				tamagotchi = (TamagotchiStats)JsonConvert.DeserializeObject(json, typeof(TamagotchiStats));
 				TamagotchiLog.Log("Tamagotchi File Found!");
 				return true;
 			}
@@ -156,7 +161,7 @@ public class TamagotchiModule : MonoBehaviour
 	{
 		TamagotchiLog.Log("Bomb exploded!");
 
-		tamagotchi.State = Tamagotchi.TamagotchiState.Dead;
+		tamagotchi.State = TamagotchiStats.TamagotchiState.Dead;
 		OnBombEnded();
 	}
 
@@ -171,13 +176,13 @@ public class TamagotchiModule : MonoBehaviour
 		{
 			switch (tamagotchi.State)
 			{
-				case Tamagotchi.TamagotchiState.Neutral:
+				case TamagotchiStats.TamagotchiState.Neutral:
 					HandleStateNeutral();
 					break;
-				case Tamagotchi.TamagotchiState.Sick:
+				case TamagotchiStats.TamagotchiState.Sick:
 					HandleStateSick();
 					break;
-				case Tamagotchi.TamagotchiState.Dead:
+				case TamagotchiStats.TamagotchiState.Dead:
 					HandleStateDead();
 					break;
 				default:
@@ -199,21 +204,23 @@ public class TamagotchiModule : MonoBehaviour
 
 			if (Random.Range(0f, 1f) <= diseaseChance)
 			{
-				tamagotchi.State = Tamagotchi.TamagotchiState.Sick;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Sick;
 			}
-			else if(tamagotchi.Boredness >= tamagotchi.Cleanliness
-				&& tamagotchi.Boredness >= tamagotchi.Hunger)
+			else if(tamagotchi.Happiness >= tamagotchi.Cleanliness
+				&& tamagotchi.Happiness >= tamagotchi.Hunger)
 			{
-				tamagotchi.State = Tamagotchi.TamagotchiState.Bored;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Bored;
 			}
 			else if (tamagotchi.Cleanliness >= tamagotchi.Hunger)
 			{
-				tamagotchi.State = Tamagotchi.TamagotchiState.Messy;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Messy;
 			}
 			else
 			{
-				tamagotchi.State = Tamagotchi.TamagotchiState.Hungry;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Hungry;
 			}
+
+			TamagotchiLog.LogFormat("Created Impairment: {0}", tamagotchi.State.ToString());
 		}
 		else if(tamagotchi.Age >= timesUntilGrowth[tamagotchi.AgeState])
 		{
@@ -226,7 +233,7 @@ public class TamagotchiModule : MonoBehaviour
 			else
 			{
 				int target = wellbeingChart[tamagotchi.AgeState];
-				int subTypeCount = 0;
+				int subTypeCount;
 
 				if(tamagotchi.TimeImpaired <= target)
 				{
@@ -254,15 +261,15 @@ public class TamagotchiModule : MonoBehaviour
 		}
 
 		tamagotchiSprite.localPosition = timeSinceStateChange % 2 == 0
-			? new Vector3(0, 0.1f, 0)
-			: Vector3.zero;
+			? creatureBasePosition + new Vector3(0, 0.1f, 0)
+			: creatureBasePosition;
 	}
 
 	private void HandleStateDead()
 	{
 		if (timeSinceStateChange >= timeUntilReset)
 		{
-			tamagotchi = new Tamagotchi(tamagotchiTypes[0]);
+			tamagotchi = new TamagotchiStats(tamagotchiTypes[0]);
 			timeSinceStateChange = 0;
 		}
 	}
@@ -271,7 +278,7 @@ public class TamagotchiModule : MonoBehaviour
 	{
 		if (timeSinceStateChange >= timeUntilSickness)
 		{
-			tamagotchi.State = Tamagotchi.TamagotchiState.Sick;
+			tamagotchi.State = TamagotchiStats.TamagotchiState.Sick;
 			timeSinceStateChange = 0;
 		}
 	}
@@ -280,30 +287,51 @@ public class TamagotchiModule : MonoBehaviour
 	{
 		if (timeSinceStateChange >= timeUntilDeath)
 		{
-			tamagotchi.State = Tamagotchi.TamagotchiState.Dead;
-			timeSinceStateChange = 0;
-
-			bombModule.HandleStrike();
-			TamagotchiLog.Log("Strike: Your pet died due to poor caretaking... tisk tisk...");
+			PetDiedPoorCare();
 		}
 	}
 
 
+	#endregion
+
+
+	#region Misc
+
 	private void UpdateTamagotchiSprite()
 	{
-		tamagotchiSprite.GetComponent<Image>().sprite = tamagotchiTypes[tamagotchi.AgeState].Get(tamagotchi.Type, tamagotchi.Subtype);
+		Texture texture = tamagotchiTypes[tamagotchi.AgeState].Get(tamagotchi.Type, tamagotchi.Subtype);
+		tamagotchiSprite.GetComponent<MeshRenderer>().material.mainTexture = texture;
+
+		float scale = texture.width / spriteScaleFactor;
+		tamagotchiSprite.localScale = Vector3.one * scale;
 	}
 
 	private void PetDiedOldAge()
 	{
-		tamagotchi.State = Tamagotchi.TamagotchiState.Dead;
-		completionAlpha = 1;
-		OnTrackedModuleSolved();
+		tamagotchi.State = TamagotchiStats.TamagotchiState.Dead;
+		timeSinceStateChange = 0;
 
+		completionAlpha = 1f;
+		OnTrackedModuleSolved();
 		TamagotchiLog.Log("Your pet died of old age... farewell buddy...");
 	}
 
+	private void PetDiedPoorCare()
+	{
+		tamagotchi.State = TamagotchiStats.TamagotchiState.Dead;
+		timeSinceStateChange = 0;
 
+		bombModule.HandleStrike();
+		TamagotchiLog.Log("Strike: Your pet died due to poor caretaking... tisk tisk...");
+	}
+
+	private void Oversaturate()
+	{
+		if (Random.Range(0f, 1f) <= nauseaChance)
+		{
+			tamagotchi.State = TamagotchiStats.TamagotchiState.Sick;
+		}
+	}
 
 	#endregion
 
@@ -312,37 +340,69 @@ public class TamagotchiModule : MonoBehaviour
 
 	private void OnFoodButtonClicked()
 	{
-		if(Random.Range(0f, 1f) <= replenishChance)
+		if (tamagotchi.State == TamagotchiStats.TamagotchiState.Hungry)
 		{
-			tamagotchi.Hunger = 0;
-			tamagotchi.State = Tamagotchi.TamagotchiState.Neutral;
+			if(Random.Range(0f, 1f) <= replenishChance)
+			{
+				tamagotchi.Hunger = 0;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Neutral;
+			}
+		}
+		else
+		{
+			Oversaturate();
 		}
 	}
 
 	private void OnMedicineButtonClicked()
 	{
-		if (Random.Range(0f, 1f) <= replenishChance)
+		if (tamagotchi.State == TamagotchiStats.TamagotchiState.Sick)
 		{
-			tamagotchi.Sickness = 0;
-			tamagotchi.State = Tamagotchi.TamagotchiState.Neutral;
+
+			if (Random.Range(0f, 1f) <= replenishChance)
+			{
+				tamagotchi.Sickness = 0;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Neutral;
+			}
+		}
+		else
+		{
+			if (Random.Range(0f, 1f) <= nauseaChance)
+			{
+				PetDiedPoorCare();
+			}
 		}
 	}
 
 	private void OnDisciplineButtonClicked()
 	{
-		if (Random.Range(0f, 1f) <= replenishChance)
+		if(tamagotchi.State == TamagotchiStats.TamagotchiState.Messy)
 		{
-			tamagotchi.Cleanliness = 0;
-			tamagotchi.State = Tamagotchi.TamagotchiState.Neutral;
+			if (Random.Range(0f, 1f) <= replenishChance)
+			{
+				tamagotchi.Cleanliness = 0;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Neutral;
+			}
+		}
+		else
+		{
+			Oversaturate();
 		}
 	}
 
 	private void OnPlayButtonClicked()
 	{
-		if (Random.Range(0f, 1f) <= replenishChance)
+		if (tamagotchi.State == TamagotchiStats.TamagotchiState.Bored)
 		{
-			tamagotchi.Boredness = 0;
-			tamagotchi.State = Tamagotchi.TamagotchiState.Neutral;
+			if (Random.Range(0f, 1f) <= replenishChance)
+			{
+				tamagotchi.Happiness = 0;
+				tamagotchi.State = TamagotchiStats.TamagotchiState.Neutral;
+			}
+		}
+		else
+		{
+			Oversaturate();
 		}
 	}
 

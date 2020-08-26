@@ -1,7 +1,23 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Tamagotchi
+[CreateAssetMenu(menuName = "Tamagotchi")]
+public class Tamagotchi : ScriptableObject
+{
+	public Sprite Sprite;
+	public string Name;
+
+	public int LifeSpan;
+	public int AgeStage;
+
+	public bool SleepsIn;
+	public bool ResetStatsOnCreation;
+
+	public int HungerRate;
+	public int HappinessRate;
+	public int HealthRate;
+}
+
+public class TamagotchiStats
 {
 	public enum TamagotchiState
 	{
@@ -13,42 +29,38 @@ public class Tamagotchi
 		Dead
 	}
 
-	public int Type;
-	public int Subtype;
 	public TamagotchiState State;
 
-	public int AgeState;
 	public int Age;
 
-	public int TimeImpaired;
 	public int Hunger;
-	public int Boredness;
+	public int Happiness;
 	public int Cleanliness;
 	public int Sickness;
 
-	public Tamagotchi(TamagotchiTypes tamagotchiTypes)
+	private Tamagotchi tamagotchi;
+
+	public TamagotchiStats()
 	{
-		Type = Random.Range(0, tamagotchiTypes.Length());
-		Subtype = Random.Range(0, tamagotchiTypes.Length(Type));
-		State = TamagotchiState.Neutral;
-
-		AgeState = 0;
-		Age = 0;
-
 		Hunger = 0;
-		Boredness = 0;
+		Happiness = 0;
 		Cleanliness = 0;
 		Sickness = 0;
+	}
+
+	public void SetTamagotchi(Tamagotchi tamagotchi)
+	{
+		this.tamagotchi = tamagotchi;
 	}
 
 	public void Tick()
 	{
 		Age++;
-		Boredness++;
+		Happiness += tamagotchi.HappinessRate;
 		Cleanliness++;
 		Hunger++;
 
-		if(State != TamagotchiState.Neutral)
+		if (State != TamagotchiState.Neutral)
 		{
 			TimeImpaired++;
 		}
