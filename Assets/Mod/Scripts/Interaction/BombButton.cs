@@ -20,11 +20,11 @@ public class BombButton : MonoBehaviour
 		if (onClick != null)
 		{
 			onClick.Invoke();
-			TamagotchiLog.LogFormat("Button {0} clicked", gameObject.name);
+			//TamagotchiLog.LogFormat("Button {0} clicked", gameObject.name);
 		}
 		else
 		{
-			TamagotchiLog.LogFormat("Button {0} clicked without listener", gameObject.name);
+			//TamagotchiLog.LogFormat("Button {0} clicked without listener", gameObject.name);
 		}
 		return true;
 	}

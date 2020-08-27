@@ -13,8 +13,19 @@ public class TamagotchiStats
 
 	public int Age = 0;
 
-	public float Hunger = 0;
-	public float Happiness = 0;
+	private float hunger = 0;
+	public float Hunger
+	{
+		get { return hunger; }
+		set { hunger = Mathf.Min(MAX_HUNGER, value); }
+	}
+
+	private float happiness = 0;
+	public float Happiness
+	{
+		get { return happiness; }
+		set { hunger = Mathf.Min(MAX_HAPPINESS, value); }
+	}
 
 	public int Weight = 0;
 	public int Discipline = 0;
@@ -51,8 +62,10 @@ public class TamagotchiStats
 		}
 
 		Hunger = Mathf.Clamp(Hunger - Base.HungerRate, 0, MAX_HUNGER);
-		Happiness = Mathf.Clamp(Happiness - Base.HappinessRate, 0, MAX_HAPPINESS);
+		happiness = Mathf.Clamp(happiness - Base.HappinessRate, 0, MAX_HAPPINESS);
 		// TODO: adjust this rate by discipline.
 		Misbehaving = Mathf.Clamp(Misbehaving - Base.MisbehavingRate, 0, MAX_MISBEHAVING);
 	}
+
+	
 }

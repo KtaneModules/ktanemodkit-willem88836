@@ -4,20 +4,28 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(KMBombInfo), typeof(KMAudio), typeof(KMBombModule))]
 [RequireComponent(typeof(KMBossModule))]
-public class TamagotchiModule : MonoBehaviour 
+public class TamagotchiModule : MonoBehaviour
 {
+	private enum MenuState { Menu, FoodMenu };
+
+
 	[SerializeField, Range(0f, 1f)] private float completionThreshold;
 	[SerializeField] private float textureScaleFactor;
 	[SerializeField] private int AttentionCallInterval;
 
 	[SerializeField] private Transform tamagotchiSprite;
 	[SerializeField] private ToggleLight completedLight;
+	[SerializeField] private FoodMenu foodMenu;
 	[SerializeField] private BombButton[] buttons;
+	[SerializeField] private GameObject[] menuIcons;
+	[SerializeField] private GameObject attentionIcon;
 	[SerializeField] private Tamagotchi[] tamagotchiTypes;
 
 
@@ -36,6 +44,8 @@ public class TamagotchiModule : MonoBehaviour
 
 	private int lastTimeSinceAttentionCall = 0;
 
+	private MenuState menuState = MenuState.Menu; 
+	private int currentMenuIcon = 0;
 
 	private string StoragePath 
 	{ 
@@ -92,6 +102,9 @@ public class TamagotchiModule : MonoBehaviour
 		{
 			tamagotchi.SetTamagotchi(tamagotchiTypes[tamagotchi.TamagotchiIndex]);
 		}
+
+		currentMenuIcon = menuIcons.Length;
+		UpdateMenuButtons();
 
 		UpdateTamagotchiSprite();
 
@@ -240,7 +253,7 @@ public class TamagotchiModule : MonoBehaviour
 
 	private void CallAttention()
 	{
-		// TODO: Attention call sequence.
+		attentionIcon.SetActive(true);
 	}
 
 	#endregion
@@ -279,19 +292,20 @@ public class TamagotchiModule : MonoBehaviour
 
 	#region ModuleInteraction 
 
-	private void OnLeftButtonClicked()
+
+	private void UpdateMenuButtons()
 	{
-
-	}
-
-	private void OnRightButtonClicked()
-	{
-
-	}
-
-	private void OnMiddleButtonClicked()
-	{
-
+		for(int i = 0; i < menuIcons.Length; i++)
+		{
+			if (i == currentMenuIcon)
+			{
+				menuIcons[i].SetActive(true);
+			}
+			else
+			{
+				menuIcons[i].SetActive(false);
+			}
+		}
 	}
 
 	private void OnCompleteButtonClicked()
@@ -305,6 +319,81 @@ public class TamagotchiModule : MonoBehaviour
 		{
 			bombModule.HandleStrike();
 			TamagotchiLog.LogFormat("STRIKE: Not enough modules solved yet! a = {0} < b = {1}", completionAlpha, completionThreshold);
+		}
+	}
+
+
+	private void OnLeftButtonClicked()
+	{
+		switch (menuState)
+		{
+			case MenuState.Menu:
+				currentMenuIcon = (currentMenuIcon - 1);
+				if (currentMenuIcon < 0)
+				{
+					currentMenuIcon = menuIcons.Length;
+				}
+				UpdateMenuButtons();
+				break;
+			case MenuState.FoodMenu:
+				foodMenu.Toggle();
+				break;
+		}
+	}
+
+	private void OnRightButtonClicked()
+	{
+		switch (menuState)
+		{
+			case MenuState.Menu:
+				currentMenuIcon = (currentMenuIcon + 1) % (menuIcons.Length + 1);
+				UpdateMenuButtons();
+				break;
+			case MenuState.FoodMenu:
+				menuState = MenuState.Menu;
+				foodMenu.Disable();
+				tamagotchiSprite.gameObject.SetActive(true);
+				break;
+		}
+	}
+
+	private void OnMiddleButtonClicked()
+	{
+		switch (menuState)
+		{
+			case MenuState.Menu:
+				ConfirmMenuSelect();
+				break;
+			case MenuState.FoodMenu:
+				bool isSnack = foodMenu.Confirm();
+				if(isSnack)
+				{
+					tamagotchi.Happiness++;
+					tamagotchi.Weight += 2;
+				}
+				else 
+				{
+					tamagotchi.Hunger = int.MaxValue;
+				}
+				break;
+		}
+	}
+
+	private void ConfirmMenuSelect()
+	{
+		/* 0 = food
+		 * 1 = light
+		 * 2 = sports
+		 * 3 = medicin
+		 * 4 = cleaning
+		 * 5 = status 
+		 * 6 = scold
+		 */
+		if (currentMenuIcon == 0)
+		{
+			tamagotchiSprite.gameObject.SetActive(false);
+			foodMenu.Enable();
+			menuState = MenuState.FoodMenu;
 		}
 	}
 
