@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc175429e66dba469dab54f177f448f, type: 3}
+  m_Name: Adult 2
+  m_EditorClassIdentifier: 
+  Texture: {fileID: 2800000, guid: f9d073c7e43556549bb70bd58f840351, type: 3}
+  Name: Adult 2
+  LifeSpan: 0
+  AgeStage: 0
+  SleepsIn: 0
+  ResetStatsOnCreation: 0
+  HungerRate: 0
+  HappinessRate: 0
+  HealthRate: 0
+  MisbehavingRate: 0
