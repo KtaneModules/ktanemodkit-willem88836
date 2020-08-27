@@ -26,6 +26,9 @@ public class TamagotchiModule : MonoBehaviour
 	private KMBombModule bombModule;
 	private KMBossModule bossModule;
 
+	private static int tamagotchiInstanceIndex = 0;
+	private int myInstanceIndex;
+
 	private Vector3 creatureBasePosition;
 	private float completionAlpha = 0f;
 	private float alphaIncrement;
@@ -34,13 +37,23 @@ public class TamagotchiModule : MonoBehaviour
 	private int lastTimeSinceAttentionCall = 0;
 
 
-	private string StoragePath { get { return Path.Combine(Application.persistentDataPath, "tamagotchi.json"); } }
+	private string StoragePath 
+	{ 
+		get 
+		{ 
+			return Path.Combine(Application.persistentDataPath, 
+				string.Format("tamagotchi_{0}.json", myInstanceIndex)); 
+		} 
+	}
 
 
 	#region Initialization
 
 	private void Start () 
 	{
+		myInstanceIndex = tamagotchiInstanceIndex;
+		tamagotchiInstanceIndex++;
+
 		// Sets up basic references.
 		bombInfo = GetComponent<KMBombInfo>();
 		bombAudio = GetComponent<KMAudio>();
@@ -61,7 +74,6 @@ public class TamagotchiModule : MonoBehaviour
 		creatureBasePosition = tamagotchiSprite.localPosition;
 
 		// Sets up storage of the module data on bomb end. 
-		bombInfo.OnBombSolved += OnBombExploded;
 		bombInfo.OnBombExploded += OnBombExploded;
 
 		// gives the scriptablje objects indices.
@@ -95,6 +107,7 @@ public class TamagotchiModule : MonoBehaviour
 		try
 		{
 			string path = StoragePath;
+			TamagotchiLog.LogFormat("Looking for tamagotchi file at: {0}", path);
 			if (File.Exists(path))
 			{
 				string json = File.ReadAllText(path);
@@ -153,20 +166,25 @@ public class TamagotchiModule : MonoBehaviour
 		return true;
 	}
 
-	private void OnBombEnded()
+	private void OnDestroy()
 	{
-		TamagotchiLog.Log("Bomb ended!");
-
-		string json = JsonConvert.SerializeObject(tamagotchi);
-		File.WriteAllText(StoragePath, json);
+		if (tamagotchi.IsDead)
+		{
+			File.Delete(StoragePath);
+			TamagotchiLog.Log("Creature is currently dead, deleted data.");
+		}
+		else if (tamagotchi != null)
+		{
+			string json = JsonConvert.SerializeObject(tamagotchi);
+			File.WriteAllText(StoragePath, json);
+			TamagotchiLog.LogFormat("Saved creature data at: {0}.", StoragePath);
+		}
 	}
 
 	private void OnBombExploded()
 	{
-		TamagotchiLog.Log("Bomb exploded!");
-
-		PetDiedPoorCare();
-		OnBombEnded();
+		tamagotchi.IsDead = true;
+		TamagotchiLog.Log("Bomb Exploded, your pet did not survive...");
 	}
 
 	#endregion
