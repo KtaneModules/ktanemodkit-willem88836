@@ -39,11 +39,17 @@ public class ThreeSwitchesModule : MonoBehaviour
 			Switches[i].Initialize(this, bombAudio, i);
 		}
 
-
 		KMBombModule[] modules = FindObjectsOfType<KMBombModule>();
-		completionAlphaIncrement = 1f / modules.Length;
+		int moduleCount = 0;
 		foreach (KMBombModule module in modules)
 		{
+			if(module.ModuleType == this.module.ModuleType)
+			{
+				continue;
+			}
+
+			moduleCount++;
+
 			module.OnPass += () =>
 			{
 				OnModuleCompleted(module);
@@ -51,16 +57,28 @@ public class ThreeSwitchesModule : MonoBehaviour
 			};
 		}
 
+		if (moduleCount <= MinimumModuleCount)
+		{
+			completionAlphaIncrement = 1f;
+			OnModuleCompleted(null);
+		}
+		else
+		{
+			completionAlphaIncrement = 1f / moduleCount;
+		}
+
 		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, modules.Length, completionAlphaIncrement);
 	}
 
 	internal void OnModuleCompleted(KMBombModule solvedModule)
 	{
+		if (CompletionLight.IsOn())
+		{
+			return;
+		}
+
 		lastSolvedModule = solvedModule;
 		solvedModuleCount++;
-
-		TestStates();
-		CalculateNewTargets();
 
 		completionAlpha += completionAlphaIncrement;
 
@@ -69,6 +87,11 @@ public class ThreeSwitchesModule : MonoBehaviour
 			CompletionLight.ToggleOn();
 			bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CompletionLight.transform);
 			Debug.LogFormat(@"[{0}] Module can now be completed!", module.ModuleDisplayName);
+		}
+		else
+		{
+			TestStates();
+			CalculateNewTargets();
 		}
 	}
 
@@ -165,7 +188,7 @@ public class ThreeSwitchesModule : MonoBehaviour
 
 			//If the last letter of the last resolved module is a vowel, flip switch one.
 			string lastSolvedName = lastSolvedModule.ModuleDisplayName;
-			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedName.ToLower()[lastSolvedName.Length]))
+			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedName.ToLower()[lastSolvedName.Length - 1]))
 			{
 				Flip(0);
 			}
