@@ -39,6 +39,8 @@ public class ThreeSwitchesModule : MonoBehaviour
 			Switches[i].Initialize(this, bombAudio, i);
 		}
 
+		// TODO: find a way to include vanilla modules in this list. 
+		// TODO: This doesn't work in TS either!!
 		KMBombModule[] modules = FindObjectsOfType<KMBombModule>();
 		int moduleCount = 0;
 		foreach (KMBombModule module in modules)
