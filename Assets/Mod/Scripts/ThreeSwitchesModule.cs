@@ -1,19 +1,25 @@
-﻿using System.Linq;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(KMBombModule), typeof(KMBombInfo), typeof(KMAudio))]
+[RequireComponent(typeof(KMBossModule))]
 public class ThreeSwitchesModule : MonoBehaviour 
 {
 	public Switch[] Switches;
 	public LightToggle CompletionLight;
+	public ModulesTracker Tracker;
 
 	private KMBombInfo bombInfo;
 	private KMBombModule module;
 	private KMAudio bombAudio;
+	private KMBossModule bossModule;
 
 	public float CompletionAlpha;
 	public int MinimumModuleCount;
 
+	private string[] solvableModules;
 
 	private bool[] switchStates;
 	private float completionAlpha;
@@ -30,6 +36,7 @@ public class ThreeSwitchesModule : MonoBehaviour
 		module = GetComponent<KMBombModule>();
 		bombInfo = GetComponent<KMBombInfo>();
 		bombAudio = GetComponent<KMAudio>();
+		bossModule = GetComponent<KMBossModule>();
 
 		switchStates = new bool[Switches.Length];
 		targetStates = new bool[Switches.Length];
@@ -39,46 +46,46 @@ public class ThreeSwitchesModule : MonoBehaviour
 			Switches[i].Initialize(this, bombAudio, i);
 		}
 
-		// TODO: find a way to include vanilla modules in this list. 
-		// TODO: This doesn't work in TS either!!
-		KMBombModule[] modules = FindObjectsOfType<KMBombModule>();
-		int moduleCount = 0;
-		foreach (KMBombModule module in modules)
+
+		// sets the alpha increment for this module.
+		List<string> solvableModules = bombInfo.GetSolvableModuleNames();
+		string[] ignoredModules = bossModule.GetIgnoredModules(module);
+		for (int i = solvableModules.Count - 1; i >= 0; i--)
 		{
-			if(module.ModuleType == this.module.ModuleType)
+			foreach(string ignored in ignoredModules)
 			{
-				continue;
+				if (solvableModules[i] == ignored)
+				{
+					solvableModules.RemoveAt(i);
+					break;
+				}
 			}
-
-			moduleCount++;
-
-			module.OnPass += () =>
-			{
-				OnModuleCompleted(module);
-				return true;
-			};
 		}
 
-		if (moduleCount <= MinimumModuleCount)
+		if(solvableModules.Count <= MinimumModuleCount)
 		{
 			completionAlphaIncrement = 1f;
 			OnModuleCompleted(null);
 		}
 		else
 		{
-			completionAlphaIncrement = 1f / moduleCount;
+			completionAlphaIncrement = 1f / solvableModules.Count;
 		}
 
-		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, modules.Length, completionAlphaIncrement);
+		this.solvableModules = solvableModules.ToArray();
+		Tracker.AddOnModuleSolvedListener(OnModuleCompleted);
+
+		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, solvableModules.Count, completionAlphaIncrement);
 	}
 
-	internal void OnModuleCompleted(KMBombModule solvedModule)
+	internal void OnModuleCompleted(string solvedModule)
 	{
 		if (CompletionLight.IsOn())
 		{
 			return;
 		}
 
+		// TODO: resolve this.
 		lastSolvedModule = solvedModule;
 		solvedModuleCount++;
 

@@ -341,7 +341,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4646231529129010}
-  - component: {fileID: 114231842902778742}
+  - component: {fileID: 114810400321062562}
+  - component: {fileID: 114919884674924526}
+  - component: {fileID: 114295630683346456}
+  - component: {fileID: 114408248507054588}
   m_Layer: 0
   m_Name: SceneSerializer
   m_TagString: Untagged
@@ -4305,18 +4308,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
---- !u!114 &114231842902778742
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1412341635323488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fcd67acc4bb67b488c757a779446d49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ParentModule: {fileID: 114717237382233990}
 --- !u!114 &114234783999530760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4381,6 +4372,17 @@ MonoBehaviour:
   m_Script: {fileID: -381104716, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114295630683346456
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1412341635323488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d0a4509abe3fe429be28c9402d7923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114298915563367146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4434,6 +4436,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114408248507054588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1412341635323488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114421889411022222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4732,6 +4745,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Transparent/TransparentTint
+--- !u!114 &114810400321062562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1412341635323488}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5da90e2bd5d88c49b5487e9e7a9223a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParentModule: {fileID: 114717237382233990}
 --- !u!114 &114834626664367110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4846,6 +4871,30 @@ MonoBehaviour:
   m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114919884674924526
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1412341635323488}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc35a7fb2231b1546bbbf1c6c6b678c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModuleName: Three Switches
+  Types:
+  - ButtonComponent
+  - WhosOnFirstComponent
+  - InvisibleWallsComponent
+  - MemoryComponent
+  - KeypadComponent
+  - VennWiresComponent
+  - MorseComponent
+  - PasswordComponent
+  - WireSequenceComponent
+  - SimonComponent
+  - WireSetComponent
 --- !u!114 &114946246481534772
 MonoBehaviour:
   m_ObjectHideFlags: 1
