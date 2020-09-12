@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,15 +26,15 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 	private float completionAlphaIncrement;
 
 	private int solvedModuleCount = -1;
-	private string lastSolvedModule;
+	private string lastSolvedModuleName;
+	private Transform lastSolvedModuleTransform;
 	private bool[] targetStates;
 
 
 	private void Start () 
 	{
 		InitializeModule();
-		InitializeSolvability();
-		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, solvableModules.Length, completionAlphaIncrement);
+		StartCoroutine(InitializeSolvability());
 	}
 
 	private void InitializeModule()
@@ -52,10 +53,15 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 		}
 	}
 
-	private void InitializeSolvability()
+	private IEnumerator InitializeSolvability()
 	{
+		while(!ModulesTracker.Initialized)
+		{
+			yield return new WaitForSeconds(0.15f);
+		}
+
 		// sets the alpha increment for this module.
-		List<string> solvableModules = bombInfo.GetSolvableModuleNames();
+		List<string> solvableModules = new List<string>(ModulesTracker.SolvableDisplayNames);
 		string[] ignoredModules = bossModule.GetIgnoredModules(module);
 		for (int i = solvableModules.Count - 1; i >= 0; i--)
 		{
@@ -77,12 +83,14 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 		{
 			completionAlphaIncrement = 1f / solvableModules.Count;
 			this.solvableModules = solvableModules.ToArray();
-			Tracker.AddOnModuleSolvedListener(this);
+			ModulesTracker.AddOnModuleSolvedListener(this);
 		}
+
+		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, this.solvableModules.Length, completionAlphaIncrement);
 	}
 
 
-	public void OnModdedModuleSolved(string module)
+	public void OnModuleSolved(string module, Transform transform)
 	{
 		if (CompletionLight.IsOn() 
 			|| !solvableModules.Contains(module))
@@ -90,8 +98,8 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			return;
 		}
 
-		// TODO: resolve this.
-		lastSolvedModule = module;
+		lastSolvedModuleName = module;
+		lastSolvedModuleTransform = transform;
 		solvedModuleCount++;
 
 		completionAlpha += completionAlphaIncrement;
@@ -105,17 +113,6 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			TestStates();
 			CalculateNewTargets();
 		}
-	}
-
-	public void OnVanillaModuleSolved()
-	{
-		throw new System.NotImplementedException();
-	}
-
-	private void OnModuleSolved()
-	{
-		// move all module logic to here. 
-		throw new System.NotImplementedException();
 	}
 
 
@@ -151,7 +148,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			}
 
 			// If the first letter of the last resolved module is a vowel, flip switch three.
-			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModule.ToLower()[0]))
+			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModuleName.ToLower()[0]))
 			{
 				Flip(2);
 			}
@@ -173,7 +170,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			}
 
 			// If the solved module was on the same side as this module, flip switch three.
-			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = lastSolvedModuleTransform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) <= Mathf.Epsilon)
 			{
@@ -217,13 +214,13 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			}
 
 			//If the last letter of the last resolved module is a vowel, flip switch one.
-			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModule.ToLower()[lastSolvedModule.Length - 1]))
+			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModuleName.ToLower()[lastSolvedModuleName.Length - 1]))
 			{
 				Flip(0);
 			}
 
 			//If the solved module is not on the same side as this module, flip switch one.
-			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = lastSolvedModuleTransform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) > Mathf.Epsilon)
 			{
@@ -257,7 +254,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			}
 
 			//If the solved module is not on the same side as this module, flip switch two.
-			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = lastSolvedModuleTransform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) > Mathf.Epsilon)
 			{
@@ -272,7 +269,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 
 			//If the last letter of the last resolved module is a number, flip switch three.
 			int a;
-			if(int.TryParse(lastSolvedModule[lastSolvedModule.Length - 1].ToString(), out a))
+			if(int.TryParse(lastSolvedModuleName[lastSolvedModuleName.Length - 1].ToString(), out a))
 			{
 				Flip(2);
 			}

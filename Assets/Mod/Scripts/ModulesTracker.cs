@@ -1,80 +1,124 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
-[RequireComponent(typeof(KMBombInfo))]
 public class ModulesTracker : MonoBehaviour
 {
-	private const string MODULE_PARENT = "VisualTransform";
-	private const string SEARCH_TERM = "Component_LED_PASS";
-	private readonly string[] VanillaModuleNames = new string[]
+	[Serializable]
+	private class Module
 	{
-		"PasswordComponent(Clone)",
-		"ButtonComponent(Clone)",
-		"WireSequenceComponent(Clone)",
-		"InvisibleWallsComponent(Clone)",
-		"WireSetComponent(Clone)",
-		"MemoryComponent(Clone)",
-		"WhosOnFirstComponent(Clone)",
-		"KeypadComponent(Clone)",
-		"MorseComponent(Clone)",
-		"VennWiresComponent(Clone)",
-		"SimonComponent(Clone)"
+		public Transform Transform;
+		public string ModuleName;
+		public GameObject Led;
+		public bool Completed;
+	}
+
+	private const string MODULE_PARENT =
+#if UNITY_EDITOR
+		"Modules";
+#else
+		"VisualTransform";
+#endif
+	private const string SEARCH_TERM = "Component_LED_PASS";
+	private const string VANILLA_COMPONENT = "BombComponent";
+	private const string VANILLA_NAME_METHOD = "GetModuleDisplayName";
+	private readonly string[] IGNORED_VANILLA_MODULES = new string[]
+	{
+		"Timer",
+		"None"
 	};
 
+	private static ModulesTracker singleton; 
 
-	private KMBombInfo bombInfo;
 	private List<IModuleTracker> listeners = new List<IModuleTracker>();
-
+	private List<Module> modules = new List<Module>();
 	private float testQuantum = 0.2f;
 
-	private List<string> previousSolvedModdedModuleIDs = new List<string>();
-
-	private List<Transform> vanillaPassLeds = new List<Transform>();
-	private bool[] completedVanillaModules;
-
+	public static bool Initialized { get; private set; }
+	public static int Count { get; private set; }
+	public static string[] SolvableDisplayNames { get; private set; }
 
 	#region Initialization
 
 	private void Awake()
 	{
-		bombInfo = GetComponent<KMBombInfo>();
-		FindVanillaLeds();
+		if (singleton)
+		{
+			this.enabled = false;
+			return;
+		}
+
+		singleton = this;
+		StartCoroutine(FindVanillaLeds());
 		StartCoroutine(TestModules());
 	}
 
-	private void FindVanillaLeds()
+	private IEnumerator FindVanillaLeds()
 	{
+		yield return new WaitForSeconds(0.1f);
+
 		Transform moduleParent = GameObject.Find(MODULE_PARENT).transform;
 		int childCount = moduleParent.childCount;
 		
 		for(int i = 0; i < childCount; i++)
 		{
 			Transform child = moduleParent.GetChild(i);
+			string moduleName = GetModuleDisplayName(child); 
 
-			if (VanillaModuleNames.Contains(child.name))
+			if(moduleName == null)
 			{
-				GameObject led = FindLEDIn(child);
+				continue;
 			}
-			else
+
+			// Adds found module to the module list. 
+			GameObject led = FindLEDIn(child);
+
+			Module module = new Module()
 			{
-				KMBombModule moddedModule = child.GetComponent<KMBombModule>();
-				if (moddedModule != null)
-				{
-					// TODO: continue here. 
-					// it's a modded module. 
-					GameObject led = FindLEDIn(child);
-					string name = moddedModule.ModuleDisplayName;
-				}
-				else
-				{
-					// it's something else. 
-				}
-			}
+				Transform = child,
+				ModuleName = moduleName,
+				Led = led,
+				Completed = false
+			};
+
+			Debug.Log("[Modules Tracker] found module: " + module.ModuleName);
+
+			modules.Add(module);
 		}
+
+		SetAttributes();
 	}
 
+	private string GetModuleDisplayName(Transform moduleObject)
+	{
+		// tests if it is a modded module.
+		KMBombModule moddedModule = moduleObject.GetComponent<KMBombModule>();
+		if (moddedModule != null)
+		{
+			return moddedModule.ModuleDisplayName;
+		}
+
+		// tests if it is a vanilla module.
+		Component vanillaComponent = moduleObject.GetComponent(VANILLA_COMPONENT);
+		if (vanillaComponent != null)
+		{
+			Type type = vanillaComponent.GetType();
+			MethodInfo method = type.GetMethod(VANILLA_NAME_METHOD);
+			string moduleName = (string)method.Invoke(vanillaComponent, null);
+			if (IGNORED_VANILLA_MODULES.Contains(moduleName))
+			{
+				return null;
+			}
+
+			return moduleName;
+		}
+
+		// it was no module.
+		return null;
+	}
 
 	private GameObject FindLEDIn(Transform parent)
 	{
@@ -100,130 +144,67 @@ public class ModulesTracker : MonoBehaviour
 		return null;
 	}
 
-
-	private void FindVanillaLedsIn(Transform parent)
+	private void SetAttributes()
 	{
-		if(parent.name == SEARCH_TERM
-			&& IsVanilla(parent))
+		Count = modules.Count;
+		SolvableDisplayNames = new string[modules.Count];
+		for(int i = 0; i < modules.Count; i++)
 		{
-			vanillaPassLeds.Add(parent);
+			SolvableDisplayNames[i] = modules[i].ModuleName;
 		}
-
-		int childCount = parent.childCount;
-		for(int i = 0; i < childCount; i++)
-		{
-			Transform child = parent.GetChild(i);
-			FindVanillaLedsIn(child);
-		}
+		Initialized = true;
 	}
 
-	private bool IsVanilla(Transform subject)
+#endregion
+
+
+#region Listeners
+
+	public static void AddOnModuleSolvedListener(IModuleTracker listener)
 	{
-		bool isVanilla = true;
-		Transform parent = subject.parent;
-
-		do
+		if (singleton.listeners.IndexOf(listener) == -1)
 		{
-			// Vanilla modules do not have a KMBombModule component. 
-			KMBombModule moddedModule = parent.GetComponent<KMBombModule>();
-			if(moddedModule != null)
-			{
-				isVanilla = false;
-				break;
-			}
-			parent = subject.parent;
-		} while (parent != null);
-
-		return isVanilla;
-	}
-
-	#endregion
-
-
-	#region Listeners
-
-	public void AddOnModuleSolvedListener(IModuleTracker listener)
-	{
-		if (listeners.IndexOf(listener) == -1)
-		{
-			listeners.Add(listener);
+			singleton.listeners.Add(listener);
 		}
 	}
 
-	public void RemoveModuleSolvedListener(IModuleTracker listener)
+	public static void RemoveModuleSolvedListener(IModuleTracker listener)
 	{
-		int index = listeners.IndexOf(listener);
+		int index = singleton.listeners.IndexOf(listener);
 		if (index == -1)
 		{
-			listeners.RemoveAt(index);
+			singleton.listeners.RemoveAt(index);
 		}
 	}
 
-	#endregion
+#endregion
 
 
-	#region Invocation
+#region Invocation
 
 	private IEnumerator TestModules()
 	{
 		while (true)
 		{
-			if (listeners.Count > 0)
+			if (listeners.Count > 0 && modules.Count > 0)
 			{
-				TestVanillaModules();
-				TestModdedModules();
+				for(int i = 0; i < modules.Count; i++)
+				{
+					Module module = modules[i];
+					if (module.Completed != module.Led.activeSelf)
+					{
+						Debug.Log("[Module Tracker] Module Solved: " + module.ModuleName);
+						module.Completed = module.Led.activeSelf;
+						foreach(IModuleTracker listener in listeners)
+						{
+							listener.OnModuleSolved(module.ModuleName, module.Transform);
+						}
+					}
+				}
 			}
-
 			yield return new WaitForSeconds(testQuantum);
 		}
 	}
 
-	private void TestVanillaModules()
-	{
-		for (int i = 0; i < vanillaPassLeds.Count; i++)
-		{
-			bool isCompleted = vanillaPassLeds[i].gameObject.activeSelf;
-			if (isCompleted != completedVanillaModules[i])
-			{
-				completedVanillaModules[i] = isCompleted;
-
-				foreach (IModuleTracker listener in listeners)
-				{
-					listener.OnVanillaModuleSolved();
-				}
-			}
-		}
-	}
-
-	private void TestModdedModules()
-	{
-		List<string> solvedModuleIDs = bombInfo.GetSolvedModuleNames();
-
-		if (solvedModuleIDs.Count != previousSolvedModdedModuleIDs.Count)
-		{
-			string solved = Difference(solvedModuleIDs, previousSolvedModdedModuleIDs);
-
-			foreach (IModuleTracker listener in listeners)
-			{
-				listener.OnModdedModuleSolved(solved);
-			}
-		}
-
-		previousSolvedModdedModuleIDs = solvedModuleIDs;
-	}
-
-	private string Difference(List<string> arrayA, List<string> arrayB)
-	{
-		foreach (string e in arrayA)
-		{
-			if (!arrayB.Contains(e))
-			{
-				return e;
-			}
-		}
-
-		return null;
-	}
-
-	#endregion
+#endregion
 }

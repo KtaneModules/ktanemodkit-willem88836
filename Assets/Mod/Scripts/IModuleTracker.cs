@@ -1,5 +1,6 @@
-﻿public interface IModuleTracker
+﻿using UnityEngine;
+
+public interface IModuleTracker
 {
-	void OnModdedModuleSolved(string module);
-	void OnVanillaModuleSolved();
+	void OnModuleSolved(string module, Transform transform);
 }
