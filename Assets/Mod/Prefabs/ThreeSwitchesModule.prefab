@@ -1944,7 +1944,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1815331898657900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0351, y: 0.013, z: -0}
+  m_LocalPosition: {x: -0.0351, y: 0.03, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4887183936107954}
@@ -3795,7 +3795,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!102 &102218807983850790
 TextMesh:
   serializedVersion: 3
@@ -3837,7 +3837,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!102 &102230949016227596
 TextMesh:
   serializedVersion: 3
@@ -3858,7 +3858,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!102 &102530654653460168
 TextMesh:
   serializedVersion: 3
@@ -3921,7 +3921,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!102 &102912006393221700
 TextMesh:
   serializedVersion: 3
@@ -3942,7 +3942,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!102 &102951337050293150
 TextMesh:
   serializedVersion: 3
@@ -3963,7 +3963,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 1ebe1d96973a920409b439b3a0e2bb63, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4278240255
+    rgba: 4278190335
 --- !u!108 &108631189781051220
 Light:
   m_ObjectHideFlags: 1
@@ -3975,7 +3975,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 0.84705883, b: 0, a: 1}
   m_Intensity: 2
-  m_Range: 0.08
+  m_Range: 0.04
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -4139,7 +4139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114109928665082522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4202,7 +4202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114166209011428532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4248,7 +4248,10 @@ MonoBehaviour:
   - {fileID: 114269615712677376}
   - {fileID: 114298915563367146}
   CompletionLight: {fileID: 114169059515266776}
-  Tracker: {fileID: 114109928665082522}
+  SwitchLabels:
+  - {fileID: 1822554840465546}
+  - {fileID: 1174858089849698}
+  - {fileID: 1071839144612678}
   CompletionAlpha: 0.5
   MinimumModuleCount: 5
 --- !u!114 &114210652670983412
@@ -4753,7 +4756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/Text Shader
+  - GUI/KT 3D Text
 --- !u!114 &114848820279627998
 MonoBehaviour:
   m_ObjectHideFlags: 1

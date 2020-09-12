@@ -12,7 +12,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 
 	public Switch[] Switches;
 	public LightToggle CompletionLight;
-	public ModulesTracker Tracker;
+	public GameObject[] SwitchLabels;
 
 	private KMBombInfo bombInfo;
 	private KMBombModule module;
@@ -60,6 +60,9 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 		{
 			Switches[i].Initialize(this, bombAudio, i);
 		}
+
+		solvedModuleCount = Random.Range(0, 3);
+		SwitchLabels[solvedModuleCount].SetActive(false);
 	}
 
 	private IEnumerator InitializeSolvability()

@@ -9,6 +9,11 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/font.css">
         <script src="js/ktane-utils.js"></script>
+        <style rel="stylesheet" type="text/css">
+            .rulelist {
+                margin-top: 0;
+            }
+        </style>
     </head>
     <body>
         <div class="section">
@@ -18,20 +23,20 @@
                     <span class="page-header-section-title">Three Switches</span>
                 </div>
                 <div class="page-content">
-                    <img src="img/Component/Module Name.svg" class="diagram">
+                    <img src="img/Component/ThreeSwitches.svg" class="diagram">
                     <h2>On the Subject of Three Switches</h2>
                     <p class="flavour-text">So did I just hear three distinct light switch clicks?</p>
 
                     <ul>
                         <li>Every time one of the other modules is solved zero or multiple switches need to be flipped.</li>
-                        <li>To determine what switches to flip, use the rulessets below. What ruleset is used is switched every solved module, starting with the first ruleset.</li>
+                        <li>The rulesets below are used to determine what switches to flip. The ruleset used is incremented every turn, starting with the ruleset that has no corresponding label on the switches.</li>
                         <li>If a module is solved, but the switches are not in the correct configuration, a strike will be dealt.</li>
                         <li>After a certain percentage of all modules is solved, the yellow indicator light will turn on.</li>  
                         <li>When this light is on, switch all switches to one side, or to the other side when they are on one side already, to complete the module.</li>
                     </ul>
 
-                    <h3>Switch Instruction Set I</h3>
-                    <ul>
+                    <h3>Instruction Set I</h3>
+                    <ul class="rulelist">
                         <li>If the number of solved modules is a multiplication of 7, flip switch one.</li>
                         <li>If the first letter of the last resolved module is a vowel, flip switch three.</li>
                         <li>If the switches are all ON or OFF, flip switch two.</li>
@@ -41,8 +46,8 @@
                     </ul>
 
 
-                    <h3>Switch Instruction Set II</h3>
-                    <ul>
+                    <h3>Instruction Set II</h3>
+                    <ul class="rulelist">
                         <li>If you have made a mistake, flip switch two.</li>
                         <li>If not all the switches are ON or OFF, flip switch three.</li>
                         <li>If the last letter of the last resolved module is a vowel, flip switch one.</li>
@@ -51,8 +56,8 @@
                         <li>If the first switch is ON, flip switch two.</li>
                     </ul>
 
-                    <h3>Switch Instruction Set III</h3>
-                    <ul>
+                    <h3>Instruction Set III</h3>
+                    <ul class="rulelist">
                         <li>If only the middle switch is ON, flip switch one.</li>
                         <li>If you the second switch is ON, flip switch two.</li>
                         <li>If the solved module is not on the same side as this module, flip switch two.</li>
