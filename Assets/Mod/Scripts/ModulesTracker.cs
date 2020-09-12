@@ -56,6 +56,12 @@ public class ModulesTracker : MonoBehaviour
 		StartCoroutine(TestModules());
 	}
 
+	private void OnDestroy()
+	{
+		Debug.Log(@"[Modules Tracker] Modules Tracker singleton reset");
+		singleton = null;
+	}
+
 	private IEnumerator FindVanillaLeds()
 	{
 		yield return new WaitForSeconds(0.1f);
@@ -84,7 +90,7 @@ public class ModulesTracker : MonoBehaviour
 				Completed = false
 			};
 
-			Debug.Log("[Modules Tracker] found module: " + module.ModuleName);
+			Debug.Log(@"[Modules Tracker] found module: " + module.ModuleName);
 
 			modules.Add(module);
 		}
@@ -193,7 +199,7 @@ public class ModulesTracker : MonoBehaviour
 					Module module = modules[i];
 					if (module.Completed != module.Led.activeSelf)
 					{
-						Debug.Log("[Module Tracker] Module Solved: " + module.ModuleName);
+						Debug.Log(@"[Module Tracker] Module Solved: " + module.ModuleName);
 						module.Completed = module.Led.activeSelf;
 						foreach(IModuleTracker listener in listeners)
 						{
