@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(KMBossModule))]
 public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 {
+	private static int moduleCount = 0;
+	private int instanceID = -1;
+
 	public Switch[] Switches;
 	public LightToggle CompletionLight;
 	public ModulesTracker Tracker;
@@ -31,8 +34,14 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 	private bool[] targetStates;
 
 
+	private void LogFormat(string format, params object[] elements)
+	{
+		Debug.LogFormat(@"[{0} #{1}] {2}", module.ModuleDisplayName, instanceID, string.Format(format, elements));
+	}
+
 	private void Start () 
 	{
+		instanceID = ++moduleCount;
 		InitializeModule();
 		StartCoroutine(InitializeSolvability());
 	}
@@ -65,13 +74,9 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 		string[] ignoredModules = bossModule.GetIgnoredModules(module);
 		for (int i = solvableModules.Count - 1; i >= 0; i--)
 		{
-			foreach (string ignored in ignoredModules)
+			if (ignoredModules.Contains(solvableModules[i]))
 			{
-				if (solvableModules[i] == ignored)
-				{
-					solvableModules.RemoveAt(i);
-					break;
-				}
+				solvableModules.RemoveAt(i);
 			}
 		}
 
@@ -86,7 +91,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			ModulesTracker.AddOnModuleSolvedListener(this);
 		}
 
-		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, this.solvableModules.Length, completionAlphaIncrement);
+		LogFormat(@"Initialized with {0} modules, alpha increment is {1}", this.solvableModules.Length, completionAlphaIncrement);
 	}
 
 
@@ -120,7 +125,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 	{
 		CompletionLight.ToggleOn();
 		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CompletionLight.transform);
-		Debug.LogFormat(@"[{0}] Module can now be completed!", module.ModuleDisplayName);
+		LogFormat(@"Module can now be completed!");
 	}
 
 	private void TestStates()
@@ -130,8 +135,8 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			if (switchStates[i] != targetStates[i])
 			{
 				module.HandleStrike();
-				Debug.LogFormat(@"[{0}] STRIKE: Incorrect Configuration. Switch {1} is {2}, should be {3}", 
-					module.ModuleDisplayName, i, (switchStates[i] ? "ON" : "OFF"), (targetStates[i] ? "ON" : "OFF"));
+				LogFormat(@"STRIKE: Incorrect Configuration. Switch {0} is {1}, should be {2}", 
+					i, (switchStates[i] ? "ON" : "OFF"), (targetStates[i] ? "ON" : "OFF"));
 				break;
 			}
 		}
@@ -287,7 +292,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			o += b.ToString();
 			o += ", ";
 		}
-		Debug.LogFormat(@"[{0}] {1}", module.ModuleDisplayName, o);
+		LogFormat(o);
 	}
 
 	private void Flip(int i)
@@ -315,7 +320,7 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			if (ended)
 			{
 				module.HandlePass();
-				Debug.LogFormat(@"[{0}] Completed!", module.ModuleDisplayName);
+				LogFormat(@"Completed!");
 			}
 		}
 	}

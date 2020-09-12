@@ -48,6 +48,7 @@ public class ModulesTracker : MonoBehaviour
 		if (singleton)
 		{
 			this.enabled = false;
+			Debug.Log(@"[Modules Tracker] Singleton found. Disabling duplicate.");
 			return;
 		}
 
@@ -199,7 +200,7 @@ public class ModulesTracker : MonoBehaviour
 					Module module = modules[i];
 					if (module.Completed != module.Led.activeSelf)
 					{
-						Debug.Log(@"[Module Tracker] Module Solved: " + module.ModuleName);
+						Debug.Log(@"[Modules Tracker] Module Solved: " + module.ModuleName);
 						module.Completed = module.Led.activeSelf;
 						foreach(IModuleTracker listener in listeners)
 						{
