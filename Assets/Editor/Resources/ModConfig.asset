@@ -19,6 +19,6 @@ MonoBehaviour:
 
     Three Switches is a module with, guess what, three switches! Every time you solve
     a module, you need to switch some of them, until you no longer have to.'
-  version: 0.1
+  version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 4c2d3d095640df1479a40f525e284278, type: 3}

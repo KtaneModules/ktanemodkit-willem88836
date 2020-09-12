@@ -74,7 +74,8 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 		string[] ignoredModules = bossModule.GetIgnoredModules(module);
 		for (int i = solvableModules.Count - 1; i >= 0; i--)
 		{
-			if (ignoredModules.Contains(solvableModules[i]))
+			string solvableModule = solvableModules[i];
+			if (ignoredModules.Contains(solvableModule) || solvableModule == module.ModuleDisplayName)
 			{
 				solvableModules.RemoveAt(i);
 			}
