@@ -893,6 +893,8 @@ GameObject:
   - component: {fileID: 114099143372022814}
   - component: {fileID: 114516089052208666}
   - component: {fileID: 114912222959065400}
+  - component: {fileID: 114604928559833578}
+  - component: {fileID: 114109928665082522}
   - component: {fileID: 114201764079284974}
   m_Layer: 0
   m_Name: ThreeSwitchesModule
@@ -4171,6 +4173,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/Text Shader
+--- !u!114 &114109928665082522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1739372919971008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d0a4509abe3fe429be28c9402d7923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114112754841728684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4247,11 +4260,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e225e9b514429cb4ab57b36372aa84e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 23876450539190166}
+  meshRenderer: {fileID: 0}
   OnColor:
     serializedVersion: 2
-    rgba: 4278245631
-  OnLight: {fileID: 108631189781051220}
+    rgba: 0
+  OnLight: {fileID: 0}
 --- !u!114 &114201764079284974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4268,6 +4281,7 @@ MonoBehaviour:
   - {fileID: 114269615712677376}
   - {fileID: 114298915563367146}
   CompletionLight: {fileID: 114169059515266776}
+  Tracker: {fileID: 114109928665082522}
   CompletionAlpha: 0.5
   MinimumModuleCount: 5
 --- !u!114 &114210652670983412
@@ -4347,7 +4361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BaseRotation: {x: 0, y: 0, z: 0}
   TargetRotation: {x: 0, y: 0, z: 180}
-  rotationSpeed: 7
+  rotationSpeed: 5
 --- !u!114 &114271220009025080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4396,7 +4410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BaseRotation: {x: 0, y: 0, z: 0}
   TargetRotation: {x: 0, y: 0, z: 180}
-  rotationSpeed: 7
+  rotationSpeed: 5
 --- !u!114 &114313573669106674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4600,6 +4614,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 0, y: 0, z: 0}
   OutlineAmount: 0
+--- !u!114 &114604928559833578
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1739372919971008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a2fc4ae3e690a498a0d85a2b5e0b99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114612698087564632
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4652,7 +4677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BaseRotation: {x: 0, y: 0, z: 0}
   TargetRotation: {x: 0, y: 0, z: 180}
-  rotationSpeed: 7
+  rotationSpeed: 5
 --- !u!114 &114717237382233990
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4751,12 +4776,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1412341635323488}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5da90e2bd5d88c49b5487e9e7a9223a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ParentModule: {fileID: 114717237382233990}
+  LogComponents: 0
 --- !u!114 &114834626664367110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4882,19 +4908,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc35a7fb2231b1546bbbf1c6c6b678c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleName: Three Switches
-  Types:
-  - ButtonComponent
-  - WhosOnFirstComponent
-  - InvisibleWallsComponent
-  - MemoryComponent
-  - KeypadComponent
-  - VennWiresComponent
-  - MorseComponent
-  - PasswordComponent
-  - WireSequenceComponent
-  - SimonComponent
-  - WireSetComponent
+  ModuleName: 
+  Types: []
 --- !u!114 &114946246481534772
 MonoBehaviour:
   m_ObjectHideFlags: 1

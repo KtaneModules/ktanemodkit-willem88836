@@ -96,7 +96,6 @@ public class ExampleModule2 : MonoBehaviour
     {
         //.Log("Pressed " + correctButton + " button");
         GetComponent<KMBombModule>().HandlePass();
-        return;
 
         if (correctButton)
         {

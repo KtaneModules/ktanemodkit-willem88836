@@ -1,11 +1,10 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(KMBombModule), typeof(KMBombInfo), typeof(KMAudio))]
 [RequireComponent(typeof(KMBossModule))]
-public class ThreeSwitchesModule : MonoBehaviour 
+public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 {
 	public Switch[] Switches;
 	public LightToggle CompletionLight;
@@ -26,12 +25,18 @@ public class ThreeSwitchesModule : MonoBehaviour
 	private float completionAlphaIncrement;
 
 	private int solvedModuleCount = -1;
-	private KMBombModule lastSolvedModule;
+	private string lastSolvedModule;
 	private bool[] targetStates;
 
 
-	// Use this for initialization
 	private void Start () 
+	{
+		InitializeModule();
+		InitializeSolvability();
+		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, solvableModules.Length, completionAlphaIncrement);
+	}
+
+	private void InitializeModule()
 	{
 		module = GetComponent<KMBombModule>();
 		bombInfo = GetComponent<KMBombInfo>();
@@ -41,18 +46,20 @@ public class ThreeSwitchesModule : MonoBehaviour
 		switchStates = new bool[Switches.Length];
 		targetStates = new bool[Switches.Length];
 
-		for(int i = 0; i < Switches.Length; i++)
+		for (int i = 0; i < Switches.Length; i++)
 		{
 			Switches[i].Initialize(this, bombAudio, i);
 		}
+	}
 
-
+	private void InitializeSolvability()
+	{
 		// sets the alpha increment for this module.
 		List<string> solvableModules = bombInfo.GetSolvableModuleNames();
 		string[] ignoredModules = bossModule.GetIgnoredModules(module);
 		for (int i = solvableModules.Count - 1; i >= 0; i--)
 		{
-			foreach(string ignored in ignoredModules)
+			foreach (string ignored in ignoredModules)
 			{
 				if (solvableModules[i] == ignored)
 				{
@@ -62,46 +69,61 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 		}
 
-		if(solvableModules.Count <= MinimumModuleCount)
+		if (solvableModules.Count <= MinimumModuleCount)
 		{
-			completionAlphaIncrement = 1f;
-			OnModuleCompleted(null);
+			CompleteModule();
 		}
 		else
 		{
 			completionAlphaIncrement = 1f / solvableModules.Count;
+			this.solvableModules = solvableModules.ToArray();
+			Tracker.AddOnModuleSolvedListener(this);
 		}
-
-		this.solvableModules = solvableModules.ToArray();
-		Tracker.AddOnModuleSolvedListener(OnModuleCompleted);
-
-		Debug.LogFormat(@"[{0}] Initialized with {1} modules, alpha increment is {2}", module.ModuleDisplayName, solvableModules.Count, completionAlphaIncrement);
 	}
 
-	internal void OnModuleCompleted(string solvedModule)
+
+	public void OnModdedModuleSolved(string module)
 	{
-		if (CompletionLight.IsOn())
+		if (CompletionLight.IsOn() 
+			|| !solvableModules.Contains(module))
 		{
 			return;
 		}
 
 		// TODO: resolve this.
-		lastSolvedModule = solvedModule;
+		lastSolvedModule = module;
 		solvedModuleCount++;
 
 		completionAlpha += completionAlphaIncrement;
 
 		if (completionAlpha >= CompletionAlpha)
 		{
-			CompletionLight.ToggleOn();
-			bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CompletionLight.transform);
-			Debug.LogFormat(@"[{0}] Module can now be completed!", module.ModuleDisplayName);
+			CompleteModule();
 		}
 		else
 		{
 			TestStates();
 			CalculateNewTargets();
 		}
+	}
+
+	public void OnVanillaModuleSolved()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	private void OnModuleSolved()
+	{
+		// move all module logic to here. 
+		throw new System.NotImplementedException();
+	}
+
+
+	private void CompleteModule()
+	{
+		CompletionLight.ToggleOn();
+		bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CompletionLight.transform);
+		Debug.LogFormat(@"[{0}] Module can now be completed!", module.ModuleDisplayName);
 	}
 
 	private void TestStates()
@@ -129,8 +151,7 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 
 			// If the first letter of the last resolved module is a vowel, flip switch three.
-			string lastSolvedName = lastSolvedModule.ModuleDisplayName;
-			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedName.ToLower()[0]))
+			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModule.ToLower()[0]))
 			{
 				Flip(2);
 			}
@@ -152,7 +173,7 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 
 			// If the solved module was on the same side as this module, flip switch three.
-			Vector3 rotA = lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) <= Mathf.Epsilon)
 			{
@@ -196,14 +217,13 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 
 			//If the last letter of the last resolved module is a vowel, flip switch one.
-			string lastSolvedName = lastSolvedModule.ModuleDisplayName;
-			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedName.ToLower()[lastSolvedName.Length - 1]))
+			if (new char[] { 'a', 'e', 'i', 'o', 'u' }.Contains(lastSolvedModule.ToLower()[lastSolvedModule.Length - 1]))
 			{
 				Flip(0);
 			}
 
 			//If the solved module is not on the same side as this module, flip switch one.
-			Vector3 rotA = lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) > Mathf.Epsilon)
 			{
@@ -237,7 +257,7 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 
 			//If the solved module is not on the same side as this module, flip switch two.
-			Vector3 rotA = lastSolvedModule.transform.rotation.eulerAngles;
+			Vector3 rotA = Vector3.zero;//lastSolvedModule.transform.rotation.eulerAngles;
 			Vector3 rotB = transform.rotation.eulerAngles;
 			if (Vector3.Magnitude(rotA - rotB) > Mathf.Epsilon)
 			{
@@ -251,9 +271,8 @@ public class ThreeSwitchesModule : MonoBehaviour
 			}
 
 			//If the last letter of the last resolved module is a number, flip switch three.
-			string lastModuleName = lastSolvedModule.ModuleDisplayName;
 			int a;
-			if(int.TryParse(lastModuleName[lastModuleName.Length - 1].ToString(), out a))
+			if(int.TryParse(lastSolvedModule[lastSolvedModule.Length - 1].ToString(), out a))
 			{
 				Flip(2);
 			}

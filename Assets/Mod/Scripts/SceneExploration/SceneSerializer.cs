@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class SceneSerializer : MonoBehaviour
 {
 	public KMBombModule ParentModule;
+	public bool LogComponents;
+
+	StringBuilder output = new StringBuilder();
 
 	private void Start()
 	{
@@ -21,36 +25,37 @@ public class SceneSerializer : MonoBehaviour
 			Serialize(root, 0);
 		}
 
+		UnityEngine.Debug.Log(output.ToString());
 		UnityEngine.Debug.LogFormat(@"[{0}] Scene succesfullly serialized", ParentModule.ModuleDisplayName);
 	}
 
 
 	private void Serialize(GameObject obj, int i)
 	{
-		string output = "";
+		output.Append(string.Format(@"[{0}] ", ParentModule.ModuleDisplayName));
+
 		for (int j = 0; j < i; j++)
 		{ 
-			output += "\t"; 
+			output.Append("\t"); 
 		}
 
-		output += obj.name;
+		output.Append(obj.name);
+		output.Append("\n");
 
-		UnityEngine.Debug.LogFormat(@"[{0}] {1}", ParentModule.ModuleDisplayName, output);
-
-		output = "";
-
-		Component[] components = obj.GetComponents<Component>();
-		foreach(Component c in components)
+		if (LogComponents)
 		{
-			output = "";
-			for (int j = 0; j < i; j++)
+			Component[] components = obj.GetComponents<Component>();
+			foreach(Component c in components)
 			{
-				output += "\t";
+				for (int j = 0; j < i; j++)
+				{
+					output.Append("\t");
+				}
+				output.Append(" [c] ");
+				output.Append(c.GetType().ToString());
+				output.Append("\n");
 			}
-			output += " [c] " + c.GetType().ToString();
-			UnityEngine.Debug.LogFormat(@"[{0}] {1}", ParentModule.ModuleDisplayName, output);
 		}
-
 
 		int childCount = obj.transform.childCount;
 		for(int j = 0; j < childCount; j++)
