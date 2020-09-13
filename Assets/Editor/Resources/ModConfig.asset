@@ -16,10 +16,10 @@ MonoBehaviour:
   author: Willem Meijer
   description: "[i]So did I just hear three distinct light switch clicks?[/i]\n\nThree
     Switches is a module with, guess what, three switches! Every time you solve a
-    module, you need to switch some of them, until you no longer have to.\n\n\n[b]Other
-    Info[/b]\nModule Type is \\\"threeSwitches\\\".\nThis module supports\r Twitch
-    Plays.\nThe manual and appendix are included in this download and also\r can be
-    downloaded at timwi's webpage."
+    module, you need to switch some of them, until you no longer have to.\n\n[b]Other
+    Info[/b]\nModule Type is \"threeSwitches\".\nThis module supports\r Twitch Plays.\nThe
+    manual and appendix are included in this download and also\r can be downloaded
+    at timwi's webpage."
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 4c2d3d095640df1479a40f525e284278, type: 3}
