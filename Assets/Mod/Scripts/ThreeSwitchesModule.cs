@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(KMBombModule), typeof(KMBombInfo), typeof(KMAudio))]
 public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
@@ -320,4 +322,53 @@ public class ThreeSwitchesModule : MonoBehaviour, IModuleTracker
 			}
 		}
 	}
+
+
+
+	#region TwitchPlays 
+
+	public readonly string TwitchHelpMessage = "Switch the first switch with \"!switch one\"" +
+		"Switch the second switch with \"!switch two\"" +
+		"Switch the third switch with \"!switch three\"" +
+		"Switch the entire configuration with \"!switchall FFF\" where \"F\" is off, and \"T\" is On";
+
+	public IEnumerator ProcessTwitchCommand(string command)
+	{
+		command = command.ToLowerInvariant().Trim();
+		string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+		if (split[0] == "switch")
+		{
+			switch (split[1])
+			{
+				case "one":
+					Switches[0].Click();
+					break;
+				case "two":
+					Switches[1].Click();
+					break;
+				case "three":
+					Switches[2].Click();
+					break;
+
+			}
+		}
+		else if (split[0] == "switchall")
+		{
+			for(int i = 0; i < split[1].Length && i < Switches.Length; i++)
+			{
+				string c = split[1][i].ToString().ToUpper();
+				if ((c == "T" && !switchStates[i])
+					|| (c == "F" && switchStates[i]))
+				{
+					Switches[i].Click();
+				}
+				yield return new WaitForSeconds(0.2f);
+			}
+		}
+
+		yield return new WaitForEndOfFrame();
+	}
+
+	#endregion
 }

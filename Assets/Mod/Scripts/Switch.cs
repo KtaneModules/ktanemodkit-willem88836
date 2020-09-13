@@ -27,7 +27,7 @@ public class Switch : MonoBehaviour
 		this.index = index;
 	}
 
-	private bool Click()
+	public bool Click()
 	{
 		clicked = !clicked;
 		parent.OnClick(index, clicked);
