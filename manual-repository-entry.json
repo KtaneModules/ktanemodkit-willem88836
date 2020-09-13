@@ -1,0 +1,17 @@
+{
+  "Author": "Willem Meijer",
+  "Compatibility": "Compatible",
+  "DefuserDifficulty": "VeryEasy",
+  "Description": "Every time you solve a module, you need to switch some of them, until you no longer have to.",
+  "ExpertDifficulty": "Easy",
+  "ModuleID": "threeSwitches",
+  "MysteryModule": "MustNotBeHidden",
+  "Name": "Three Switches",
+  "Origin": "Mods",
+  "Published": "2020-09-13",
+  "SortKey": "THREESWITCHES",
+  "SourceUrl": "https://github.com/willem88836/ktanemodkit/tree/ThreeLevers",
+  "SteamID": "2227704574",
+  "Symbol": "Ths",
+  "Type": "Regular"
+}
