@@ -2847,6 +2847,12 @@ MonoBehaviour:
   downButton: {fileID: 114509670444105892}
   screenOverlay: {fileID: 114175465940647964}
   rebootDuration: 10
+  parameters:
+    SourceFileCount: 16
+    ErrorCodeCount: 12
+    PatchFileCount: 8
+    VersionCount: 8
+    ParameterCount: 8
   errorFormat: '> Caught exception in module {0}. Source file {2} halted with message
     {1} at line {3}, column {4}. Additional information is required to resolve this
     issue.'
@@ -3134,7 +3140,7 @@ MonoBehaviour:
   - {fileID: 114393224101092080}
   - {fileID: 114048042427949326}
   - {fileID: 114109854831548390}
-  IsPassThrough: 1
+  IsPassThrough: 0
   ChildRowLength: 1
   Highlight: {fileID: 114306428772460078}
   SelectableColliders: []

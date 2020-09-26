@@ -19,11 +19,10 @@ MonoBehaviour:
     requires you cooperate with your professional.\nIncidentally, one of the bomb's
     other modules will break down, rendering it completely inoperable, and an error
     message is shown. \nIt is your task to resolve this issue before the timer runs
-    out. \n\n[b]Other Info[/b]\nModule Type is \"TechSupport\".\nThis module supports
-    Twitch Plays.\nThe manual and appendix are included in this download and also
-    can be downloaded at timwi's webpage.\nThis mod uses KMBossModule, so your mods
-    can be ignored by it.\n\n[b]Special Thanks[/b]\nThanks Itachi/Goofy for allowing
-    me to use the Mystery Module source code. "
-  version: 1.1
+    out. \n\n[b]Other Info[/b]\nModule Type is \"TechSupport\".\nThe manual and appendix
+    are included in this download and also can be downloaded at Timwi's webpage.\nThis
+    mod uses KMBossModule, so your mods can be ignored by it.\n\n[b]Special Thanks[/b]\nThanks
+    Itachi/Goofy for allowing me to use the Mystery Module source code. "
+  version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: e480a79a79fa80943a4592a3e0573a62, type: 3}

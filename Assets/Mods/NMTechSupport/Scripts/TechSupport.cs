@@ -27,6 +27,7 @@ public class TechSupport : MonoBehaviour
 
 	[Header("Settings")]
 	[SerializeField] private int rebootDuration;
+	[SerializeField] private TechSupportData.RuleParameters parameters;
 
 	[Header("Text")]
 	[SerializeField] private string errorFormat;
@@ -87,8 +88,14 @@ public class TechSupport : MonoBehaviour
 		screenOverlay.Toggle(false);
 
 		// TODO: do something with KMSeedable here.
-		monoRandom = new MonoRandom(0);
-		data.Generate(monoRandom, 16, 12, 9, 9, 9);
+		parameters.Random = new MonoRandom(0);
+		data.Generate(parameters);
+
+		TechSupportUtilities.PrintCS(TechSupportData.SourceFileNames);
+		TechSupportUtilities.PrintCS(TechSupportData.ErrorCodes);
+		TechSupportUtilities.PrintCS(TechSupportData.PatchFiles);
+		TechSupportUtilities.PrintCS(TechSupportData.Parameters);
+		TechSupportUtilities.PrintCrossTableAsHTML();
 
 		// Adds methods to buttons.
 		okButton.AddListener(OnOKClicked);
@@ -355,8 +362,7 @@ public class TechSupport : MonoBehaviour
 		// 4 "faee.sup",
 		// 5 "exed.asc",
 		// 6 "gilick.pxd",
-		// 7 "linion.dart",
-		// 8 "lonist.ftl"
+		// 7 "linion.dart"
 
 		//However, if the error's source file is either satcle.bb, plor.pom, or equely.ctl, ignore all rules above and select exed.asc.
 		if (errorData.SourceFileIndex == 2
@@ -443,7 +449,7 @@ public class TechSupport : MonoBehaviour
 		}
 
 		//Otherwise, select shuttle lonist.ftl.
-		return 8;
+		return 4;
 	}
 
 

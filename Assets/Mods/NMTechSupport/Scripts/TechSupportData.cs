@@ -5,6 +5,29 @@ using Random = UnityEngine.Random;
 
 public class TechSupportData : MonoBehaviour
 {
+    [Serializable]
+    public class RuleParameters
+    {
+        public MonoRandom Random;
+
+        public int SourceFileCount;
+        public int ErrorCodeCount;
+        public int PatchFileCount;
+        public int VersionCount;
+        public int ParameterCount;
+
+        public RuleParameters(MonoRandom random, int sourceFileCount, int errorCodeCount, 
+            int patchFileCount, int versionCount, int parameterCount)
+        {
+            Random = random;
+            SourceFileCount = sourceFileCount;
+            ErrorCodeCount = errorCodeCount;
+            PatchFileCount = patchFileCount;
+            VersionCount = versionCount;
+            ParameterCount = parameterCount;
+        }
+    }
+
     public static string[] SourceFileNames;
     public static string[] ErrorCodes;
 
@@ -42,20 +65,20 @@ public class TechSupportData : MonoBehaviour
     }
 
 
-    public void Generate(MonoRandom monoRandom, int s, int e, int pf, int v, int pa)
+    public void Generate(RuleParameters parameters)
     {
-        this.monoRandom = monoRandom;
+        this.monoRandom = parameters.Random;
 
         extentionText = extentions.text;
         modulePrefixText = modulePrefixes.text;
         moduleSuffixtext = moduleSuffixes.text;
 
-        GenerateSourceFileNames(s, 4, 8);
-        GenerateErrorCodes(e, 6);
-        GeneratePatchFiles(pf, 4, 8);
-        GenerateVersions(v);
-        GenerateParameters(pa, 1, 4);
-        GenerateCrossTable(v);
+        GenerateSourceFileNames(parameters.SourceFileCount, 4, 8);
+        GenerateErrorCodes(parameters.ErrorCodeCount, 6);
+        GeneratePatchFiles(parameters.PatchFileCount, 4, 8);
+        GenerateVersions(parameters.VersionCount);
+        GenerateParameters(parameters.ParameterCount, 1, 4);
+        GenerateCrossTable(parameters.VersionCount);
     }
 
 
