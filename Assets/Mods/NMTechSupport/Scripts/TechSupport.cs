@@ -91,12 +91,6 @@ public class TechSupport : MonoBehaviour
 		parameters.Random = new MonoRandom(0);
 		data.Generate(parameters);
 
-		TechSupportUtilities.PrintCS(TechSupportData.SourceFileNames);
-		TechSupportUtilities.PrintCS(TechSupportData.ErrorCodes);
-		TechSupportUtilities.PrintCS(TechSupportData.PatchFiles);
-		TechSupportUtilities.PrintCS(TechSupportData.Parameters);
-		TechSupportUtilities.PrintCrossTableAsHTML();
-
 		// Adds methods to buttons.
 		okButton.AddListener(OnOKClicked);
 		upButton.AddListener(OnUpClicked);
