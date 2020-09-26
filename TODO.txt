@@ -22,12 +22,12 @@
 ## [Done] Bug: Crucial report-information is no longer readable when you enter a wrong answer.
 ## [Done] Bug: Yellow status light can be on when the green one is too. 
 ## [Done] Bug: Yellow and green status light can disappear together, leaving no status light. 
+## [Done] Bug: Clickthrough bug making the mod basically unplayable.
 
 
 #### Addtitions for version 1.3 ####
 
 ## Bug: The highlight of buttons isn't truly on the buttons, but next to it. 
-## Bug: Clickthrough bug making the mod basically unplayable.
 ## Support vanilla module interruption.
 ## Intersect Twitch Plays Commands (so they are interrupted as well).
 ## Remove highlight on module when interrupted.
