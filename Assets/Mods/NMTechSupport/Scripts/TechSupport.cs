@@ -681,47 +681,47 @@ public class TechSupport : MonoBehaviour
 	#endregion
 
 
-	#region TwitchPlays
+	//#region TwitchPlays
 
-	public readonly string TwitchHelpMessage = "Press the Confirm button with \"!confirm\". " +
-		"Press the up button with \"!up\" followed by the number times you want to go up." +
-		"Press the down button with \"!down\" followed by the number of timers you want to go down.";
+	//public readonly string TwitchHelpMessage = "Press the Confirm button with \"!confirm\". " +
+	//	"Press the up button with \"!up\" followed by the number times you want to go up." +
+	//	"Press the down button with \"!down\" followed by the number of timers you want to go down.";
 
-	public IEnumerator ProcessTwitchCommand(string command)
-	{
-		command = command.ToLowerInvariant().Trim();
-		string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+	//public IEnumerator ProcessTwitchCommand(string command)
+	//{
+	//	command = command.ToLowerInvariant().Trim();
+	//	string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-		if (split[0] == "confirm")
-		{
-			OnOKClicked();
-			yield return new WaitForEndOfFrame();
-		}
-		else if (split[0] == "up")
-		{
-			int i;
-			if(int.TryParse(split[1], out i) && i > 0 && i < 10)
-			{
-				for (; i > 0; i--)
-				{
-					OnUpClicked();
-					yield return new WaitForSeconds(0.1f);
-				}
-			}
-		}
-		else if (split[0] == "down")
-		{
-			int i;
-			if (int.TryParse(split[1], out i) && i > 0 && i < 10)
-			{
-				for (; i > 0; i--)
-				{
-					OnDownClicked();
-					yield return new WaitForSeconds(0.1f);
-				}
-			}
-		}
-	}
+	//	if (split[0] == "confirm")
+	//	{
+	//		OnOKClicked();
+	//		yield return new WaitForEndOfFrame();
+	//	}
+	//	else if (split[0] == "up")
+	//	{
+	//		int i;
+	//		if(int.TryParse(split[1], out i) && i > 0 && i < 10)
+	//		{
+	//			for (; i > 0; i--)
+	//			{
+	//				OnUpClicked();
+	//				yield return new WaitForSeconds(0.1f);
+	//			}
+	//		}
+	//	}
+	//	else if (split[0] == "down")
+	//	{
+	//		int i;
+	//		if (int.TryParse(split[1], out i) && i > 0 && i < 10)
+	//		{
+	//			for (; i > 0; i--)
+	//			{
+	//				OnDownClicked();
+	//				yield return new WaitForSeconds(0.1f);
+	//			}
+	//		}
+	//	}
+	//}
 
-	#endregion
+	//#endregion
 }
