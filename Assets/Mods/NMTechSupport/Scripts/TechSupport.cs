@@ -15,6 +15,7 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private bool forceVersionCorrect = false;
 	[SerializeField] private bool forcePatchFileCorrect = false;
 	[SerializeField] private bool forceParametersCorrect = false;
+	[SerializeField] private bool forceNoInterruptableModule = false;
 
 	[Header("References")]
 	[SerializeField] private TextAsset backUpIgnoreList;
@@ -27,7 +28,7 @@ public class TechSupport : MonoBehaviour
 
 	[Header("Settings")]
 	[SerializeField] private int rebootDuration;
-	[SerializeField] private TechSupportData.RuleParameters parameters;
+	[SerializeField] private RuleParameters parameters;
 
 	[Header("Text")]
 	[SerializeField] private string errorFormat;
@@ -55,11 +56,10 @@ public class TechSupport : MonoBehaviour
 	private KMNeedyModule needyModule;
 	private KMAudio bombAudio;
 	private TechSupportData data;
-	private MonoRandom monoRandom;
 
 	// Respectively: module, selectable, passed light, error light.
 	private List<InterruptableModule> interruptableModules;
-	private int interrupted;
+	private int interrupted = -1;
 	private KMSelectable.OnInteractHandler interruptedInteractHandler;
 	private ErrorData errorData;
 
@@ -101,6 +101,8 @@ public class TechSupport : MonoBehaviour
 
 	private IEnumerator DelayedStart()
 	{
+		yield return new WaitForEndOfFrame();
+
 		TechSupportService mysteryKeyService = GetComponent<TechSupportService>();
 
 		while (!mysteryKeyService.SettingsLoaded)
@@ -129,19 +131,19 @@ public class TechSupport : MonoBehaviour
 				// Ignored modules are ignored.
 				if (mustNotBeHidden || isIgnored)
 				{
-					TechSupportLog.LogFormat("Ignored module {0} - Must Not Be Hidden: {1}; Is Ignored {2}", 
-						bombModule.ModuleDisplayName, 
-						mustNotBeHidden, 
+					TechSupportLog.LogFormat("Ignored module {0} - Must Not Be Hidden: {1}; Is Ignored {2}",
+						bombModule.ModuleDisplayName,
+						mustNotBeHidden,
 						isIgnored);
 					continue;
 				}
 
 				// Collects the module's KMSelectable.
 				KMSelectable selectable = bombModule.GetComponent<KMSelectable>();
-
 				GameObject passLight = TransformUtilities.FindChildIn(bombModule.transform, "Component_LED_PASS").gameObject;
 				Transform statusLight = passLight.transform.parent;
 				GameObject strikeLight = TransformUtilities.FindChildIn(statusLight, "Component_LED_STRIKE").gameObject;
+				GameObject offLight = TransformUtilities.FindChildIn(statusLight, "Component_LED_OFF").gameObject;
 				GameObject errorLight = Instantiate(
 					errorLightPrefab,
 					statusLight.position,
@@ -150,8 +152,8 @@ public class TechSupport : MonoBehaviour
 				errorLight.SetActive(false);
 
 				// Stores the acquired data.
-				InterruptableModule interruptableModule = new InterruptableModule(bombModule, selectable, passLight, strikeLight, errorLight);
-				
+				InterruptableModule interruptableModule = new InterruptableModule(bombModule, selectable, passLight, strikeLight, errorLight, offLight);
+
 				interruptableModules.Add(interruptableModule);
 			}
 			catch (Exception exception)
@@ -167,6 +169,24 @@ public class TechSupport : MonoBehaviour
 		TechSupportLog.LogFormat("Loaded total of {0} interruptable modules", interruptableModules.Count);
 	}
 
+	private void Update()
+	{
+		if (interrupted > -1)
+		{
+			TestInterruptedModuleCompleted();
+		}
+	}
+
+	private void TestInterruptedModuleCompleted()
+	{
+		// ensures that when the passlight does turn on for some reason, 
+		// the error light is turned off.
+		InterruptableModule module = interruptableModules[interrupted];
+		if (module.PassLight.activeSelf)
+		{
+			module.ErrorLight.SetActive(false);
+		}
+	}
 
 	#region NeedyModuleHooks
 
@@ -188,7 +208,7 @@ public class TechSupport : MonoBehaviour
 
 		// The module can no longer reset when too little time is left.
 		float bombTime = bombInfo.GetTime();
-		if (bombTime >= needyModule.CountdownTime)
+		if (bombTime >= needyModule.CountdownTime && !forceNoInterruptableModule)
 		{
 			InterruptableModule[] potentials = new InterruptableModule[interruptableModules.Count];
 			interruptableModules.CopyTo(potentials);
@@ -463,10 +483,6 @@ public class TechSupport : MonoBehaviour
 
 			if (selectedOption == correctParameter || forceParametersCorrect)
 			{
-				ReactivateInterruptedModule();
-				moduleResolved = true;
-				console.Show(correctSelectionMessage);
-
 				if (errorData.ModuleName == null)
 				{
 					console.Show(exceptionWithoutModuleResolvedMessage);
@@ -477,6 +493,10 @@ public class TechSupport : MonoBehaviour
 					string message = string.Format(moduleReleasedFormat, module.BombModule.ModuleDisplayName);
 					console.Show(message);
 				}
+
+				ReactivateInterruptedModule();
+				moduleResolved = true;
+				console.Show(correctSelectionMessage);
 			}
 			else
 			{
@@ -546,30 +566,27 @@ public class TechSupport : MonoBehaviour
 
 	private void ReactivateInterruptedModule()
 	{
-		if (errorData.ModuleName == null)
+		onSelected = null;
+
+		if (interrupted == -1 || 
+			errorData.ModuleName == null)
 		{
 			return;
 		}
 
 		InterruptableModule module = interruptableModules[interrupted];
-
-		onSelected = null;
+		interrupted = -1;
 
 		// Enables interrupted module.
 		module.Selectable.OnInteract = interruptedInteractHandler;
 		Transform parent = module.PassLight.transform.parent;
-		int childCount = parent.childCount;
-		for (int i = 0; i < childCount; i++)
+
+		module.ErrorLight.SetActive(false); 
+
+		if (!module.PassLight.activeSelf)
 		{
-			Transform child = parent.GetChild(i);
-			if (child.name == "Component_LED_OFF")
-			{
-				child.gameObject.SetActive(true);
-			}
-			else
-			{
-				child.gameObject.SetActive(false);
-			}
+			module.OffLight.SetActive(true);
+			module.StrikeLight.SetActive(false);
 		}
 	}
 

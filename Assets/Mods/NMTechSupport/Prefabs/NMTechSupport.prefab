@@ -586,6 +586,7 @@ GameObject:
   - component: {fileID: 114024775540105756}
   - component: {fileID: 114532234587176212}
   - component: {fileID: 114611826183849894}
+  - component: {fileID: 114171708983827168}
   - component: {fileID: 114009864943838186}
   m_Layer: 0
   m_Name: NMTechSupport
@@ -2838,6 +2839,7 @@ MonoBehaviour:
   forceVersionCorrect: 0
   forcePatchFileCorrect: 0
   forceParametersCorrect: 0
+  forceNoInterruptableModule: 0
   backUpIgnoreList: {fileID: 4900000, guid: 9b8b67730e7415c4caf8399d65b92124, type: 3}
   console: {fileID: 114011031761777226}
   errorLightPrefab: {fileID: 1947296581329806, guid: 9b38df0f99ca50a44996e25320314754,
@@ -2847,12 +2849,7 @@ MonoBehaviour:
   downButton: {fileID: 114509670444105892}
   screenOverlay: {fileID: 114175465940647964}
   rebootDuration: 10
-  parameters:
-    SourceFileCount: 16
-    ErrorCodeCount: 12
-    PatchFileCount: 8
-    VersionCount: 8
-    ParameterCount: 8
+  parameters: {fileID: 114171708983827168}
   errorFormat: '> Caught exception in module {0}. Source file {2} halted with message
     {1} at line {3}, column {4}. Additional information is required to resolve this
     issue.'
@@ -2934,11 +2931,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 114312906926775360}
-  Children:
-  - {fileID: 114393224101092080}
-  - {fileID: 114048042427949326}
-  - {fileID: 114109854831548390}
-  IsPassThrough: 1
+  Children: []
+  IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114870391429947270}
   SelectableColliders:
@@ -2989,11 +2983,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 114312906926775360}
-  Children:
-  - {fileID: 114393224101092080}
-  - {fileID: 114048042427949326}
-  - {fileID: 114109854831548390}
-  IsPassThrough: 1
+  Children: []
+  IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114403383554423394}
   SelectableColliders:
@@ -3069,6 +3060,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114171708983827168
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1565616158909610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130af3f09514d444a94cb8ba5e88b3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SourceFileCount: 16
+  ErrorCodeCount: 12
+  PatchFileCount: 8
+  VersionCount: 8
+  ParameterCount: 8
 --- !u!114 &114175465940647964
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3140,7 +3147,7 @@ MonoBehaviour:
   - {fileID: 114393224101092080}
   - {fileID: 114048042427949326}
   - {fileID: 114109854831548390}
-  IsPassThrough: 0
+  IsPassThrough: 1
   ChildRowLength: 1
   Highlight: {fileID: 114306428772460078}
   SelectableColliders: []
@@ -3187,11 +3194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 114312906926775360}
-  Children:
-  - {fileID: 114393224101092080}
-  - {fileID: 114048042427949326}
-  - {fileID: 114109854831548390}
-  IsPassThrough: 1
+  Children: []
+  IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114541993386638072}
   SelectableColliders:

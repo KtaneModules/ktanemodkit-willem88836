@@ -23,6 +23,6 @@ public class InteractableButton : MonoBehaviour
 			onClick.Invoke();
 		}
 
-		return true;
+		return false;
 	}
 }

@@ -19,18 +19,18 @@
 ## [Done] Use .svg image in manual.
 ## [Done] Json description should be more concise and have tags. 
 ## [Done] Bug: TwitchPlays doesn't work well, therefore is disabled.
-## Bug: Clickthrough bug making the mod basically unplayable.
 ## [Done] Bug: Crucial report-information is no longer readable when you enter a wrong answer.
-## Bug: Yellow status light can be on when the green one is too. 
-## Bug: Yellow and green status light can disappear together, leaving no status light. 
+## [Done] Bug: Yellow status light can be on when the green one is too. 
+## [Done] Bug: Yellow and green status light can disappear together, leaving no status light. 
 
 
 #### Addtitions for version 1.3 ####
 
+## Bug: The highlight of buttons isn't truly on the buttons, but next to it. 
+## Bug: Clickthrough bug making the mod basically unplayable.
 ## Support vanilla module interruption.
 ## Intersect Twitch Plays Commands (so they are interrupted as well).
 ## Remove highlight on module when interrupted.
 ## Look at custom KMNeedy interrupt intervals
 ## Implement KMSeedable.
-## Bug: The highlight of buttons isn't truly on the buttons, but next to it. 
 
