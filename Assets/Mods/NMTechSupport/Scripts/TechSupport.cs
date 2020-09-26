@@ -307,10 +307,7 @@ public class TechSupport : MonoBehaviour
 			}
 			else
 			{
-				TechSupportLog.Log("STRIKE: Wrong software version.");
-				needyModule.HandleStrike();
-				console.Show(incorrectSelectionMessage);
-				StartVersionSelection();
+				OnIncorrectOptionSelected("Wrong software version", StartVersionSelection);
 			}
 		};
 	}
@@ -342,10 +339,7 @@ public class TechSupport : MonoBehaviour
 			}
 			else
 			{
-				TechSupportLog.Log("STRIKE: Wrong patch file.");
-				needyModule.HandleStrike();
-				console.Show(incorrectSelectionMessage);
-				StartPatchFileSelection();
+				OnIncorrectOptionSelected("Wrong patch file", StartPatchFileSelection);
 			}
 		};
 	}
@@ -484,10 +478,7 @@ public class TechSupport : MonoBehaviour
 			}
 			else
 			{
-				TechSupportLog.Log("STRIKE: Wrong parameters.");
-				needyModule.HandleStrike();
-				console.Show(incorrectSelectionMessage);
-				StartParametersSelection();
+				OnIncorrectOptionSelected("Wrong parameters", StartParametersSelection);
 			}
 		};
 	}
@@ -524,6 +515,14 @@ public class TechSupport : MonoBehaviour
 		x %= TechSupportData.Parameters.Length;
 
 		return x;
+	}
+
+	private void OnIncorrectOptionSelected(string message, Action state)
+	{
+		TechSupportLog.Log("STRIKE: " + message);
+		needyModule.HandleStrike();
+		console.Show(incorrectSelectionMessage);
+		state.Invoke();
 	}
 
 	#endregion
