@@ -46,6 +46,8 @@ public class TechSupport : MonoBehaviour
 	[SerializeField] private string rebootCompletedMessage;
 	[SerializeField] private string[] exceptionWithoutModuleMessages;
 	[SerializeField] private string exceptionWithoutModuleResolvedMessage;
+	[SerializeField] private string showParametersAgainMessage;
+	[SerializeField] private string[] showParametersAgainOptions;
 
 
 	private KMBombInfo bombInfo;
@@ -522,7 +524,19 @@ public class TechSupport : MonoBehaviour
 		TechSupportLog.Log("STRIKE: " + message);
 		needyModule.HandleStrike();
 		console.Show(incorrectSelectionMessage);
-		state.Invoke();
+
+		ShowOptions(showParametersAgainOptions, showParametersAgainMessage);
+		onSelected = delegate
+		{
+			if (selectedOption == 1)
+			{
+				// Prompt exception message again.
+				string exceptionMessage = string.Format(errorFormat, errorData.ModuleName, errorData.Error, errorData.SourceFile, errorData.LineIndex, errorData.ColumnIndex);
+				console.Show(exceptionMessage);
+			}
+
+			state.Invoke();
+		};
 	}
 
 	#endregion

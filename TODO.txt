@@ -21,7 +21,7 @@
 ## [Done] Bug: TwitchPlays doesn't work well, therefore is disabled.
 ## Bug: Clickthrough bug making the mod basically unplayable.
 ## Bug: The highlight of buttons isn't truly on the buttons, but next to it. 
-## Bug: Crucial report-information is no longer readable when you enter a wrong answer.
+## [Done] Bug: Crucial report-information is no longer readable when you enter a wrong answer.
 ## Bug: Yellow status light can be on when the green one is too. 
 ## Bug: Yellow and green status light can disappear together, leaving no status light. 
 

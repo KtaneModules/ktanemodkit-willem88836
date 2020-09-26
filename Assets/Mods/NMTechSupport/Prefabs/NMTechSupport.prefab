@@ -2877,6 +2877,10 @@ MonoBehaviour:
   - '> Caught exception in moduleinterfacer. Source file {1} halted with message {0}
     at line {2}, column {3}. Additional information is required to resolve this issue.'
   exceptionWithoutModuleResolvedMessage: '> Exception resolved. '
+  showParametersAgainMessage: '> Reshow Exception Message?'
+  showParametersAgainOptions:
+  - No
+  - Yes
 --- !u!114 &114011031761777226
 MonoBehaviour:
   m_ObjectHideFlags: 1
