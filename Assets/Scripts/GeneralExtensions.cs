@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using UnityEngine;
-// ReSharper disable UnusedMember.Global
 
 public static class GeneralExtensions
 {

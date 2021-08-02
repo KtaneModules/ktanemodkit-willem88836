@@ -1128,13 +1128,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1125570866853544}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0292, y: 0.01155, z: -0.00118}
+  m_LocalRotation: {x: -0, y: 0.28756636, z: -0, w: 0.95776075}
+  m_LocalPosition: {x: -0.029200003, y: 0.011549999, z: -0.00118}
   m_LocalScale: {x: 0.05, y: 0.05000002, z: 0.05000002}
   m_Children: []
   m_Father: {fileID: 4551433505772826}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 33.425003, z: 0}
 --- !u!4 &4360719268619288
 Transform:
   m_ObjectHideFlags: 1
@@ -1340,13 +1340,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1418787842036870}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0292, y: 0.01155, z: -0.04501}
+  m_LocalRotation: {x: -0, y: 0.32382122, z: -0, w: 0.9461183}
+  m_LocalPosition: {x: -0.029200003, y: 0.011549999, z: -0.04501}
   m_LocalScale: {x: 0.05, y: 0.05000002, z: 0.05000002}
   m_Children: []
   m_Father: {fileID: 4551433505772826}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 37.788002, z: 0}
 --- !u!4 &4654062018803948
 Transform:
   m_ObjectHideFlags: 1
@@ -1366,13 +1366,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1391749873171028}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00269, y: 0.01155, z: -0.00118}
+  m_LocalRotation: {x: -0, y: -0.09425366, z: -0, w: 0.9955483}
+  m_LocalPosition: {x: -0.0026900023, y: 0.011549999, z: -0.00118}
   m_LocalScale: {x: 0.05, y: 0.05000002, z: 0.05000002}
   m_Children: []
   m_Father: {fileID: 4551433505772826}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -10.817, z: 0}
 --- !u!4 &4697329979534940
 Transform:
   m_ObjectHideFlags: 1
@@ -2836,10 +2836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14190d8e444a4348a8fff17595318d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceVersionCorrect: 0
-  forcePatchFileCorrect: 0
-  forceParametersCorrect: 0
-  forceNoInterruptableModule: 0
   backUpIgnoreList: {fileID: 4900000, guid: 9b8b67730e7415c4caf8399d65b92124, type: 3}
   console: {fileID: 114011031761777226}
   errorLightPrefab: {fileID: 1947296581329806, guid: 9b38df0f99ca50a44996e25320314754,
@@ -2857,11 +2853,9 @@ MonoBehaviour:
   unselectedOptionFormat: '   {0}'
   optionConfirmedFormat: '> {0}'
   moduleReleasedFormat: '> Exception resolved, Module {0} is fully operational again.'
+  makeSelectionMessageFormat: 'Select {0}:'
   startMessage: '> Loaded System {0}.'
   startMessageExtended: '> Located {0} unstable modules.'
-  selectVersionMessage: '> Select software version: '
-  selectPatchFileMessage: '> Select patch file: '
-  selectParametersMessage: '> Select launch parameters: '
   incorrectSelectionMessage: '> Incorrect selection.'
   correctSelectionMessage: '> Correct selection.'
   timerExpiredMessage: '> Exception was not handled in time.'
@@ -2881,9 +2875,6 @@ MonoBehaviour:
     at line {2}, column {3}. Additional information is required to resolve this issue.'
   exceptionWithoutModuleResolvedMessage: '> Exception resolved. '
   showParametersAgainMessage: '> Reshow Exception Message?'
-  showParametersAgainOptions:
-  - No
-  - Yes
 --- !u!114 &114011031761777226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3298,13 +3289,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946bc3f4690d36e4fa08473fa24a0f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modulePrefixes: {fileID: 4900000, guid: a5d18567ddd6ce54891733fa44e1b2f8, type: 3}
+  moduleSuffixes: {fileID: 4900000, guid: ac368b203e2b3684fad7006a01d55424, type: 3}
   extentionEntryCount: 657
   extentionLength: 4
   extentions: {fileID: 4900000, guid: 0ba8cbafab84ecd499e506ca0988ce6e, type: 3}
   moduleEntryCount: 58112
   moduleLength: 6
-  modulePrefixes: {fileID: 4900000, guid: a5d18567ddd6ce54891733fa44e1b2f8, type: 3}
-  moduleSuffixes: {fileID: 4900000, guid: ac368b203e2b3684fad7006a01d55424, type: 3}
 --- !u!114 &114536551060966724
 MonoBehaviour:
   m_ObjectHideFlags: 1

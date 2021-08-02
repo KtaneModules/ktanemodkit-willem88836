@@ -35,7 +35,7 @@ public class SceneSerializer : MonoBehaviour
 
 		output += obj.name;
 
-		TechSupportLog.Log(output);
+		UnityEngine.Debug.Log(output);
 
 		output = "";
 
@@ -48,7 +48,7 @@ public class SceneSerializer : MonoBehaviour
 				output += "\t";
 			}
 			output += " [c] " + c.GetType().ToString();
-			TechSupportLog.Log(output);
+			UnityEngine.Debug.Log(output);
 		}
 
 
