@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: TechSupport
+  title: Tech Support
+  author: Willem Meijer
+  description: "[i]Have you tried turning it off and on again?[/i]\n\n[b]About[/b]\nTech
+    Support is a semi-needy module that occasionally interrupts you, however, also
+    requires you cooperate with your professional.\nIncidentally, one of the bomb's
+    other modules will break down, rendering it completely inoperable, and an error
+    message is shown. \nIt is your task to resolve this issue before the timer runs
+    out. \n\n[b]Other Info[/b]\nModule Type is \"TechSupport\".\nThe manual and appendix
+    are included in this download and also can be downloaded at Timwi's webpage.\nThis
+    mod uses KMBossModule, so your mods can be ignored by it.\nIf you run into any
+    issues, please add a comment or place a message in the KTaNE modding Discord Server.
+    \n\n[b]Special Thanks[/b]\nThanks Itachi/Goofy for allowing me to use the Mystery
+    Module source code. "
+  version: 1.3
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: e480a79a79fa80943a4592a3e0573a62, type: 3}

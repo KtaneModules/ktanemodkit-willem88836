@@ -1,0 +1,13 @@
+{
+  "Author": "Willem Meijer",
+  "Compatibility": "Compatible",
+  "Description": "Appendix document explaining various binary boolean operations.",
+  "ModuleID": null,
+  "Name": "Boolean Operations",
+  "Origin": "Mods",
+  "Published": "2020-08-17",
+  "SortKey": "BOOLEANOPERATIONS",
+  "SourceUrl": "https://github.com/willem88836/ktanemodkit",
+  "SteamID": null,
+  "Type": "Widget"
+}
