@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace RMMondrian
 {
 	[RequireComponent(typeof(KMBombModule))]
 	public class RMMondrian : MonoBehaviour
 	{
-		[SerializeField] private ScreenSwap screenSwap;
+		[SerializeField] private KMAudio audioSource;
 		[SerializeField] private Canvas mondrianCanvas;
-
-		[SerializeField] private Transform goalTileParent;
-		[SerializeField] private GameObject goalTile;
-		[SerializeField] private Transform puzzleTileParent;
-		[SerializeField] private GameObject puzzleTile;
+		[SerializeField] private GameObjectCache goalTiles;
+		[SerializeField] private GameObjectCache puzzleTiles;
 
 		[Space]
-		[SerializeField] private Image colorDisplay; 
+		[SerializeField] private SpriteRenderer colorDisplay;
+		[SerializeField] private TextMesh clicksLeft;
+
 
 		[Space]
 		[SerializeField] private int resolution; 
@@ -27,14 +24,19 @@ namespace RMMondrian
 		[SerializeField] private Color32[] colors;
 
 		private KMBombModule bombModule;
-		private int currentColor; 
+		private int currentColor;
+		private List<MondrianTile> activeTiles;
+		private int clickCount;
+		private bool passed = false;
 
 
 		public void Start()
         {
 			bombModule = GetComponent<KMBombModule>();
-			List<MondrianTile> tiles = GenerateMondrian();
-			PaintMondrian(tiles);
+			activeTiles = GenerateMondrian();
+			PaintMondrian(activeTiles);
+			DisableUnusedTiles();
+			Debug.Log("[Mondrian] Spawned (" + activeTiles.Count + ") tiles.");
         }
 
 		private List<MondrianTile> GenerateMondrian()
@@ -47,7 +49,7 @@ namespace RMMondrian
 
 			List<MondrianTile> tiles = new List<MondrianTile>();
 			Queue<MondrianTile> work = new Queue<MondrianTile>();
-			work.Enqueue(new MondrianTile());
+			work.Enqueue(puzzleTiles.GetNext().GetComponent<MondrianTile>());
 
 			while(work.Count > 0)
             {
@@ -67,7 +69,10 @@ namespace RMMondrian
                 }
 
 				if (maxZ == 0 || maxW == 0)
+                {
+					puzzleTiles.GiveBack(tile.gameObject);
 					continue;
+                }
 
 				// generates tile width and height
 				tile.Width = Random.Range(1, Mathf.Min(maxZ, maxTileWidth));
@@ -85,45 +90,35 @@ namespace RMMondrian
 
 				// adds tile. 
 				tiles.Add(tile);
-				InstantiateTiles(tile, columns, rows);
+				tile.Instantiate(columns, rows, goalTiles.GetNext());
 
 				// adds new work
 				if (tile.CoordinateX + tile.Width < columns && tile.Width != maxZ)
-					work.Enqueue(new MondrianTile(tile.CoordinateX + tile.Width, tile.CoordinateY, 0, 0));
+				{
+					MondrianTile taskTile = puzzleTiles.GetNext().GetComponent<MondrianTile>();
+					taskTile.CoordinateX = tile.CoordinateX + tile.Width;
+					taskTile.CoordinateY = tile.CoordinateY;
+					work.Enqueue(taskTile);
+                }
 
 				if (tile.CoordinateY + tile.Height < rows && tile.Height != maxW)
-					work.Enqueue(new MondrianTile(tile.CoordinateX, tile.CoordinateY + tile.Height, 0, 0));
+				{
+					MondrianTile taskTile = puzzleTiles.GetNext().GetComponent<MondrianTile>();
+					taskTile.CoordinateX = tile.CoordinateX;
+					taskTile.CoordinateY = tile.CoordinateY + tile.Height;
+					work.Enqueue(taskTile);
+				}
             }
 
 			return tiles;
         }
 
-		private void InstantiateTiles(MondrianTile tile, int columns, int rows)
-		{
-			Vector2 rectMin = new Vector2(tile.CoordinateX / (float)columns, tile.CoordinateY / (float)rows);
-			Vector2 rectMax = new Vector2((tile.CoordinateX + tile.Width) / (float)columns, (tile.CoordinateY + tile.Height) / (float)rows);
-
-			GameObject newPuzzleTile = Instantiate(puzzleTile, puzzleTileParent);
-			RectTransform prect = newPuzzleTile.GetComponent<RectTransform>();
-			prect.anchorMin = rectMin;
-			prect.anchorMax = rectMax;
-			newPuzzleTile.SetActive(true);
-			tile.PuzzleTile = newPuzzleTile.GetComponent<Image>();
-
-			GameObject newGoalTile = Instantiate(goalTile, goalTileParent);
-			RectTransform grect = newGoalTile.GetComponent<RectTransform>();
-			grect.anchorMin = rectMin;
-			grect.anchorMax = rectMax;
-			newGoalTile.SetActive(true);
-			tile.GoalTile = newGoalTile.GetComponent<Image>();
-		}
-
 		private bool AreNeighbours(MondrianTile tileA, MondrianTile tileB)
         {
-			return (tileA.CoordinateX + tileA.Width == tileB.CoordinateX && tileA.CoordinateY + tileA.Height >= tileB.CoordinateY && tileA.CoordinateY <= tileB.CoordinateY + tileB.Height)
-				|| (tileB.CoordinateX + tileB.Width == tileA.CoordinateX && tileB.CoordinateY + tileB.Height >= tileA.CoordinateY && tileB.CoordinateY <= tileA.CoordinateY + tileA.Height)
-				|| (tileA.CoordinateY + tileA.Height == tileB.CoordinateY && tileA.CoordinateX + tileA.Width >= tileB.CoordinateX && tileA.CoordinateX <= tileB.CoordinateX + tileB.Width)
-				|| (tileB.CoordinateY + tileB.Height == tileA.CoordinateY && tileB.CoordinateX + tileB.Width >= tileA.CoordinateX && tileB.CoordinateX <= tileA.CoordinateX + tileA.Width); 
+			return (tileA.CoordinateX + tileA.Width == tileB.CoordinateX && tileA.CoordinateY + tileA.Height > tileB.CoordinateY && tileA.CoordinateY < tileB.CoordinateY + tileB.Height)
+				|| (tileB.CoordinateX + tileB.Width == tileA.CoordinateX && tileB.CoordinateY + tileB.Height > tileA.CoordinateY && tileB.CoordinateY < tileA.CoordinateY + tileA.Height)
+				|| (tileA.CoordinateY + tileA.Height == tileB.CoordinateY && tileA.CoordinateX + tileA.Width > tileB.CoordinateX && tileA.CoordinateX < tileB.CoordinateX + tileB.Width)
+				|| (tileB.CoordinateY + tileB.Height == tileA.CoordinateY && tileB.CoordinateX + tileB.Width > tileA.CoordinateX && tileB.CoordinateX < tileA.CoordinateX + tileA.Width); 
 		}
 
 		private void PaintMondrian(List<MondrianTile> tiles)
@@ -142,20 +137,66 @@ namespace RMMondrian
 		}
 
 		public void PaintNext(MondrianTile tile)
-        {
+		{
+			if (passed)
+				return;
+
+			clickCount++;
 			tile.Click(colors, currentColor, false);
 			currentColor = (currentColor + 1) % colors.Length;
 			UpdateColorDisplay();
+			CheckCorrectness();
 		}
+
+		private void CheckCorrectness()
+        {
+			bool correct = true;
+			foreach(MondrianTile tile in activeTiles)
+            {
+				if (tile.Color != tile.GoalColor)
+                {
+					Debug.Log("[Mondrian] Not yet correct");
+					correct = false;
+					break;
+                }
+            }
+
+			if (clickCount >= clicks)
+            {
+				audioSource.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.LightBuzzShort, transform);
+			}
+			else if (correct)
+            {
+				Debug.Log("[Mondrian] Correct!");
+				passed = true;
+				bombModule.HandlePass();
+            }
+        }
 
 		private void UpdateColorDisplay()
         {
 			colorDisplay.color = colors[currentColor];
+			clicksLeft.text = (clicks - clickCount).ToString();
+		}
+
+		private void DisableUnusedTiles()
+        {
+			puzzleTiles.DisableUnused();
+			goalTiles.DisableUnused();
         }
 
 		public void ResetModule()
-        {
+		{
+			if (passed)
+				return;
 
+			bombModule.HandleStrike();
+			foreach(MondrianTile tile in activeTiles)
+				tile.ClearPuzzle();
+
+			clickCount = 0;
+
+			UpdateColorDisplay();
         }
 	}
 }
