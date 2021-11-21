@@ -407,7 +407,7 @@ public class TechSupport : MonoBehaviour
 			}
 		}
 
-		if(v >= c)
+		if (v >= c || errorData.ColumnIndex > errorData.LineIndex) 
 		{
 			return 4;
 		}
@@ -504,11 +504,12 @@ public class TechSupport : MonoBehaviour
 			}
 		};
 	}
+
 	private int CorrectParameter(ErrorData errorData)
 	{
 		// sum of the first three icons.
 		int a = 0;
-		for (int i = 2; i< 5; i++)
+		for (int i = 2; i < 5; i++)
 		{
 			char l = errorData.Error[i];
 			int k = "1234567890".IndexOf(l) >= 0
@@ -709,49 +710,4 @@ public class TechSupport : MonoBehaviour
 	}
 
 	#endregion
-
-
-	//#region TwitchPlays
-
-	//public readonly string TwitchHelpMessage = "Press the Confirm button with \"!confirm\". " +
-	//	"Press the up button with \"!up\" followed by the number times you want to go up." +
-	//	"Press the down button with \"!down\" followed by the number of timers you want to go down.";
-
-	//public IEnumerator ProcessTwitchCommand(string command)
-	//{
-	//	command = command.ToLowerInvariant().Trim();
-	//	string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-	//	if (split[0] == "confirm")
-	//	{
-	//		OnOKClicked();
-	//		yield return new WaitForEndOfFrame();
-	//	}
-	//	else if (split[0] == "up")
-	//	{
-	//		int i;
-	//		if(int.TryParse(split[1], out i) && i > 0 && i < 10)
-	//		{
-	//			for (; i > 0; i--)
-	//			{
-	//				OnUpClicked();
-	//				yield return new WaitForSeconds(0.1f);
-	//			}
-	//		}
-	//	}
-	//	else if (split[0] == "down")
-	//	{
-	//		int i;
-	//		if (int.TryParse(split[1], out i) && i > 0 && i < 10)
-	//		{
-	//			for (; i > 0; i--)
-	//			{
-	//				OnDownClicked();
-	//				yield return new WaitForSeconds(0.1f);
-	//			}
-	//		}
-	//	}
-	//}
-
-	//#endregion
 }
