@@ -10,15 +10,17 @@
 
 using System.Collections.Generic;
 
-public sealed class TechSupportSettings
-{
-    public string SiteUrl = @"https://ktane.timwi.de/json/raw";
+namespace wmeijer {
+    public sealed class TechSupportSettings
+    {
+        public string SiteUrl = @"https://ktane.timwi.de/json/raw";
 
-    public Dictionary<string, string> RememberedCompatibilities = new Dictionary<string, string>();
+        public Dictionary<string, string> RememberedCompatibilities = new Dictionary<string, string>();
 
-    public bool HideUberSouvenir = false;
+        public bool HideUberSouvenir = false;
 
-    public bool AutomaticUpdate = true;
+        public bool AutomaticUpdate = true;
 
-    public int Version = 3;
+        public int Version = 3;
+    }
 }
