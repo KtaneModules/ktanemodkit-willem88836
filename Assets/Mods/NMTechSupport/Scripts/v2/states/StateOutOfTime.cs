@@ -4,7 +4,7 @@ using IEnumerator = System.Collections.IEnumerator;
 public sealed class StateOutOfTime : MonoBehaviour, IState
 {
     [SerializeField] private KMNeedyModule needyModule;
-    [SerializeField] private VirtualConsole console; 
+    [SerializeField] private VirtualConsole console;
 
     [Space]
     [SerializeField] private string messageStart;
@@ -19,11 +19,11 @@ public sealed class StateOutOfTime : MonoBehaviour, IState
         this.controller = controller;
         TechSupportLog.Log("STRIKE: Out of time.");
         needyModule.HandleStrike();
-        console.WriteMessage(messageStart);
         rebootRoutine = StartCoroutine(Reboot());
     }
 
-    private IEnumerator Reboot() {
+    private IEnumerator Reboot()
+    {
         console.WriteMessage(messageStart);
         yield return new WaitForSeconds(rebootTime);
         console.WriteMessage(messageComplete);
@@ -32,7 +32,8 @@ public sealed class StateOutOfTime : MonoBehaviour, IState
 
     public void Terminate()
     {
-        if (rebootRoutine != null) {
+        if (rebootRoutine != null)
+        {
             StopCoroutine(rebootRoutine);
             rebootRoutine = null;
         }

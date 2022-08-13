@@ -30,7 +30,7 @@ public class TechSupportData : MonoBehaviour
     [NonSerialized] private string moduleSuffixtext;
     private MonoRandom monoRandom;
 
-    private void Start() 
+    private void Start()
     {
         // TODO: add KMSeedable stuff here.
         parameters.Random = new MonoRandom(0);

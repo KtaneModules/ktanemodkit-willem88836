@@ -28,26 +28,27 @@ public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
         buttonPublisher.Unsubscribe(this);
     }
 
-    public virtual void OnOkButtonClicked() 
+    public virtual void OnOkButtonClicked()
     {
         string[] optionStrings = GetOptionStrings();
-        int selectedIndex = console.GetCurrentOption(); 
+        int selectedIndex = console.GetCurrentOption();
         string selectedOption = optionStrings[selectedIndex];
         console.WriteMessage(selectedOption);
         int correctIndex = GetCorrectOption(this.globalState);
         string correctOption = optionStrings[correctIndex];
         TechSupportLog.LogFormat("Selected answer: \"{0}\", Correct answer: \"{1}\"", selectedOption, correctOption);
-        if (selectedIndex == correctIndex) {
+        if (selectedIndex == correctIndex)
+        {
             console.WriteMessage(correctAnswerMessage);
             controller.SetState(GetNextState());
         }
-        else 
+        else
         {
             needyModule.HandleStrike();
             TechSupportLog.Log("STRIKE: Incorrect answer");
             console.WriteMessage(incorrectAnswerMessage);
             console.WriteMessage(globalState.GetErrorData().Message);
-            console.WriteMessage(message); 
+            console.WriteMessage(message);
             console.Refresh();
         }
     }
@@ -59,7 +60,7 @@ public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
     public virtual void OnDownButtonClicked()
     {
     }
-    
+
     protected abstract string[] GetOptionStrings();
 
     protected abstract int GetCorrectOption(GlobalState globalState);

@@ -1,4 +1,4 @@
-using UnityEngine; 
+using UnityEngine;
 
 public sealed class StateErrorInitialize : MonoBehaviour, IState
 {
@@ -7,10 +7,10 @@ public sealed class StateErrorInitialize : MonoBehaviour, IState
     [SerializeField] private KMAudio bombAudio;
     [SerializeField] private TechSupportData techSupportData;
     [SerializeField] private VirtualConsole console;
-    
+
     [Space]
     [SerializeField] private float minimumTimeFactor;
-    [SerializeField] private string errorFormat; 
+    [SerializeField] private string errorFormat;
     [SerializeField] private string[] errorFormatsNoModule;
     [SerializeField] private string startMessage;
 
@@ -20,21 +20,23 @@ public sealed class StateErrorInitialize : MonoBehaviour, IState
             ? SelectModule(globalState.GetModules()) : -1;
         globalState.SetInterruptedModuleIndex(moduleIndex);
         ErrorData errorData = null;
-        if (moduleIndex >= 0) {
+        if (moduleIndex >= 0)
+        {
             InterruptableModule module = globalState.GetInterruptedModule();
             errorData = techSupportData.GenerateError(module.BombModule.ModuleDisplayName);
             CreateErrorWithModule(module);
             errorData.Message = string.Format(
-                errorFormat, module.BombModule.ModuleDisplayName, 
-                errorData.Error, errorData.SourceFile, 
+                errorFormat, module.BombModule.ModuleDisplayName,
+                errorData.Error, errorData.SourceFile,
                 errorData.LineIndex, errorData.ColumnIndex);
         }
-        else {
+        else
+        {
             TechSupportLog.Log("Throwing error without module.");
             errorData = techSupportData.GenerateError(null);
             errorData.Message = string.Format(
-                errorFormatsNoModule.PickRandom(), errorData.Error, 
-                errorData.SourceFile, errorData.LineIndex, 
+                errorFormatsNoModule.PickRandom(), errorData.Error,
+                errorData.SourceFile, errorData.LineIndex,
                 errorData.ColumnIndex
             );
         }
@@ -44,11 +46,13 @@ public sealed class StateErrorInitialize : MonoBehaviour, IState
         controller.SetState(typeof(StateVersionSelection));
     }
 
-    private int SelectModule(InterruptableModule[] modules) {
-        foreach(InterruptableModule module in modules.Shuffle()) {
-            if (!module.PassLight.activeSelf 
-                && !module.StrikeLight.activeSelf 
-                && !module.ErrorLight.activeSelf 
+    private int SelectModule(InterruptableModule[] modules)
+    {
+        foreach (InterruptableModule module in modules.Shuffle())
+        {
+            if (!module.PassLight.activeSelf
+                && !module.StrikeLight.activeSelf
+                && !module.ErrorLight.activeSelf
                 && !module.IsFocussed)
             {
                 return System.Array.IndexOf(modules, module);
@@ -57,10 +61,12 @@ public sealed class StateErrorInitialize : MonoBehaviour, IState
         return -1;
     }
 
-    private void CreateErrorWithModule(InterruptableModule module) {
+    private void CreateErrorWithModule(InterruptableModule module)
+    {
         module.OffLight.SetActive(false);
         module.ErrorLight.SetActive(true);
-        module.Selectable.OnInteract += new KMSelectable.OnInteractHandler(delegate {
+        module.Selectable.OnInteract += new KMSelectable.OnInteractHandler(delegate
+        {
             bombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.NeedyActivated, module.BombModule.transform);
             return false;
         });

@@ -1,6 +1,7 @@
 using System;
 
-public sealed class StatePatchFileSelection : StateSelection {
+public sealed class StatePatchFileSelection : StateSelection
+{
     public override void Initialize(TechSupportController controller, GlobalState globalState)
     {
         base.Initialize(controller, globalState);
@@ -32,7 +33,7 @@ public sealed class StatePatchFileSelection : StateSelection {
         //Otherwise, if the source file's number of vowels is equal to or greater than the number of consonants, or the column index is higher than the line index, select faee.sup.
         int v = 0;
         int c = 0;
-        foreach(char l in errorData.SourceFile)
+        foreach (char l in errorData.SourceFile)
         {
             if (l == '.')
             {
@@ -51,20 +52,20 @@ public sealed class StatePatchFileSelection : StateSelection {
             }
         }
 
-        if (v >= c || errorData.ColumnIndex > errorData.LineIndex) 
+        if (v >= c || errorData.ColumnIndex > errorData.LineIndex)
         {
             return 4;
         }
 
         //Otherwise, if the source file's first letter is in the last third of the alphabet, select prle.cba.
-        if(StringManipulation.AlphabetToIntPlusOne(errorData.SourceFile[0]) 
+        if (StringManipulation.AlphabetToIntPlusOne(errorData.SourceFile[0])
             >= 26f / 3f * 2f)
         {
             return 0;
         }
 
         //Otherwise, if the less than 99 seconds is still available and the column is higher than 75, select linion.dart.
-        if (needyModule.GetNeedyTimeRemaining() < 99f 
+        if (needyModule.GetNeedyTimeRemaining() < 99f
             && errorData.ColumnIndex > 75)
         {
             return 7;

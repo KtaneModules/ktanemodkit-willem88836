@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public sealed class StateCompleteModule : MonoBehaviour, IState {
+public sealed class StateCompleteModule : MonoBehaviour, IState
+{
     [SerializeField] private KMNeedyModule needyModule;
     [SerializeField] private VirtualConsole console;
 
     [SerializeField] private string message;
 
-    public void Initialize(TechSupportController controller, GlobalState globalState) {
+    public void Initialize(TechSupportController controller, GlobalState globalState)
+    {
         InterruptableModule interrupted = globalState.GetInterruptedModule();
         globalState.SetInterruptedModuleIndex(-1);
         globalState.SetErrorData(null);
@@ -18,9 +20,12 @@ public sealed class StateCompleteModule : MonoBehaviour, IState {
         controller.SetState(typeof(StateIdle));
     }
 
-    private void RemoveModListener(InterruptableModule interrupted) {
-        foreach(var listener in interrupted.Selectable.OnInteract.GetInvocationList()) {
-            if (listener.Target.ToString().Contains("StateErrorInitialize")) {
+    private void RemoveModListener(InterruptableModule interrupted)
+    {
+        foreach (var listener in interrupted.Selectable.OnInteract.GetInvocationList())
+        {
+            if (listener.Target.ToString().Contains("StateErrorInitialize"))
+            {
                 interrupted.Selectable.OnInteract -= (KMSelectable.OnInteractHandler)listener;
                 TechSupportLog.Log("Removed OnInterract Listener.");
                 return;
@@ -29,8 +34,9 @@ public sealed class StateCompleteModule : MonoBehaviour, IState {
         }
     }
 
-    private void ResetModuleLights(InterruptableModule interrupted) {
-        interrupted.ErrorLight.SetActive(false); 
+    private void ResetModuleLights(InterruptableModule interrupted)
+    {
+        interrupted.ErrorLight.SetActive(false);
         if (!interrupted.PassLight.activeSelf)
         {
             interrupted.OffLight.SetActive(true);
@@ -38,7 +44,8 @@ public sealed class StateCompleteModule : MonoBehaviour, IState {
         }
     }
 
-    public void Terminate() {
+    public void Terminate()
+    {
         // unused
     }
 }

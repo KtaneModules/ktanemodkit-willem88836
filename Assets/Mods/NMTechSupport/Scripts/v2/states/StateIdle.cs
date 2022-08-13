@@ -1,4 +1,4 @@
-using UnityEngine; 
+using UnityEngine;
 
 public sealed class StateIdle : MonoBehaviour, IState
 {
@@ -7,7 +7,8 @@ public sealed class StateIdle : MonoBehaviour, IState
         // unused
     }
 
-    public void Terminate() { 
+    public void Terminate()
+    {
         // unused
     }
 }

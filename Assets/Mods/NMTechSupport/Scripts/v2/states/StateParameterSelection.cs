@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-public sealed class StateParameterSelection : StateSelection {
+public sealed class StateParameterSelection : StateSelection
+{
 
     public override void Initialize(TechSupportController controller, GlobalState globalState)
     {

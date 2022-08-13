@@ -12,10 +12,10 @@ public sealed class InterruptableModule
     public bool IsFocussed { get; private set; }
 
     public InterruptableModule(
-        KMBombModule bombModule, 
-        KMSelectable selectable, 
-        GameObject passLight, 
-        GameObject strikeLight, 
+        KMBombModule bombModule,
+        KMSelectable selectable,
+        GameObject passLight,
+        GameObject strikeLight,
         GameObject errorLight,
         GameObject offLight)
     {
