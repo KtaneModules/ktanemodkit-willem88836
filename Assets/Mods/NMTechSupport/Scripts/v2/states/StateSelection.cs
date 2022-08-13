@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using wmeijer.techsupport.v2.buttons;
 
@@ -31,6 +32,26 @@ namespace wmeijer.techsupport.v2.states {
 
         public virtual void OnOkButtonClicked() 
         {
+            string[] optionStrings = GetOptionStrings();
+            int selectedIndex = console.GetCurrentOption(); 
+            string selectedOption = optionStrings[selectedIndex];
+            console.WriteMessage(selectedOption);
+            int correctIndex = GetCorrectOption(this.globalState);
+            string correctOption = optionStrings[correctIndex];
+            TechSupportLog.LogFormat("Selected answer: \"{0}\", Correct answer: \"{1}\"", selectedOption, correctOption);
+            if (selectedIndex == correctIndex) {
+                console.WriteMessage(correctAnswerMessage);
+                controller.SetState(GetNextState());
+            }
+            else 
+            {
+                needyModule.HandleStrike();
+                TechSupportLog.Log("STRIKE: Incorrect answer");
+                console.WriteMessage(incorrectAnswerMessage);
+                console.WriteMessage(globalState.GetErrorData().Message);
+                console.WriteMessage(message); 
+                console.Refresh();
+            }
         }
 
         public virtual void OnUpButtonClicked()
@@ -40,5 +61,11 @@ namespace wmeijer.techsupport.v2.states {
         public virtual void OnDownButtonClicked()
         {
         }
+        
+        protected abstract string[] GetOptionStrings();
+
+        protected abstract int GetCorrectOption(GlobalState globalState);
+
+        protected abstract Type GetNextState();
     }
 }

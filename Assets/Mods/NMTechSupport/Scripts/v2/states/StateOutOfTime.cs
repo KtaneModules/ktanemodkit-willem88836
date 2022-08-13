@@ -20,14 +20,14 @@ namespace wmeijer.techsupport.v2.states {
             this.controller = controller;
             TechSupportLog.Log("STRIKE: Out of time.");
             needyModule.HandleStrike();
-            console.Write(messageStart);
+            console.WriteMessage(messageStart);
             rebootRoutine = StartCoroutine(Reboot());
         }
 
         private IEnumerator Reboot() {
-            console.Write(messageStart);
+            console.WriteMessage(messageStart);
             yield return new WaitForSeconds(rebootTime);
-            console.Write(messageComplete);
+            console.WriteMessage(messageComplete);
             controller.SetState(typeof(StateCompleteModule));
         }
 

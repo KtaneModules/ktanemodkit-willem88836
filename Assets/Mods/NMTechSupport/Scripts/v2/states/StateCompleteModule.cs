@@ -14,7 +14,7 @@ namespace wmeijer.techsupport.v2.states {
             RemoveModListener(interrupted);
             ResetModuleLights(interrupted);
             interrupted.Selectable.OnInteract = null;
-            console.Write(message);
+            console.WriteMessage(message);
             needyModule.HandlePass();
             controller.SetState(typeof(StateIdle));
         }

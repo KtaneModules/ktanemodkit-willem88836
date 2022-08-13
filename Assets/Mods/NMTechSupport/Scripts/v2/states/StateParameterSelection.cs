@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace wmeijer.techsupport.v2.states {
@@ -6,31 +7,13 @@ namespace wmeijer.techsupport.v2.states {
         public override void Initialize(TechSupportController controller, GlobalState globalState)
         {
             base.Initialize(controller, globalState);
-            console.WriteOptions(message, TechSupportData.Parameters);
+            console.Write(message, TechSupportData.Parameters, true);
         }
 
-        public override void OnOkButtonClicked()
+        protected override int GetCorrectOption(GlobalState globalState)
         {
-            string selectedParameters = TechSupportData.Parameters[console.GetCurrentOption()];
-            TechSupportLog.LogFormat("Selected parameters: \"{0}\"", selectedParameters);
-            console.Write(selectedParameters);
-            int correctPatchFileIndex = CorrectParameters(globalState.GetErrorData());
-            string correctPatchFile = TechSupportData.Parameters[correctPatchFileIndex];
-            TechSupportLog.LogFormat("Correct parameters: \"{0}\"", correctPatchFile);
-            if (selectedParameters.Equals(correctPatchFile)) {
-                console.Write(correctAnswerMessage);
-                controller.SetState(typeof(StateCompleteModule));
-            } 
-            else {
-                needyModule.HandleStrike();
-                TechSupportLog.Log("STRIKE: Incorrect parameters");
-                console.Write(incorrectAnswerMessage);
-                console.WriteOptions(message, TechSupportData.Parameters);
-            }
-        }
+            ErrorData errorData = globalState.GetErrorData();
 
-        private int CorrectParameters(ErrorData errorData)
-        {
             // sum of the first three icons.
             int a = 0;
             for (int i = 2; i < 5; i++)
@@ -62,6 +45,16 @@ namespace wmeijer.techsupport.v2.states {
             x %= TechSupportData.Parameters.Length;
 
             return x;
+        }
+
+        protected override Type GetNextState()
+        {
+            return typeof(StateCompleteModule);
+        }
+
+        protected override string[] GetOptionStrings()
+        {
+            return TechSupportData.Parameters;
         }
     }
 }

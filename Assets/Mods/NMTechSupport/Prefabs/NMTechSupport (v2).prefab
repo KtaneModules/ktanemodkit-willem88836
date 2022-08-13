@@ -3457,8 +3457,7 @@ MonoBehaviour:
   console: {fileID: 114423081702233998}
   minimumTimeFactor: 1.25
   errorFormat: Caught exception in module {0}. Source file {2} halted with message
-    {1} at line {3}, column {4}. Additional information is required to resolve this
-    issue.
+    {1} at line {3}, column {4}.
   errorFormatsNoModule:
   - '> Caught exception in bomb_root. Source file {1} halted with message {0} at line
     {2}, column {3}. Additional information is required to resolve this issue.'
@@ -3468,6 +3467,7 @@ MonoBehaviour:
     line {2}, column {3}. Additional information is required to resolve this issue.'
   - '> Caught exception in moduleinterfacer. Source file {1} halted with message {0}
     at line {2}, column {3}. Additional information is required to resolve this issue.'
+  startMessage: Additional information is required to resolve this issue.
 --- !u!114 &114452432481246184
 MonoBehaviour:
   m_ObjectHideFlags: 1

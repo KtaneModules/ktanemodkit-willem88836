@@ -13,6 +13,7 @@ namespace wmeijer.techsupport.v2.states {
         [SerializeField] private float minimumTimeFactor;
         [SerializeField] private string errorFormat; 
         [SerializeField] private string[] errorFormatsNoModule;
+        [SerializeField] private string startMessage;
 
         public void Initialize(TechSupportController controller, GlobalState globalState)
         {
@@ -20,13 +21,12 @@ namespace wmeijer.techsupport.v2.states {
                 ? SelectModule(globalState.GetModules()) : -1;
             globalState.SetInterruptedModuleIndex(moduleIndex);
             ErrorData errorData = null;
-            string errorMessage = null;
             if (moduleIndex >= 0) {
                 InterruptableModule module = globalState.GetInterruptedModule();
                 errorData = techSupportData.GenerateError(module.BombModule.ModuleDisplayName);
                 TechSupportLog.LogFormat("Throwing error with module \"{0}\".", module.BombModule.ModuleDisplayName);
                 CreateErrorWithModule(module);
-                errorMessage = string.Format(
+                errorData.Message = string.Format(
                     errorFormat, module.BombModule.ModuleDisplayName, 
                     errorData.Error, errorData.SourceFile, 
                     errorData.LineIndex, errorData.ColumnIndex);
@@ -34,15 +34,15 @@ namespace wmeijer.techsupport.v2.states {
             else {
                 TechSupportLog.Log("Throwing error without module.");
                 errorData = techSupportData.GenerateError(null);
-                errorMessage = string.Format(
+                errorData.Message = string.Format(
                     errorFormatsNoModule.PickRandom(), errorData.Error, 
                     errorData.SourceFile, errorData.LineIndex, 
                     errorData.ColumnIndex
                 );
             }
             globalState.SetErrorData(errorData);
-            console.Write(errorMessage);
-            TechSupportLog.Log(errorMessage);
+            console.WriteMessage(string.Format("{0} {1}", errorData.Message, startMessage));
+            TechSupportLog.Log(errorData.Message);
             controller.SetState(typeof(StateVersionSelection));
         }
 

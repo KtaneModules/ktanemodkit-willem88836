@@ -1,33 +1,16 @@
 
+using System;
+
 namespace wmeijer.techsupport.v2.states {
     public sealed class StatePatchFileSelection : StateSelection {
         public override void Initialize(TechSupportController controller, GlobalState globalState)
         {
             base.Initialize(controller, globalState);
-            console.WriteOptions(message, TechSupportData.PatchFiles);
-        }
-        
-        public override void OnOkButtonClicked()
-        {
-            string selectedPatchFile = TechSupportData.PatchFiles[console.GetCurrentOption()];
-            TechSupportLog.LogFormat("Selected patch file: \"{0}\"", selectedPatchFile);
-            console.Write(selectedPatchFile);
-            int correctPatchFileIndex = CorrectPatchFile(globalState.GetErrorData(), globalState.GetErrorMemento());
-            string correctPatchFile = TechSupportData.PatchFiles[correctPatchFileIndex];
-            TechSupportLog.LogFormat("Correct patch file: \"{0}\"", correctPatchFile);
-            if (selectedPatchFile.Equals(correctPatchFile)) {
-                console.Write(correctAnswerMessage);
-                controller.SetState(typeof(StateParameterSelection));
-            } 
-            else {
-                needyModule.HandleStrike();
-                TechSupportLog.Log("STRIKE: Incorrect patch file");
-                console.Write(incorrectAnswerMessage);
-                console.WriteOptions(message, TechSupportData.PatchFiles);
-            }
+            console.Write(message, TechSupportData.PatchFiles, true);
         }
 
-        private int CorrectPatchFile(ErrorData errorData, ErrorData[] allErrors) {
+        protected override int GetCorrectOption(GlobalState globalState)
+        {
             // Data where seed = 0;
             // 0 "prle.cba",
             // 1 "resble.bbc",
@@ -37,6 +20,9 @@ namespace wmeijer.techsupport.v2.states {
             // 5 "exed.asc",
             // 6 "gilick.pxd",
             // 7 "linion.dart"
+
+            ErrorData errorData = globalState.GetErrorData();
+            ErrorData[] allErrors = globalState.GetErrorMemento();
 
             //However, if the error's source file is either satcle.bb, plor.pom, or equely.ctl, ignore all rules above and select exed.asc.
             if (errorData.SourceFileIndex == 2
@@ -125,6 +111,15 @@ namespace wmeijer.techsupport.v2.states {
             //Otherwise, select shuttle lonist.ftl.
             return 4;
         }
+
+        protected override Type GetNextState()
+        {
+            return typeof(StateParameterSelection);
+        }
+
+        protected override string[] GetOptionStrings()
+        {
+            return TechSupportData.PatchFiles;
+        }
     }
 }
-

@@ -4,11 +4,25 @@ namespace wmeijer.techsupport.v2 {
 	[Serializable]
 	public class ErrorData
 	{
-		public int ErrorIndex;
-		public int SourceFileIndex;
-		public int LineIndex;
-		public int ColumnIndex;
-		public string ModuleName;
+		public int ErrorIndex {get; private set;}
+		public int SourceFileIndex {get; private set;}
+		public int LineIndex {get; private set;}
+		public int ColumnIndex {get; private set;}
+		public string ModuleName {get; private set;}
+		private string message = null; 
+		public string Message {
+			get
+			{
+				return this.message;
+			} 
+			
+			set
+			{
+				if (Message != null) 
+					throw new InvalidOperationException("Cannot set message twice");
+				this.message = value;
+			}
+		}
 
 		public string Error 
 		{ 

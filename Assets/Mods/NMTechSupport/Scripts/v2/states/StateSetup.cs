@@ -36,7 +36,7 @@ namespace wmeijer.techsupport.v2.states {
                 interruptableModules.Count(), 
                 string.Join(", ",  interruptableModules.Select(m => m.ToString()).ToArray()));
             controller.SetState(typeof(StateIdle));
-            this.console.Write(string.Format(this.bootMessage, 
+            this.console.WriteMessage(string.Format(this.bootMessage, 
                                 this.bombInfo.GetSerialNumber(), 
                                 interruptableModules.Length));
         }
