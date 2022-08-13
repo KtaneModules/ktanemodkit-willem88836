@@ -1,8 +1,5 @@
-
-namespace wmeijer.techsupport.v2.buttons {
-    public interface IButtonSubscriber {
-        void OnOkButtonClicked();
-        void OnUpButtonClicked();
-        void OnDownButtonClicked();
-    }
+public interface IButtonSubscriber {
+    void OnOkButtonClicked();
+    void OnUpButtonClicked();
+    void OnDownButtonClicked();
 }

@@ -1,17 +1,13 @@
-
 using UnityEngine; 
 
-namespace wmeijer.techsupport.v2.states
+public sealed class StateIdle : MonoBehaviour, IState
 {
-    public sealed class StateIdle : MonoBehaviour, IState
+    public void Initialize(TechSupportController controller, GlobalState globalState)
     {
-        public void Initialize(TechSupportController controller, GlobalState globalState)
-        {
-            TechSupportLog.Log("Started idling...");
-        }
+        // unused
+    }
 
-        public void Terminate() { 
-            // unused.
-        }
+    public void Terminate() { 
+        // unused
     }
 }
