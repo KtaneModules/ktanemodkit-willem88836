@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class RandomZRotation : MonoBehaviour
+/// <summary>
+/// Gives object random Z rotation. 
+/// </summary>
+public sealed class RandomZRotation : MonoBehaviour
 {
     private void Start()
     {

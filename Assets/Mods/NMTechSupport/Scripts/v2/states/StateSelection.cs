@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary> 
+/// Base class for all Tech Support states in 
+/// which some selection is made. 
+/// </summary>
 public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
 {
     [SerializeField] protected TechSupportData techSupportData;
@@ -55,14 +59,17 @@ public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
 
     public virtual void OnUpButtonClicked()
     {
+        // unused.
     }
 
     public virtual void OnDownButtonClicked()
     {
+        // unused.
     }
 
     protected abstract string[] GetOptionStrings();
 
+    /// <summary>Calculates the correct answer</summary>
     protected abstract int GetCorrectOption(GlobalState globalState);
 
     protected abstract Type GetNextState();

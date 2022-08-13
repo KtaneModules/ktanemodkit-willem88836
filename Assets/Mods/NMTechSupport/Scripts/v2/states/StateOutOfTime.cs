@@ -1,6 +1,10 @@
 using UnityEngine;
 using IEnumerator = System.Collections.IEnumerator;
 
+/// <summary>
+/// Tech support state that is called when 
+/// the needy module is out of time.
+/// </summary>
 public sealed class StateOutOfTime : MonoBehaviour, IState
 {
     [SerializeField] private KMNeedyModule needyModule;

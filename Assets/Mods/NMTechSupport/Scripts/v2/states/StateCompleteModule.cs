@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Tech Support state that undoes the module interruption. 
+/// </summary>
 public sealed class StateCompleteModule : MonoBehaviour, IState
 {
     [SerializeField] private KMNeedyModule needyModule;

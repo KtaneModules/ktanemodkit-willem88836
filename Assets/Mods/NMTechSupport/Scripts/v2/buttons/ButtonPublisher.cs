@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Object that publishes updates invoked 
+/// by <c>ClickableButton</c> to <c>IButtonSubscriber</c> objects.
+/// </summary>
 public sealed class ButtonPublisher : MonoBehaviour
 {
     private List<IButtonSubscriber> subscribers = new List<IButtonSubscriber>();

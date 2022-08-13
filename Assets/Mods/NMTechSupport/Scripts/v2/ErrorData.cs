@@ -1,7 +1,11 @@
 ﻿using System;
 
+/// <summary>
+/// Data container object for all data
+/// related to a single Error. 
+/// </summary>
 [Serializable]
-public class ErrorData
+public sealed class ErrorData
 {
     public int ErrorIndex { get; private set; }
     public int SourceFileIndex { get; private set; }

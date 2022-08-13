@@ -1,7 +1,11 @@
 
 using UnityEngine;
 
-public class ShuffleColors : MonoBehaviour
+/// <summary>
+/// Shuffles the provided materials across 
+/// the provided MeshRenderers
+/// </summary>
+public sealed class ShuffleColors : MonoBehaviour
 {
     [SerializeField] Material[] colors;
     [SerializeField] MeshRenderer[] renderers;

@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// Container object for all data
+/// relevant to a module that can be interrupted
+/// by the Tech Support module. 
+/// </summary>
 public sealed class InterruptableModule
 {
     public KMBombModule BombModule;

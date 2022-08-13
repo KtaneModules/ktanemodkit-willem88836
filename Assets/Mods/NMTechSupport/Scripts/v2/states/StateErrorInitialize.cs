@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Tech Support state that is started when 
+/// the needy module is activated.
+/// </summary>
 public sealed class StateErrorInitialize : MonoBehaviour, IState
 {
     [SerializeField] private KMBombInfo bombInfo;

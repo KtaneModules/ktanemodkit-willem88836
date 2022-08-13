@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class TechSupportData : MonoBehaviour
+/// <summary>
+/// Contains all potential parameters of this module, 
+/// and generates the parameters used in this run.
+/// </summary>
+public sealed class TechSupportData : MonoBehaviour
 {
     public static string[] SourceFileNames;
     public static string[] ErrorCodes;
@@ -37,6 +41,9 @@ public class TechSupportData : MonoBehaviour
         Generate(parameters);
     }
 
+    /// <summary>
+    /// Generates a new random ErrorData object. 
+    /// </summary>
     public ErrorData GenerateError(string moduleName)
     {
         int errorIndex = Random.Range(0, ErrorCodes.Length);
@@ -50,6 +57,12 @@ public class TechSupportData : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Generates the module's versions, patch files, and error codes. 
+    /// </summary>
+    /// <param name="parameters">
+    /// Constraints on the generated solution options. 
+    /// </param>
     public void Generate(RuleParameters parameters)
     {
         this.monoRandom = parameters.Random;
@@ -66,7 +79,7 @@ public class TechSupportData : MonoBehaviour
         GenerateCrossTable(parameters.VersionCount);
     }
 
-
+    
     private string GenerateFileName(int minLength, int maxLength)
     {
         int length = monoRandom.Next(minLength, maxLength);

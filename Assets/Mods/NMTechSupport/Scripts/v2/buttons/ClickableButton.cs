@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Button that can be clicked and makes a sound. 
+/// </summary>
 public class ClickableButton : MonoBehaviour
 {
     [SerializeField] private KMSelectable selectable;

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
-public class RuleParameters : MonoBehaviour
+/// <summary>
+/// Parameter object for the rules used to generate 
+/// the module's sourcefiles, errorcodes, patch files etc.
+/// </summary>
+public sealed class RuleParameters : MonoBehaviour
 {
     public MonoRandom Random;
 

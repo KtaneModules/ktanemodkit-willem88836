@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Tech Support state in which the parameters are selected.
+/// </summary>
 public sealed class StateParameterSelection : StateSelection
 {
-
     public override void Initialize(TechSupportController controller, GlobalState globalState)
     {
         base.Initialize(controller, globalState);

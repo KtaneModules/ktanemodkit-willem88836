@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Main controller for the Tech Support module.
+/// Implements state-machine for the different module phases.
+/// </summary>
 public sealed class TechSupportController : MonoBehaviour, INeedyModule
 {
     [SerializeField] private KMBombInfo bombInfo;
@@ -35,6 +39,7 @@ public sealed class TechSupportController : MonoBehaviour, INeedyModule
         needyModule.OnActivate += () => SetState(typeof(StateSetup));
     }
 
+    /// <summary>Adds states to the state-machine</summary>
     private void InitializeStates()
     {
         states = new Dictionary<Type, IState>(availableStates.Length);
@@ -55,7 +60,18 @@ public sealed class TechSupportController : MonoBehaviour, INeedyModule
         this.state.Initialize(this, this.globalState);
     }
 
-    // TODO: add check for modules that complete when interrupted, disabling the error.
+    private void Update()
+    {
+        // Prevents the error light and the pass light from clipping, 
+        // when the interrupted module is somehow resolved.
+        if (this.globalState != null
+            && this.globalState.GetInterruptedModule() != null
+            && this.globalState.GetInterruptedModule().PassLight.activeSelf)
+        {
+            TechSupportLog.Log("Module completed while interrupted.");
+            this.globalState.GetInterruptedModule().ErrorLight.SetActive(false);
+        }
+    }
 
     public void OnNeedyActivation()
     {
@@ -64,8 +80,7 @@ public sealed class TechSupportController : MonoBehaviour, INeedyModule
 
     public void OnNeedyDeactivation()
     {
-        TechSupportLog.Log("Module deactivated");
-        SetState(typeof(StateCompleteModule));
+        // unused
     }
 
     public void OnTimerExpired()

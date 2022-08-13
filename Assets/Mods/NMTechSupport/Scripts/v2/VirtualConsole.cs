@@ -1,7 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class VirtualConsole : MonoBehaviour, IButtonSubscriber
+/// <summary>
+/// TextMeshBox interface, implementing all functionalities 
+/// for the Tech Support module's interface.
+/// </summary>
+public sealed class VirtualConsole : MonoBehaviour, IButtonSubscriber
 {
     [SerializeField] private TextMeshBox textBox;
     [SerializeField] private TextMesh text;
@@ -26,22 +30,39 @@ public class VirtualConsole : MonoBehaviour, IButtonSubscriber
         Clear();
     }
 
+    /// <summary>
+    /// Disables/enables the dark overlay of the console. 
+    /// </summary>
     public void ToggleDim(bool isEnabled)
     {
         this.screenDimmedOverlay.SetActive(isEnabled);
     }
 
+    /// <summary> 
+    /// Returns the option that is currently selected
+    /// or -1 if none is selected. 
+    /// </summary>
     public int GetCurrentOption()
     {
-        return this.shuffledOptionMap[this.currentOption];
+        return this.options.Length > 0 
+            ? this.shuffledOptionMap[this.currentOption]
+            : -1;
     }
 
+    /// <summary>
+    /// Writes a message and an array of options. 
+    /// </summary>
+    /// <param name="message">The to-be printed message</param>
+    /// <param name="options">The to-be printed options</param> 
+    /// <param name="isShuffled">Whether the options are shown shuffled or not</param>
     public void Write(string message, string[] options, bool isShuffled)
     {
         WriteMessage(message);
         WriteOptions(options, isShuffled);
     }
 
+    /// <summary>Writes a message</summary>
+    /// <param name="message">The to-be printed message</param>
     public void WriteMessage(string message)
     {
         message = string.Format(messageFormat, message);
@@ -51,6 +72,9 @@ public class VirtualConsole : MonoBehaviour, IButtonSubscriber
         RefreshMessages();
     }
 
+    /// <summary>Writes a list of options</summary>
+    /// <param name="options">The to-be printed options</param> 
+    /// <param name="isShuffled">Whether the options are shown shuffled</param>
     public void WriteOptions(string[] options, bool isShuffled)
     {
         this.options = options;
@@ -73,17 +97,20 @@ public class VirtualConsole : MonoBehaviour, IButtonSubscriber
         RefreshOptions();
     }
 
+    /// <summary>Refereshes both the messages and the options</summary>
     public void Refresh()
     {
         RefreshMessages();
         RefreshOptions();
     }
 
+    /// <summary>Refreshes the messages, clearing the options</summary>
     public void RefreshMessages()
     {
         textBox.SetText(messageMemento.Join("\n"));
     }
 
+    /// <summary>Refreshes the options, keeping the messages</summary>
     public void RefreshOptions()
     {
         string text = this.text.text;
@@ -98,6 +125,7 @@ public class VirtualConsole : MonoBehaviour, IButtonSubscriber
         textBox.SetText(text);
     }
 
+    /// <summary>Completely clears the console, deleting all past messages</summary>
     public void Clear()
     {
         textBox.SetText("");

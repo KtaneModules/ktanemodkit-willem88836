@@ -1,5 +1,9 @@
 using System;
 
+/// <summary>
+/// Tech Support state in which the 
+/// software version is selected. 
+/// </summary>
 public sealed class StateVersionSelection : StateSelection
 {
     public override void Initialize(TechSupportController controller, GlobalState globalState)

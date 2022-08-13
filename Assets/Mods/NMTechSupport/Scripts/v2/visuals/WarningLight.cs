@@ -2,9 +2,11 @@
 using UnityEngine;
 using IEnumerator = System.Collections.IEnumerator;
 
-public class WarningLight : MonoBehaviour
+/// <summary>
+/// Makes all child objects of this object flicker on and off. 
+/// </summary>
+public sealed class WarningLight : MonoBehaviour
 {
-
     [SerializeField] private int flickerInterval;
 
     private void Start()

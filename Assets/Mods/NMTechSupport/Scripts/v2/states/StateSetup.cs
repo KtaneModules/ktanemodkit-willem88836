@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using IEnumerator = System.Collections.IEnumerator;
 
+/// <summary>
+/// Tech Support state in which the module is set up.
+/// i.e. it loads all interruptable modules and 
+/// prepares them for interruption.
+/// </summary>
 public sealed class StateSetup : MonoBehaviour, IState
 {
     [SerializeField] private TechSupportService mysteryKeyService;

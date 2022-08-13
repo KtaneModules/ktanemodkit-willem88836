@@ -1,5 +1,8 @@
 using System;
 
+/// <summary>
+/// Tech Support state in which the patch file is selected.
+/// </summary>
 public sealed class StatePatchFileSelection : StateSelection
 {
     public override void Initialize(TechSupportController controller, GlobalState globalState)
