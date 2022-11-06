@@ -16,6 +16,8 @@ public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
     [SerializeField] protected string message;
     [SerializeField] protected string correctAnswerMessage;
     [SerializeField] protected string incorrectAnswerMessage;
+    
+    public bool DebugMode = false;
 
     protected TechSupportController controller;
     protected GlobalState globalState;
@@ -41,7 +43,7 @@ public abstract class StateSelection : MonoBehaviour, IState, IButtonSubscriber
         int correctIndex = GetCorrectOption(this.globalState);
         string correctOption = optionStrings[correctIndex];
         TechSupportLog.LogFormat("Selected answer: \"{0}\", Correct answer: \"{1}\"", selectedOption, correctOption);
-        if (selectedIndex == correctIndex)
+        if (selectedIndex == correctIndex || DebugMode)
         {
             console.WriteMessage(correctAnswerMessage);
             controller.SetState(GetNextState());

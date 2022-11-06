@@ -3121,9 +3121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b59ab3367bceaaf42b82109ae256d6cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombInfo: {fileID: 114948266177858550}
   needyModule: {fileID: 114683145837631692}
-  bombAudio: {fileID: 114106624149736852}
   availableStates:
   - {fileID: 114794824464216368}
   - {fileID: 114924622095007686}
@@ -3414,6 +3412,7 @@ MonoBehaviour:
   message: Select launch parameters
   correctAnswerMessage: Correct parameters
   incorrectAnswerMessage: Incorrect parameters
+  DebugMode: 0
 --- !u!114 &114421539967232320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3432,6 +3431,7 @@ MonoBehaviour:
   message: 'Select patch file:'
   correctAnswerMessage: Correct patch file
   incorrectAnswerMessage: Incorrect patch file
+  DebugMode: 0
 --- !u!114 &114426031630084094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3798,6 +3798,7 @@ MonoBehaviour:
   message: 'Select software version: '
   correctAnswerMessage: Correct version
   incorrectAnswerMessage: Incorrect version
+  DebugMode: 0
 --- !u!114 &114719299357820674
 MonoBehaviour:
   m_ObjectHideFlags: 1

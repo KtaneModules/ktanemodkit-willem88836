@@ -15,9 +15,12 @@ public sealed class StateCompleteModule : MonoBehaviour, IState
         InterruptableModule interrupted = globalState.GetInterruptedModule();
         globalState.SetInterruptedModuleIndex(-1);
         globalState.SetErrorData(null);
-        RemoveModListener(interrupted);
-        ResetModuleLights(interrupted);
-        interrupted.Selectable.OnInteract = null;
+        if (interrupted != null) 
+        {
+            RemoveModListener(interrupted);
+            ResetModuleLights(interrupted);
+            interrupted.Selectable.OnInteract = null;
+        }
         console.WriteMessage(message);
         needyModule.HandlePass();
         controller.SetState(typeof(StateIdle));
