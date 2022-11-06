@@ -8,9 +8,7 @@ using UnityEngine;
 /// </summary>
 public sealed class TechSupportController : MonoBehaviour, INeedyModule
 {
-    [SerializeField] private KMBombInfo bombInfo;
     [SerializeField] private KMNeedyModule needyModule;
-    [SerializeField] private KMAudio bombAudio;
 
     [Space]
     [SerializeField] private MonoBehaviour[] availableStates;

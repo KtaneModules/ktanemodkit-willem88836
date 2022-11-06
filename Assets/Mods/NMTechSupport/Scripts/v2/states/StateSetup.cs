@@ -37,9 +37,6 @@ public sealed class StateSetup : MonoBehaviour, IState
         GlobalState newGlobalState = new GlobalState();
         newGlobalState.SetModules(interruptableModules);
         controller.SetGlobalState(newGlobalState);
-        TechSupportLog.LogFormat("Loaded {0} interruptable modules: {1}",
-            interruptableModules.Count(),
-            string.Join(", ", interruptableModules.Select(m => m.ToString()).ToArray()));
         controller.SetState(typeof(StateIdle));
         this.console.WriteMessage(string.Format(this.bootMessage,
                             this.bombInfo.GetSerialNumber(),
@@ -68,10 +65,11 @@ public sealed class StateSetup : MonoBehaviour, IState
     {
         List<InterruptableModule> interruptableModules = new List<InterruptableModule>();
         string[] ignoredModules = GetIgnoredBossModules();
-        foreach (KMBombModule bombModule in FindObjectsOfType<KMBombModule>())
+        KMBombModule[] bombModules = FindObjectsOfType<KMBombModule>();
+        TechSupportLog.LogFormat("Found {0} modules in scene", bombModules.Length);
+        foreach (KMBombModule bombModule in bombModules)
         {
-            if (mysteryKeyService.MustNotBeHidden(bombModule.ModuleType)
-                    || ignoredModules.Contains(bombModule.ModuleDisplayName))
+            if (IsIgnoredModule(bombModule, ignoredModules))
                 continue;
             InterruptableModule interruptable = null;
             try
@@ -84,7 +82,36 @@ public sealed class StateSetup : MonoBehaviour, IState
                     interruptableModules.Add(interruptable);
             }
         }
+        TechSupportLog.LogFormat("Loaded {0} interruptable modules: {1}",
+            interruptableModules.Count(),
+            string.Join(", ", interruptableModules.Select(m => m.ToString()).ToArray()));
         return interruptableModules.ToArray();
+    }
+
+    private bool IsIgnoredModule(KMBombModule bombModule, string[] ignoredModules) {
+        return mysteryKeyService.MustNotBeHidden(bombModule.ModuleType)
+            || ignoredModules.Contains(bombModule.ModuleDisplayName)
+            || !IsOnSameBomb(bombModule);
+    }
+    
+    // Uses the bomb serial of the module to determine 
+    // whether it's on the same bomb. Returns false if 
+    // no bombinfo was found.
+    private bool IsOnSameBomb(KMBombModule bombModule) {
+        Transform current = bombModule.transform;
+        KMBombInfo otherBombInfo = null;
+        while (otherBombInfo == null && current != null) {
+            otherBombInfo = current.GetComponent<KMBombInfo>();
+            current = current.transform.parent;
+        }
+        // By default, modules without bomb info are ignored.
+        if (otherBombInfo == null)
+            return false;
+        TechSupportLog.LogFormat("Other Serial: {0}, My Serial: {1}", 
+            otherBombInfo.GetSerialNumber(), 
+            this.bombInfo.GetSerialNumber());
+        return otherBombInfo.GetSerialNumber()
+            .Equals(this.bombInfo.GetSerialNumber());
     }
 
     // Loads all modules that are ignored through the boss module.
