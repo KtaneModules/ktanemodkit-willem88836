@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: TechSupport
   title: Tech Support
-  author: Willem Meijer
+  author: Willem Meijer (willem88836)
   description: "[i]Have you tried turning it off and on again?[/i]\n\n[b]About[/b]\nTech
     Support is a semi-needy module that occasionally interrupts you, however, also
     requires you cooperate with your professional.\nIncidentally, one of the bomb's
@@ -23,6 +23,6 @@ MonoBehaviour:
     manual repository for an up-to-date manual.\nThis mod uses KMBossModule, so your
     mods can be ignored by it.\n\n[b]Special Thanks[/b]\nThanks Itachi/Goofy for allowing
     me to use the Mystery Module source code. "
-  version: 2.0.0
+  version: 2.0.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: e480a79a79fa80943a4592a3e0573a62, type: 3}

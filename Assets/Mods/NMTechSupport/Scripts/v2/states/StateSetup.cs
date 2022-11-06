@@ -107,9 +107,6 @@ public sealed class StateSetup : MonoBehaviour, IState
         // By default, modules without bomb info are ignored.
         if (otherBombInfo == null)
             return false;
-        TechSupportLog.LogFormat("Other Serial: {0}, My Serial: {1}", 
-            otherBombInfo.GetSerialNumber(), 
-            this.bombInfo.GetSerialNumber());
         return otherBombInfo.GetSerialNumber()
             .Equals(this.bombInfo.GetSerialNumber());
     }
